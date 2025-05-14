@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', function () {
     savePositionsBtn.textContent = 'Save Positions';
     // Insert button below the planOutput container
     const planOutput = document.getElementById('planOutput');
-    planOutput.insertAdjacentElement('afterend', savePositionsBtn);
+    document.getElementById('subForm').appendChild(savePositionsBtn);
+
 
     function updatePlayerFields() {
         const total = parseInt(totalPlayersInput.value);
