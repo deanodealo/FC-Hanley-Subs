@@ -757,3 +757,9 @@ input.player-input {
 .navbar a:hover {
   background-color: #555;
 }
+
+@media (max-width: 600px) {
+  .side-image {
+    display: none;
+  }
+}
