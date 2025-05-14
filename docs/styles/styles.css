@@ -669,3 +669,91 @@ input.player-input {
     width: 50px;  /* Adjust width as needed */
     margin-top: 5px;
 }
+
+.navbar {
+  overflow-x: auto;             /* Allow horizontal scroll */
+  -webkit-overflow-scrolling: touch;  /* Smooth scrolling on iOS */
+  white-space: nowrap;          /* Prevent line breaks */
+  background-color: #333;       /* Example background */
+  padding: 0 10px;              /* Optional padding */
+}
+
+.navbar ul {
+  display: inline-flex;         /* Arrange list items horizontally */
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.navbar li {
+  white-space: nowrap;          /* Prevent text wrap in nav items */
+}
+
+.navbar a {
+  display: block;
+  padding: 14px 20px;
+  color: white;
+  text-decoration: none;
+  white-space: nowrap;          /* Ensure link text doesn't wrap */
+}
+
+.navbar a:hover {
+  background-color: #555;
+}
+
+.navbar {
+  position: relative;
+  background-color: #333;
+  padding: 0 10px;
+}
+
+/* Scroll container with horizontal scroll */
+.nav-scroll-container {
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+/* Scroll indicator shadow on the right */
+.nav-scroll-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(to left, rgba(51, 51, 51, 1), rgba(51, 51, 51, 0));
+  transition: opacity 0.3s ease;
+  opacity: 1;
+  z-index: 10;
+}
+
+/* Hide shadow if scrolled to the very right */
+.nav-scroll-container.scrolled-end::after {
+  opacity: 0;
+}
+
+.navbar ul {
+  display: inline-flex;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.navbar li {
+  white-space: nowrap;
+}
+
+.navbar a {
+  display: block;
+  padding: 14px 20px;
+  color: white;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.navbar a:hover {
+  background-color: #555;
+}

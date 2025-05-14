@@ -153,4 +153,26 @@ document.addEventListener('DOMContentLoaded', function () {
     if (savedPlan) {
         document.getElementById('planOutput').innerHTML = savedPlan;
     }
+
+const navScroll = document.querySelector('.nav-scroll-container');
+
+function checkScroll() {
+  const scrollLeft = navScroll.scrollLeft;
+  const maxScrollLeft = navScroll.scrollWidth - navScroll.clientWidth;
+
+  if (scrollLeft >= maxScrollLeft - 1) {  // Allow slight fuzziness
+    navScroll.classList.add('scrolled-end');
+  } else {
+    navScroll.classList.remove('scrolled-end');
+  }
+}
+
+// Listen for scroll events
+navScroll.addEventListener('scroll', checkScroll);
+
+// Initial check
+checkScroll();
+
+
+
 });
