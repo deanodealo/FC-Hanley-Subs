@@ -1,0 +1,671 @@
+
+/* Reset body and font styles */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+/* Header Styles */
+header {
+    background-color: #004080;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Navigation Bar */
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 0;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Hero Section Styles */
+.hero {
+    text-align: center;
+    padding: 5px 5px;
+    background-image: url("../images/footy.jpg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: white;
+    position: relative;
+}
+
+.side-image {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%); /* Center vertically */
+    width: 150px; /* Adjust the width as needed */
+    height: auto;
+    z-index: 2;
+    border-radius: 20px; /* Rounded corners */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions */
+}
+
+.side-image:hover {
+    transform: scale(1.1); /* Slight zoom effect on hover */
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.5); /* More intense shadow on hover */
+}
+
+.left {
+    left: 10%; /* Adjust position to move the left image towards the center */
+}
+
+.right {
+    right: 10%; /* Adjust position to move the right image towards the center */
+}
+
+/* Hero Content (Text Overlay) */
+.hero-content {
+    background-color: rgba(0, 0, 0, 0.6); /* Dark overlay for better contrast */
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 10px;
+    z-index: 1;
+    position: relative;
+}
+
+.hero-content h1 {
+    font-size: 10px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.hero-content p {
+    font-size: 10px;
+    line-height: 1.6;
+}
+
+/* Call-to-Action Section Styles */
+.cta {
+    background-color: #004080; /* Dark blue background */
+    color: white;
+    text-align: center;
+    padding: 50px 20px;
+    margin: 30px 0;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cta h2 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.cta p {
+    font-size: 20px;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.cta .btn {
+    font-size: 18px;
+    background-color: #ffcc00; /* Gold color for the button */
+    color: #003366; /* Dark blue text */
+    padding: 15px 30px;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.cta .btn:hover {
+    background-color: #e6b800; /* Slightly darker gold on hover */
+}
+
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #002244;
+    color: white;
+}
+
+/* Club Header (Centered Badge) */
+.club-header {
+    position: relative;
+    height: 170px;
+    background: url("../images/cool.png"); /* Background image */
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the badge horizontally */
+    padding: 10px;
+    color: white;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.badge {
+    width: 180px; /* Adjust the width as needed */
+    height: auto;
+}
+
+
+.top-left {
+    left: 10px;
+}
+
+.top-right {
+    right: 10px;
+}
+
+.club-title {
+    font-size: 48px; 
+    font-family: 'Arial', sans-serif; 
+    font-weight: bold; 
+    text-align: center; 
+    color: #f7f9fb; 
+    margin: 0;
+    padding: 10px 0;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #003366;
+    padding: 10px;
+    text-align: center;
+}
+
+.navbar ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar ul li {
+    display: inline;
+    margin: 0 15px;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.navbar ul li a:hover {
+    color: #ffcc00; /* Gold color on hover */
+    text-decoration: underline;
+}
+
+/* Content Section Styles */
+.content-section {
+    padding: 20px;
+    margin: 20px 0;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Fixtures Page Styles */
+.fixtures {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #f4f4f4;
+    margin-top: 30px;
+}
+
+.fixtures h1 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.fixtures p {
+    font-size: 20px;
+    margin-bottom: 40px;
+}
+
+/* Content Section Styles for Fixtures */
+.content-section {
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.content-section h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.content-section p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* Navigation Styles for Fixtures Page */
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 0;
+}
+
+.navbar ul li {
+    margin: 0 15px;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.navbar ul li a:hover {
+    color: #ffcc00; /* Gold color on hover */
+}
+/* Gallery Page Styles */
+.gallery {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #f4f4f4;
+}
+
+.gallery h1 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.gallery p {
+    font-size: 20px;
+    margin-bottom: 40px;
+}
+
+/* Gallery Section Styles */
+.gallery-section {
+    margin-bottom: 40px;
+}
+
+.gallery-section h2 {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Gallery Image Styles */
+.gallery-images {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.gallery-item {
+    width: 300px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.image-description {
+    font-size: 16px;
+    margin-top: 10px;
+    color: #333;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Make the gallery responsive */
+@media screen and (max-width: 768px) {
+    .gallery-images {
+        flex-direction: column;
+    }
+    
+    .gallery-item {
+        width: 90%;
+        margin: 10px auto;
+    }
+}
+
+/* Reset default margins and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and Background */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+/* Hero Section */
+.hero {
+    background-color: #004080;
+    color: white;
+    text-align: center;
+    padding: 60px 0;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
+}
+
+.hero p {
+    font-size: 20px;
+}
+
+/* Container for Forms and Results */
+.container {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.form-container {
+    width: 45%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-container h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 18px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+button {
+    background-color: #004080;
+    color: white;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #003366;
+}
+
+/* Results Section */
+.results-container {
+    width: 50%;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.results-container h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+#planOutput {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .form-container, .results-container {
+        width: 80%;
+        margin-bottom: 20px;
+    }
+}
+.news-article {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.news-article h2 {
+    color: #004080;
+    margin-bottom: 10px;
+}
+
+.news-article p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+/* Google Font Import */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
+
+body {
+    background-image: url('../images/background.jpeg'); /* Adjust path if needed */
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed; /* Optional: keeps background still when scrolling */
+    color: #333;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+
+
+/* Background video */
+#bg-video {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -2;
+}
+
+/* Hero Section */
+.hero {
+    text-align: center;
+    padding: 5rem 1rem 2rem;
+    color: #fff;
+}
+.hero h1 {
+    font-size: 3rem;
+    font-weight: 800;
+}
+.hero p {
+    font-size: 1.2rem;
+    font-weight: 400;
+    margin-top: 1rem;
+}
+
+.modern-camp {
+    background: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+    margin: 4rem auto;
+    padding: 3rem;
+    max-width: 850px;
+    font-family: 'Montserrat', sans-serif;
+    backdrop-filter: blur(6px); /* modern frosted-glass effect */
+    transition: transform 0.3s ease;
+}
+
+.modern-camp:hover {
+    transform: scale(1.01);
+}
+
+.modern-camp h2 {
+    font-size: 2.2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #1221f3;
+    letter-spacing: 1px;
+    border-bottom: 2px solid #1221f3;
+    padding-bottom: 0.5rem;
+}
+
+.camp-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2rem 0;
+    font-size: 1.1rem;
+}
+
+.camp-list li {
+    margin-bottom: 0.8rem;
+    line-height: 1.6;
+    color: #2c3e50;
+}
+
+.highlight {
+    font-weight: 700;
+    color: #1221f3;
+}
+
+.signup-link {
+    display: inline-block;
+    padding: 12px 28px;
+    background: #1221f3;
+    color: #fff;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.3s ease;
+    text-align: center;
+}
+
+.signup-link:hover {
+    background: #0e1dd0;
+}
+.camp-photo-wrapper {
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.camp-photo {
+    max-width: 90%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+.camp-poster {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    margin: 4rem auto;
+    max-width: 1100px;
+    font-family: 'Montserrat', sans-serif;
+    backdrop-filter: blur(6px);
+}
+
+.poster-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.poster-text {
+    flex: 1;
+    min-width: 280px;
+}
+
+.poster-text h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #1221f3;
+    border-bottom: 2px solid #1221f3;
+    padding-bottom: 0.5rem;
+}
+
+.camp-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    font-size: 1.1rem;
+}
+
+.camp-list li {
+    margin-bottom: 0.6rem;
+    color: #2c3e50;
+}
+
+.poster-image {
+    flex: 1;
+    min-width: 280px;
+    text-align: center;
+}
+
+.poster-image img {
+    width: 100%;
+    max-width: 450px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+input.player-input {
+    width: 50px; /* Adjust as needed */
+}
+
+.player-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;  /* Space between rows */
+}
+
+.player-row span {
+    flex: 1;
+    text-align: center;
+}
+
+.player-input {
+    width: 50px;  /* Adjust width as needed */
+    margin-top: 5px;
+}
