@@ -1,5 +1,6 @@
 function clearPlan() {
     localStorage.removeItem('savedPlan');
+    localStorage.removeItem('savedPositions');
     document.getElementById('planOutput').innerHTML = '';
 }
 
@@ -9,6 +10,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const playerNamesDiv = document.getElementById('player_names');
     const goalkeeperSelect = document.getElementById('goalkeeper_name');
     const excludedSelect = document.getElementById('excluded_player');
+
+    // *** ADDED: Create Save Positions button dynamically and append it ***
+    const savePositionsBtn = document.createElement('button');
+    savePositionsBtn.id = 'savePositionsBtn';
+    savePositionsBtn.textContent = 'Save Positions';
+    // Insert button below the planOutput container
+    const planOutput = document.getElementById('planOutput');
+    planOutput.insertAdjacentElement('afterend', savePositionsBtn);
 
     function updatePlayerFields() {
         const total = parseInt(totalPlayersInput.value);
@@ -118,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 r.players.forEach((player, index) => {
                     row += `
                         <span><strong>${player}</strong>
-                        <input type="text" maxlength="2" placeholder="00" class="player-input" />
+                        <input type="text" maxlength="2" placeholder="00" class="player-input" data-interval="${r.interval}" data-player="${player}" />
                         </span>
                     `;
 
@@ -145,34 +154,76 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const output = generatePlan(players, onField, totalMinutes, subInterval, goalkeeper, excluded);
-        document.getElementById('planOutput').innerHTML = output;
+        const container = document.getElementById('planOutput');
+        container.innerHTML = output;
         localStorage.setItem('savedPlan', output);
+
+        // Save position inputs after a short delay (inputs are just added)
+        setTimeout(() => {
+            const inputs = container.querySelectorAll('.player-input');
+            const positionsData = {};
+            inputs.forEach(input => {
+                const interval = input.dataset.interval;
+                const player = input.dataset.player;
+                positionsData[`${interval}_${player}`] = input.value;
+            });
+            localStorage.setItem('savedPositions', JSON.stringify(positionsData));
+        }, 100);
     });
 
+    // *** ADDED: Save Positions button click handler ***
+    savePositionsBtn.addEventListener('click', () => {
+        const container = document.getElementById('planOutput');
+        const inputs = container.querySelectorAll('.player-input');
+        const positionsData = {};
+
+        inputs.forEach(input => {
+            const interval = input.dataset.interval;
+            const player = input.dataset.player;
+            positionsData[`${interval}_${player}`] = input.value;
+        });
+
+        localStorage.setItem('savedPositions', JSON.stringify(positionsData));
+        alert('Positions saved!');
+    });
+
+    // Load saved plan and positions on page load
     const savedPlan = localStorage.getItem('savedPlan');
     if (savedPlan) {
-        document.getElementById('planOutput').innerHTML = savedPlan;
+        const container = document.getElementById('planOutput');
+        container.innerHTML = savedPlan;
+
+        const savedPositions = localStorage.getItem('savedPositions');
+        if (savedPositions) {
+            const positionsData = JSON.parse(savedPositions);
+            const inputs = container.querySelectorAll('.player-input');
+            inputs.forEach(input => {
+                const interval = input.dataset.interval;
+                const player = input.dataset.player;
+                const key = `${interval}_${player}`;
+                if (positionsData[key]) {
+                    input.value = positionsData[key];
+                }
+            });
+        }
     }
 
-const navScroll = document.querySelector('.nav-scroll-container');
+    const navScroll = document.querySelector('.nav-scroll-container');
 
-function checkScroll() {
-  const scrollLeft = navScroll.scrollLeft;
-  const maxScrollLeft = navScroll.scrollWidth - navScroll.clientWidth;
+    function checkScroll() {
+        const scrollLeft = navScroll.scrollLeft;
+        const maxScrollLeft = navScroll.scrollWidth - navScroll.clientWidth;
 
-  if (scrollLeft >= maxScrollLeft - 1) {  // Allow slight fuzziness
-    navScroll.classList.add('scrolled-end');
-  } else {
-    navScroll.classList.remove('scrolled-end');
-  }
-}
+        if (scrollLeft >= maxScrollLeft - 1) {  // Allow slight fuzziness
+            navScroll.classList.add('scrolled-end');
+        } else {
+            navScroll.classList.remove('scrolled-end');
+        }
+    }
 
-// Listen for scroll events
-navScroll.addEventListener('scroll', checkScroll);
+    // Listen for scroll events
+    navScroll.addEventListener('scroll', checkScroll);
 
-// Initial check
-checkScroll();
-
-
-
+    // Initial check
+    checkScroll();
 });
