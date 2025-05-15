@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // *** ADDED: Create Save Positions button dynamically and append it ***
     const savePositionsBtn = document.createElement('button');
     savePositionsBtn.id = 'savePositionsBtn';
+    savePositionsBtn.type = 'button';  // Prevent form submission
     savePositionsBtn.textContent = 'Save Positions';
     // Insert button below the planOutput container
     const planOutput = document.getElementById('planOutput');
