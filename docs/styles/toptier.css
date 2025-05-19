@@ -185,3 +185,14 @@ footer {
     background-color: #002244;
     color: white;
 }
+
+.hero-content a {
+  color: white;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.hero-content a:hover {
+  color: #ffcc00; /* yellow (your club's gold) */
+  text-decoration: underline; /* optional hover effect */
+}
