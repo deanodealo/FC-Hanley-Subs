@@ -773,3 +773,52 @@ input.player-input {
   max-width: 300px;
   box-sizing: border-box;
 }
+.top-tier-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  gap: 40px;
+  background-color: #f9f9f9;
+}
+
+.trophy-section {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.trophy-section {
+  display: flex;
+  flex-direction: column;  /* stack image above text */
+  align-items: center;     /* ← horizontally centers children */
+  max-width: 600px;        /* keeps it from stretching full‑width */
+  margin: 0 auto;          /* centers the flex‑box itself */
+}
+
+
+.promo-text {
+  margin-top: 10px;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.social-link {
+  display: inline-block;
+  margin-left: 10px;           /* space from other header items */
+  vertical-align: middle;      /* align with logo/text */
+}
+
+.social-icon {
+  width: 100px;                 /* adjust size */
+  height: auto;
+  transition: filter 0.3s ease;
+}
+
+.social-link:hover .social-icon {
+  filter: brightness(1.5) drop-shadow(0 0 4px rgba(255,255,255,0.7));
+}
+
+.social-container {
+  text-align: center;
+}

@@ -1,0 +1,187 @@
+/* —————————————————————————————— */
+/* Site‑wide Reset, Background & Typography */
+/* —————————————————————————————— */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-image: url('../images/background.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: #f7f7f7;
+  color: #f8f5f5;
+}
+
+/* —————————————————————————————— */
+/* Header & Logo */
+/* —————————————————————————————— */
+/* Club Header (Centered Badge) */
+.club-header {
+    position: relative;
+    height: 170px;
+    background: url("../images/cool.png"); /* Background image */
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Center the badge horizontally */
+    padding: 10px;
+    color: white;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+.badge {
+    width: 180px; /* Adjust the width as needed */
+    height: auto;
+}
+
+/* —————————————————————————————— */
+/* Main Navbar */
+/* —————————————————————————————— */
+.navbar {
+  background-color: #333;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  white-space: nowrap;
+  padding: 0 10px;
+  position: relative;
+  text-align: center;
+}
+
+.navbar ul {
+  display: inline-flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  justify-content: center;
+}
+
+.navbar li {
+  margin: 0 15px;
+  white-space: nowrap;
+}
+
+.navbar a {
+  display: block;
+  padding: 14px 20px;
+  color: #fff;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.navbar a:hover {
+  background-color: #555;
+  color: #ffcc00;
+  text-decoration: underline;
+}
+
+/* Optional scroll‑shadow on the right */
+.nav-scroll-container::after {
+  content: "";
+  position: absolute;
+  top: 0; right: 0;
+  width: 40px; height: 100%;
+  pointer-events: none;
+  background: linear-gradient(to left, rgba(51,51,51,1), rgba(51,51,51,0));
+  transition: opacity 0.3s ease;
+  opacity: 1;
+  z-index: 10;
+}
+
+.nav-scroll-container.scrolled-end::after {
+  opacity: 0;
+}
+
+/* Hero Content (Text Overlay) */
+.hero-section {
+    background-color: #004080; /* Dark overlay for better contrast */
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    border-radius: 10px;
+    z-index: 1;
+    position: relative;
+    text-align: center;
+}
+
+.promo-text {
+  /* …existing rules… */
+  color: white;
+}
+
+.top-tier-trophy-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  gap: 40px;
+  background-color: #f9f9f9;
+}
+
+.trophy-section {
+  max-width: 800px;
+  text-align: center;
+}
+
+.promo-image {
+  display: block;         /* makes margin:auto work */
+  margin: 0 auto;         /* ← centers the image inside its container */
+  width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.promo-text {
+  margin-top: 10px;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.promo-image {
+  display: block;       /* Make the image behave like a block element */
+  margin: 0 auto;       /* This centers it horizontally */
+  width: 100%;
+  max-width: 600px;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.social-link {
+  display: inline-block;
+  margin: 0 auto;           /* space from other header items */
+  vertical-align: middle;      /* align with logo/text */
+}
+
+.social-icon {
+  width: 100px;                 /* adjust size */
+  height: auto;
+  transition: filter 0.3s ease;
+}
+
+.social-link:hover .social-icon {
+  filter: brightness(1.5) drop-shadow(0 0 4px rgba(255,255,255,0.7));
+}
+
+.social-container {
+  text-align: center;
+}
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #002244;
+    color: white;
+}
