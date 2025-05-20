@@ -81,24 +81,30 @@
   </div>
 </nav>
 
-  <div class="form-wrapper">
-    <h2>Register Your Player</h2>
-    <form id="registrationForm">
-      <input type="text" id="playerName" placeholder="Player Name" required />
-      <input type="date" id="dob" placeholder="Date of Birth" required />
-      <input type="text" id="guardianName" placeholder="Parent/Guardian Name" required />
-      <input type="email" id="guardianEmail" placeholder="Parent/Guardian Email" required />
-      <input type="tel" id="contactNumber" placeholder="Contact Number" required />
-      <select id="interest" required>
-        <option value="" disabled selected>Interested In...</option>
-        <option value="Soccer School">Soccer School</option>
-        <option value="Joining a team">Joining a team</option>
-        <option value="Both">Both</option>
-      </select>
-      <button type="submit">Submit Registration</button>
-    </form>
-    <p id="confirmation">Thank you! Your registration has been submitted.</p>
-  </div>
+<div class="form-wrapper">
+  <h2>Register Your Player</h2>
+  <form id="registrationForm">
+    <input type="text" id="playerName" placeholder="Player Name" required />
+    
+    <label for="dob">Date of Birth</label>
+    <input type="date" id="dob" required />
+
+    <input type="text" id="guardianName" placeholder="Parent/Guardian Name" required />
+    <input type="email" id="guardianEmail" placeholder="Parent/Guardian Email" required />
+    <input type="tel" id="contactNumber" placeholder="Contact Number" required />
+    
+    <select id="interest" required>
+      <option value="" disabled selected>Interested In...</option>
+      <option value="Soccer School">Soccer School</option>
+      <option value="Joining a team">Joining a team</option>
+      <option value="Both">Both</option>
+    </select>
+    
+    <button type="submit">Submit Registration</button>
+  </form>
+  <p id="confirmation">Thank you! Your registration has been submitted.</p>
+</div>
+
 
   <script>
     const firebaseConfig = {

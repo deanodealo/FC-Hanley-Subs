@@ -881,3 +881,32 @@ input.player-input {
 .signup-link:hover {
   background-color: #0056b3;
 }
+
+.form-wrapper label {
+  font-weight: bold;
+  display: block;
+  margin-top: 10px;
+  color: #333;
+}
+
+input[type="date"] {
+  color: #555;
+  background-color: white;
+  position: relative;
+}
+
+input[type="date"]::before {
+  content: attr(placeholder);
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  color: #aaa;
+  pointer-events: none;
+  font-size: 16px;
+  display: block;
+}
+
+input[type="date"]:focus::before,
+input[type="date"]:valid::before {
+  display: none;
+}
