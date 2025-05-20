@@ -543,7 +543,7 @@ body {
     font-size: 2.2rem;
     text-align: center;
     margin-bottom: 1.5rem;
-    color: #1221f3;
+    color: #0c0c0c;
     letter-spacing: 1px;
     border-bottom: 2px solid #1221f3;
     padding-bottom: 0.5rem;
@@ -620,7 +620,7 @@ body {
 .poster-text h2 {
     font-size: 2rem;
     margin-bottom: 1rem;
-    color: #1221f3;
+    color: #070707;
     border-bottom: 2px solid #1221f3;
     padding-bottom: 0.5rem;
 }
@@ -821,4 +821,38 @@ input.player-input {
 
 .social-container {
   text-align: center;
+}
+
+.news-article {
+    margin-bottom: 30px;
+}
+
+.news-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.news-text {
+    flex: 1;
+    min-width: 250px;
+}
+
+.news-image {
+    width: 300px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .news-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .news-image {
+        width: 90%;
+    }
 }
