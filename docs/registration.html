@@ -5,19 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>FC Hanley Registration</title>
 
-  <!-- Existing global styles -->
+  <!-- Global Styles -->
   <link rel="stylesheet" href="styles/styles.css">
 
-  <!-- Firebase scripts -->
+  <!-- Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
-  <!-- Club Header -->
-  <header class="club-header">
-    <a href="index.html">
-      <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge" />
-    </a>
-  </header>
 
   <style>
     .form-wrapper {
@@ -66,53 +59,58 @@
 </head>
 <body>
 
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-  <div class="nav-scroll-container">
-    <ul>
-      <li><a href="fixtures.html">Fixtures</a></li>
-      <li><a href="gallery.html">Gallery</a></li>
-      <li><a href="news.html">News & Events</a></li>
-      <li><a href="holidaycamps.html">Holiday Camps</a></li>a
-      <li><a href="toptier.html">Top Tier Trophies</a></li>
-      <li><a href="subz.html">Subz</a></li>
-      <li><a href="guestbook.html">feedback</a></li>
-    </ul>
+  <!-- Club Header -->
+  <header class="club-header">
+    <a href="index.html">
+      <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge" />
+    </a>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-scroll-container">
+      <ul>
+        <li><a href="fixtures.html">Fixtures</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="news.html">News & Events</a></li>
+        <li><a href="holidaycamps.html">Holiday Camps</a></li>
+        <li><a href="toptier.html">Top Tier Trophies</a></li>
+        <li><a href="subz.html">Subz</a></li>
+        <li><a href="guestbook.html">Feedback</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Registration Form -->
+  <div class="form-wrapper">
+    <h2>Register Your Player</h2>
+    <form id="registrationForm">
+      <input type="text" id="playerName" placeholder="Player Name" required />
+      <input type="text" id="dob" placeholder="DD/MM/YYYY" required />
+      <input type="text" id="guardianName" placeholder="Parent/Guardian Name" required />
+      <input type="email" id="guardianEmail" placeholder="Parent/Guardian Email" required />
+      <input type="tel" id="contactNumber" placeholder="Contact Number" required />
+
+      <select id="interest" required>
+        <option value="" disabled selected>Interested In...</option>
+        <option value="Soccer School">Soccer School</option>
+        <option value="Joining a team">Joining a team</option>
+        <option value="Both">Both</option>
+      </select>
+
+      <button type="submit">Submit Registration</button>
+    </form>
+    <p id="confirmation">Thank you! Your registration has been submitted.</p>
   </div>
-</nav>
 
-<div class="form-wrapper">
-  <h2>Register Your Player</h2>
-  <form id="registrationForm">
-    <input type="text" id="playerName" placeholder="Player Name" required />
-    
-    <label for="dob">Date of Birth</label>
-    <input type="date" id="dob" required />
-
-    <input type="text" id="guardianName" placeholder="Parent/Guardian Name" required />
-    <input type="email" id="guardianEmail" placeholder="Parent/Guardian Email" required />
-    <input type="tel" id="contactNumber" placeholder="Contact Number" required />
-    
-    <select id="interest" required>
-      <option value="" disabled selected>Interested In...</option>
-      <option value="Soccer School">Soccer School</option>
-      <option value="Joining a team">Joining a team</option>
-      <option value="Both">Both</option>
-    </select>
-    
-    <button type="submit">Submit Registration</button>
-  </form>
-  <p id="confirmation">Thank you! Your registration has been submitted.</p>
-</div>
-
-
+  <!-- Firebase Script -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDXXX-LMkY4Q0oN0M9e5wLdVhANzL8ifHs",
       authDomain: "fchanley-8d910.firebaseapp.com",
       databaseURL: "https://fchanley-8d910-default-rtdb.europe-west1.firebasedatabase.app",
       projectId: "fchanley-8d910",
-      storageBucket: "fchanley-8d910.firebasestorage.app",
+      storageBucket: "fchanley-8d910.appspot.com",
       messagingSenderId: "384977183977",
       appId: "1:384977183977:web:7805c8ba7e9122b883bc78",
       measurementId: "G-1CBV4NK83L"
@@ -134,6 +132,13 @@
       const contactNumber = document.getElementById('contactNumber').value;
       const interest = document.getElementById('interest').value;
 
+      const dobPattern = /^(0?[1-9]|[12][0-9]|3[01])\/(0?[1-9]|1[0-2])\/\d{4}$/;
+      if (!dobPattern.test(dob)) {
+        alert("Please enter the Date of Birth in the format DD/MM/YYYY.");
+        document.getElementById('dob').focus();
+        return;
+      }
+
       database.ref('registrations').push({
         playerName,
         dob,
@@ -154,21 +159,21 @@
     });
   </script>
 
+  <!-- Footer with Admin Login -->
+  <footer style="text-align: center; margin-top: 30px;">
+    <a href="#" onclick="adminLogin()">Admin Login</a>
+
+    <script>
+      function adminLogin() {
+        const password = prompt("Enter admin password:");
+        if (password === "hanley123") {
+          window.location.href = "view-registrations.html";
+        } else if (password !== null) {
+          alert("Incorrect password.");
+        }
+      }
+    </script>
+  </footer>
+
 </body>
 </html>
-
-<footer>
-  <a href="#" onclick="adminLogin()">Admin Login</a>
-
-<script>
-  function adminLogin() {
-    const password = prompt("Enter admin password:");
-    if (password === "hanley123") {
-      window.location.href = "view-registrations.html";
-    } else if (password !== null) {
-      alert("Incorrect password.");
-    }
-  }
-</script>
-
-</footer>
