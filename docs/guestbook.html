@@ -30,14 +30,17 @@
             <li><a href="holidaycamps.html">Holiday Camps</a></li>
             <li><a href="toptier.html">Top Tier Trophies</a></li>
             <li><a href="subz.html">Subz</a></li>
-            <li><a href="guestbook.html">Guestbook</a></li>
+            <li><a href="guestbook.html">feedback</a></li>
         </ul>
     </nav>
 
-    <!-- Guestbook Content -->
-    <div class="guestbook-container">
-        <h2>FC Hanley Guestbook</h2>
-        <p>We'd love to hear your comments, feedback and suggestions from your experience at FC Hanley. Please leave a message or shoutout!</p>
+<!-- Guestbook Content -->
+<div class="guestbook-container">
+    <h2 class="guestbook-title">FC Hanley Guestbook</h2>
+    <p class="guestbook-intro">
+        We'd love to hear your comments, feedback and suggestions from your experience at FC Hanley.
+        Please leave a message or shoutout!
+    </p>
 
         <form id="guestbookForm" class="guestbook-form">
             <input type="text" id="guestName" placeholder="Your Name" required />
@@ -46,6 +49,9 @@
         </form>
 
         <div id="commentList"></div>
+        
+        <!-- Admin Controls -->
+        <button id="adminLoginBtn" class="admin-btn">Admin Login</button>
         <button id="clearCommentsBtn" class="clear-btn" style="display:none;">Clear All Messages</button>
     </div>
 
@@ -57,16 +63,15 @@
     <script>
         // Your Firebase configuration — replace with your real config
         const firebaseConfig = {
-  apiKey: "AIzaSyDXXX-LMkY4Q0oN0M9e5wLdVhANzL8ifHs",
-  authDomain: "fchanley-8d910.firebaseapp.com",
-  databaseURL: "https://fchanley-8d910-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "fchanley-8d910",
-  storageBucket: "fchanley-8d910.firebasestorage.app",
-  messagingSenderId: "384977183977",
-  appId: "1:384977183977:web:7805c8ba7e9122b883bc78",
-  measurementId: "G-1CBV4NK83L"
-};
-
+            apiKey: "AIzaSyDXXX-LMkY4Q0oN0M9e5wLdVhANzL8ifHs",
+            authDomain: "fchanley-8d910.firebaseapp.com",
+            databaseURL: "https://fchanley-8d910-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "fchanley-8d910",
+            storageBucket: "fchanley-8d910.firebasestorage.app",
+            messagingSenderId: "384977183977",
+            appId: "1:384977183977:web:7805c8ba7e9122b883bc78",
+            measurementId: "G-1CBV4NK83L"
+        };
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -75,6 +80,7 @@
         const form = document.getElementById('guestbookForm');
         const commentList = document.getElementById('commentList');
         const clearBtn = document.getElementById('clearCommentsBtn');
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
 
         // Load comments from Firebase realtime database
         function loadComments() {
@@ -126,13 +132,30 @@
             });
         });
 
-        // Admin password to enable clear messages button
+        // Admin password
         const adminPassword = "hanley123"; // Change as needed
-        const enteredPassword = prompt("Enter admin password to enable message management:");
 
-        if (enteredPassword === adminPassword) {
+        // Check if admin already logged in this session
+        function setAdminMode() {
             clearBtn.style.display = 'inline-block';
+            adminLoginBtn.style.display = 'none';
+            sessionStorage.setItem('isAdmin', 'true');
         }
+
+        if (sessionStorage.getItem('isAdmin') === 'true') {
+            setAdminMode();
+        }
+
+        // Admin Login button click
+        adminLoginBtn.addEventListener('click', () => {
+            const enteredPassword = prompt("Enter admin password:");
+            if (enteredPassword === adminPassword) {
+                setAdminMode();
+                alert("Admin mode enabled.");
+            } else {
+                alert("Incorrect password.");
+            }
+        });
 
         clearBtn.addEventListener('click', () => {
             if (confirm("Are you sure you want to delete all guestbook messages?")) {

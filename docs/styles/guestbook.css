@@ -100,3 +100,20 @@
 .clear-btn:hover {
     background-color: #a71d2a;
 }
+
+.guestbook-title {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 0.3em;
+    color: #003366; /* or your brand color */
+}
+
+.guestbook-intro {
+    text-align: center;
+    font-size: 1.1em;
+    margin-bottom: 1.5em;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    color: #333;
+}
