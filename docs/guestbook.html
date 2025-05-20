@@ -10,6 +10,52 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+    <style>
+        .guestbook-container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .guestbook-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #1a1a1a;
+        }
+
+        .guestbook-intro {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1rem;
+            color: #444;
+        }
+
+        .delete-btn {
+            background-color: #cc0000;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin-top: 5px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .delete-btn:hover {
+            background-color: #a30000;
+        }
+
+        .comment {
+            background: white;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #0077cc;
+        }
+    </style>
 </head>
 
 <body>
@@ -30,17 +76,17 @@
             <li><a href="holidaycamps.html">Holiday Camps</a></li>
             <li><a href="toptier.html">Top Tier Trophies</a></li>
             <li><a href="subz.html">Subz</a></li>
-            <li><a href="guestbook.html">feedback</a></li>
+            <li><a href="guestbook.html">Feedback</a></li>
         </ul>
     </nav>
 
-<!-- Guestbook Content -->
-<div class="guestbook-container">
-    <h2 class="guestbook-title">FC Hanley Guestbook</h2>
-    <p class="guestbook-intro">
-        We'd love to hear your comments, feedback and suggestions from your experience at FC Hanley.
-        Please leave a message or shoutout!
-    </p>
+    <!-- Guestbook Content -->
+    <div class="guestbook-container">
+        <h2 class="guestbook-title">FC Hanley Guestbook</h2>
+        <p class="guestbook-intro">
+            We'd love to hear your comments, feedback and suggestions from your experience at FC Hanley.
+            Please leave a message or shoutout!
+        </p>
 
         <form id="guestbookForm" class="guestbook-form">
             <input type="text" id="guestName" placeholder="Your Name" required />
@@ -49,7 +95,7 @@
         </form>
 
         <div id="commentList"></div>
-        
+
         <!-- Admin Controls -->
         <button id="adminLoginBtn" class="admin-btn">Admin Login</button>
         <button id="clearCommentsBtn" class="clear-btn" style="display:none;">Clear All Messages</button>
@@ -61,7 +107,7 @@
     </footer>
 
     <script>
-        // Your Firebase configuration — replace with your real config
+        // Firebase config
         const firebaseConfig = {
             apiKey: "AIzaSyDXXX-LMkY4Q0oN0M9e5wLdVhANzL8ifHs",
             authDomain: "fchanley-8d910.firebaseapp.com",
@@ -73,7 +119,6 @@
             measurementId: "G-1CBV4NK83L"
         };
 
-        // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
@@ -82,33 +127,51 @@
         const clearBtn = document.getElementById('clearCommentsBtn');
         const adminLoginBtn = document.getElementById('adminLoginBtn');
 
-        // Load comments from Firebase realtime database
+        let isAdmin = false;
+        const adminPassword = "hanley123";
+
+        function escapeHtml(text) {
+            return text.replace(/[&<>"']/g, function(m) {
+                return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+            });
+        }
+
         function loadComments() {
             commentList.innerHTML = "Loading messages...";
             db.ref('guestbookMessages').orderByChild('timestamp').once('value', snapshot => {
                 const comments = [];
                 snapshot.forEach(childSnapshot => {
-                    comments.push(childSnapshot.val());
+                    comments.push({
+                        id: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
                 });
-                comments.reverse(); // newest first
+                comments.reverse();
+
                 if (comments.length === 0) {
                     commentList.innerHTML = "<p>No messages yet. Be the first to post!</p>";
                     return;
                 }
+
                 commentList.innerHTML = comments.map(c => `
                     <div class="comment">
                         <h4>${escapeHtml(c.name)}</h4>
                         <small>${new Date(c.timestamp).toLocaleString()}</small>
                         <p>${escapeHtml(c.message)}</p>
+                        ${isAdmin ? `<button class="delete-btn" data-id="${c.id}">Delete</button>` : ''}
                     </div>
                 `).join('');
-            });
-        }
 
-        // Escape HTML to prevent XSS
-        function escapeHtml(text) {
-            return text.replace(/[&<>"']/g, function(m) {
-                return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+                if (isAdmin) {
+                    document.querySelectorAll('.delete-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const messageId = btn.getAttribute('data-id');
+                            if (confirm("Delete this message?")) {
+                                db.ref('guestbookMessages/' + messageId).remove().then(loadComments);
+                            }
+                        });
+                    });
+                }
             });
         }
 
@@ -116,10 +179,8 @@
             e.preventDefault();
             const name = document.getElementById('guestName').value.trim();
             const message = document.getElementById('guestMessage').value.trim();
-
             if (!name || !message) return;
 
-            // Push new comment to Firebase
             db.ref('guestbookMessages').push({
                 name,
                 message,
@@ -132,21 +193,18 @@
             });
         });
 
-        // Admin password
-        const adminPassword = "hanley123"; // Change as needed
-
-        // Check if admin already logged in this session
         function setAdminMode() {
+            isAdmin = true;
             clearBtn.style.display = 'inline-block';
             adminLoginBtn.style.display = 'none';
             sessionStorage.setItem('isAdmin', 'true');
+            loadComments(); // reload to show delete buttons
         }
 
         if (sessionStorage.getItem('isAdmin') === 'true') {
             setAdminMode();
         }
 
-        // Admin Login button click
         adminLoginBtn.addEventListener('click', () => {
             const enteredPassword = prompt("Enter admin password:");
             if (enteredPassword === adminPassword) {
@@ -169,7 +227,6 @@
             }
         });
 
-        // Initial load
         loadComments();
     </script>
 
