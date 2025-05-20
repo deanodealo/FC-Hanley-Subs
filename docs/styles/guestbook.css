@@ -1,0 +1,102 @@
+/* guestbook.css */
+
+/* Container styling */
+.guestbook-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1rem;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Form styles */
+.guestbook-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.guestbook-form input,
+.guestbook-form textarea {
+    padding: 0.6rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.guestbook-form input:focus,
+.guestbook-form textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0,123,255,0.5);
+}
+
+.guestbook-form button {
+    padding: 0.8rem;
+    font-size: 1.1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    font-family: inherit;
+}
+
+.guestbook-form button:hover {
+    background-color: #0056b3;
+}
+
+/* Comments styling */
+.comment {
+    background: #f9f9f9;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.comment h4 {
+    margin: 0 0 0.25rem 0;
+    color: #003366;
+}
+
+.comment small {
+    color: #666;
+    font-size: 0.85rem;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.comment p {
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .guestbook-container {
+        margin: 1rem;
+        padding: 1rem;
+    }
+}
+
+.clear-btn {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 1rem;
+}
+
+.clear-btn:hover {
+    background-color: #a71d2a;
+}

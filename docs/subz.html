@@ -1,90 +1,163 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Substitution Planner - FC Hanley</title>
-    <link rel="stylesheet" href="styles/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Substitution Planner - FC Hanley</title>
+  <link rel="stylesheet" href="styles/styles.css"/>
+  <style>
+    .step-slide {
+      display: none;
+      transform: translateX(100%);
+      opacity: 0;
+      transition: all 0.5s ease;
+      position: absolute;
+      width: 100%;
+    }
+
+    .step-slide.active {
+      display: block;
+      transform: translateX(0%);
+      opacity: 1;
+      position: relative;
+    }
+
+    .form-slider {
+      position: relative;
+      overflow: hidden;
+      min-height: 450px;
+    }
+
+    .form-buttons {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    @media (max-width: 600px) {
+      .form-slider {
+        min-height: 500px;
+      }
+    }
+  </style>
 </head>
+<body>
 
-    <!-- Header with centered FC Hanley Badge -->
-    <header class="club-header">
-        <a href="index.html">
-            <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge">
-        </a>
-    </header>
+  <!-- Header with FC Hanley Badge -->
+  <header class="club-header">
+    <a href="index.html">
+      <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge" />
+    </a>
+  </header>
 
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="fixtures.html">Fixtures</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="news.html">News & Events</a></li>
+      <li><a href="holidaycamps.html">Holiday Camps</a></li>
+      <li><a href="toptier.html">Top Tier Trophies</a></li>
+      <li><a href="subz.html">Subz</a></li>
+    </ul>
+  </nav>
 
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <ul>
-            <li><a href="fixtures.html">Fixtures</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
-            <li><a href="news.html">News & Events</a></li>
-            <li><a href="holidaycamps.html">Holiday Camps</a></li>
-            <li><a href="toptier.html">Top Tier Trophies</a></li>
-            <li><a href="subz.html">Subz</a></li>
-        </ul>
-    </nav>
+  <header class="hero">
+    <div class="hero-content">
+      <h1>Subz!</h1>
+      <p>Plan your team substitutions with ease!</p>
+    </div>
+  </header>
 
-    <body>
-        <header class="hero">
-            <div class="hero-content">
-                <h1>Subz!</h1>
-                <p>Plan your team substitutions with ease!</p>
+  <div class="container">
+    <div class="form-container">
+      <h2>Substitution Planner</h2>
+      <form id="subForm">
+
+        <div class="form-slider">
+          <!-- Step 1 -->
+          <div class="step-slide active">
+            <label for="total_players">Total Players:</label>
+            <input type="number" id="total_players" min="1" value="12" />
+
+            <label for="on_field">Players on Field:</label>
+            <input type="number" id="on_field" min="1" value="11" />
+
+            <label for="total_minutes">Total Game Time (minutes):</label>
+            <input type="number" id="total_minutes" min="1" value="90" />
+
+            <div class="form-buttons">
+              <button type="button" onclick="nextStep()">Next</button>
             </div>
-        </header>
+          </div>
 
-    <div class="container">
-        <div class="form-container">
-            <h2>Enter Game Details</h2>
-            <form id="subForm">
-                <label for="total_players">Total Players:</label>
-                <input type="number" id="total_players" min="1" value="12">
+          <!-- Step 2 -->
+          <div class="step-slide">
+            <label for="sub_interval">Substitution Interval (minutes):</label>
+            <input type="number" id="sub_interval" min="0.1" value="10" step="0.1" />
 
-                <label for="on_field">Players on Field:</label>
-                <input type="number" id="on_field" min="1" value="11">
+            <label for="use_custom_names">Use Custom Player Names:</label>
+            <input type="checkbox" id="use_custom_names" />
 
-                <label for="total_minutes">Total Game Time (minutes):</label>
-                <input type="number" id="total_minutes" min="1" value="90">
+            <div class="form-buttons">
+              <button type="button" onclick="prevStep()">Back</button>
+              <button type="button" onclick="nextStep()">Next</button>
+            </div>
+          </div>
 
-                <label for="sub_interval">Substitution Interval (minutes):</label>
-                <input type="number" id="sub_interval" min="0.1" value="10" step="0.1">
+          <!-- Step 3 -->
+          <div class="step-slide">
+            <div id="player_names"></div>
 
-                <label for="use_custom_names">Use Custom Player Names:</label>
-                <input type="checkbox" id="use_custom_names">
+            <label for="goalkeeper_name">Goalkeeper:</label>
+            <select id="goalkeeper_name"></select>
 
-                <div id="player_names"></div>
+            <label for="excluded_player">Exclude From Starting Lineup:</label>
+            <select id="excluded_player">
+              <option value="None">None</option>
+            </select>
 
-                <label for="goalkeeper_name">Goalkeeper:</label>
-                <select id="goalkeeper_name">
-                    <!-- Player options will be dynamically added here -->
-                </select>
-
-                <label for="excluded_player">Exclude From Starting Lineup:</label>
-                <select id="excluded_player">
-                    <option value="None">None</option>
-                    <!-- Player options will be dynamically added here -->
-                </select>
-
-                <button type="submit">Generate Substitution Plan</button>
-            </form>
+            <div class="form-buttons">
+              <button type="button" onclick="prevStep()">Back</button>
+              <button type="submit">Generate Plan</button>
+            </div>
+          </div>
         </div>
-
-        <div id="substitutionResults" class="results-container">
-            <h2>Substitution Plan</h2>
-            <div id="planOutput"></div>
-        </div>
+      </form>
     </div>
 
-<button onclick="clearPlan()">Clear Plan</button>
+    <div id="substitutionResults" class="results-container">
+      <h2>Substitution Plan</h2>
+      <div id="planOutput"></div>
+      <button onclick="clearPlan()">Clear Plan</button>
+    </div>
+  </div>
 
+  <script src="scripts/substitution.js"></script>
+  <script src="subz.js"></script>
+  <script>
+    let currentStep = 0;
+    const steps = document.querySelectorAll(".step-slide");
 
-    <script src="scripts/substitution.js"></script>
+    function showStep(index) {
+      steps.forEach((step, i) => {
+        step.classList.remove("active");
+        if (i === index) step.classList.add("active");
+      });
+      currentStep = index;
+    }
+
+    function nextStep() {
+      if (currentStep < steps.length - 1) {
+        showStep(currentStep + 1);
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 0) {
+        showStep(currentStep - 1);
+      }
+    }
+  </script>
 </body>
 </html>
-
-<script src="subz.js"></script>
-
-
-    

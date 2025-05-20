@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FC Hanley Guestbook</title>
+    <link rel="stylesheet" href="styles/styles.css" />
+    <link rel="stylesheet" href="styles/guestbook.css" />
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header class="club-header">
+        <a href="index.html">
+            <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge">
+        </a>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <ul>
+            <li><a href="fixtures.html">Fixtures</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="news.html">News & Events</a></li>
+            <li><a href="holidaycamps.html">Holiday Camps</a></li>
+            <li><a href="toptier.html">Top Tier Trophies</a></li>
+            <li><a href="subz.html">Subz</a></li>
+            <li><a href="guestbook.html">Guestbook</a></li>
+        </ul>
+    </nav>
+
+    <!-- Guestbook Content -->
+    <div class="guestbook-container">
+        <h2>FC Hanley Guestbook</h2>
+        <p>We'd love to hear your comments, feedback and suggestions from your experience at FC Hanley. Please leave a message or shoutout!</p>
+
+        <form id="guestbookForm" class="guestbook-form">
+            <input type="text" id="guestName" placeholder="Your Name" required>
+            <textarea id="guestMessage" rows="4" placeholder="Your Message" required></textarea>
+            <button type="submit">Post Message</button>
+        </form>
+
+        <!-- Comment list will be populated by JavaScript -->
+        <div id="commentList"></div>
+
+        <!-- Admin Section -->
+        <div id="adminControls" style="text-align: right; margin-top: 1rem;">
+            <button id="adminLoginBtn">🔒 Admin Tools</button>
+            <button id="clearMessagesBtn" class="clear-btn" style="display: none;">🗑️ Clear All Messages</button>
+        </div>
+    </div>
+
+    <!-- Script -->
+    <script>
+        const form = document.getElementById('guestbookForm');
+        const commentList = document.getElementById('commentList');
+        const clearBtn = document.getElementById('clearMessagesBtn');
+        const adminLoginBtn = document.getElementById('adminLoginBtn');
+
+        const ADMIN_PASSWORD = "hanley123"; // Change this as needed
+
+        function loadComments() {
+            const comments = JSON.parse(localStorage.getItem('fcHanleyComments')) || [];
+            commentList.innerHTML = comments.reverse().map(c => `
+                <div class="comment">
+                    <h4>${c.name}</h4>
+                    <small>${c.date}</small>
+                    <p>${c.message}</p>
+                </div>
+            `).join('');
+        }
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('guestName').value.trim();
+            const message = document.getElementById('guestMessage').value.trim();
+
+            if (name && message) {
+                const comment = {
+                    name,
+                    message,
+                    date: new Date().toLocaleString()
+                };
+
+                const comments = JSON.parse(localStorage.getItem('fcHanleyComments')) || [];
+                comments.push(comment);
+                localStorage.setItem('fcHanleyComments', JSON.stringify(comments));
+
+                form.reset();
+                loadComments();
+            }
+        });
+
+        // Admin login button click
+        adminLoginBtn.addEventListener('click', () => {
+            const input = prompt("Enter admin password:");
+            if (input === ADMIN_PASSWORD) {
+                clearBtn.style.display = "inline-block";
+                alert("Admin access granted.");
+            } else if (input !== null) {
+                alert("Incorrect password.");
+            }
+        });
+
+        // Clear all messages
+        clearBtn.addEventListener('click', () => {
+            if (confirm("Are you sure you want to delete all guestbook messages?")) {
+                localStorage.removeItem('fcHanleyComments');
+                loadComments();
+            }
+        });
+
+        // Initial load
+        loadComments();
+    </script>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 FC Hanley. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
