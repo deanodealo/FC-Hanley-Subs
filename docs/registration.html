@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FC Hanley Registration</title>
+
+  <!-- Existing global styles -->
+  <link rel="stylesheet" href="styles/styles.css">
+
+  <!-- Firebase scripts -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+  <!-- Club Header -->
+  <header class="club-header">
+    <a href="index.html">
+      <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge" />
+    </a>
+  </header>
+
+  <style>
+    .form-wrapper {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .form-wrapper h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-wrapper input,
+    .form-wrapper select,
+    .form-wrapper button {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .form-wrapper button {
+      background-color: #004080;
+      color: white;
+      border: none;
+    }
+
+    .form-wrapper button:hover {
+      background-color: #002f5f;
+    }
+
+    #confirmation {
+      text-align: center;
+      color: green;
+      font-weight: bold;
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+  <div class="nav-scroll-container">
+    <ul>
+      <li><a href="fixtures.html">Fixtures</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="news.html">News & Events</a></li>
+      <li><a href="holidaycamps.html">Holiday Camps</a></li>a
+      <li><a href="toptier.html">Top Tier Trophies</a></li>
+      <li><a href="subz.html">Subz</a></li>
+      <li><a href="guestbook.html">feedback</a></li>
+    </ul>
+  </div>
+</nav>
+
+  <div class="form-wrapper">
+    <h2>Register Your Player</h2>
+    <form id="registrationForm">
+      <input type="text" id="playerName" placeholder="Player Name" required />
+      <input type="date" id="dob" placeholder="Date of Birth" required />
+      <input type="text" id="guardianName" placeholder="Parent/Guardian Name" required />
+      <input type="email" id="guardianEmail" placeholder="Parent/Guardian Email" required />
+      <input type="tel" id="contactNumber" placeholder="Contact Number" required />
+      <select id="interest" required>
+        <option value="" disabled selected>Interested In...</option>
+        <option value="Soccer School">Soccer School</option>
+        <option value="Joining a team">Joining a team</option>
+        <option value="Both">Both</option>
+      </select>
+      <button type="submit">Submit Registration</button>
+    </form>
+    <p id="confirmation">Thank you! Your registration has been submitted.</p>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDXXX-LMkY4Q0oN0M9e5wLdVhANzL8ifHs",
+      authDomain: "fchanley-8d910.firebaseapp.com",
+      databaseURL: "https://fchanley-8d910-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "fchanley-8d910",
+      storageBucket: "fchanley-8d910.firebasestorage.app",
+      messagingSenderId: "384977183977",
+      appId: "1:384977183977:web:7805c8ba7e9122b883bc78",
+      measurementId: "G-1CBV4NK83L"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    const form = document.getElementById('registrationForm');
+    const confirmation = document.getElementById('confirmation');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const playerName = document.getElementById('playerName').value;
+      const dob = document.getElementById('dob').value;
+      const guardianName = document.getElementById('guardianName').value;
+      const guardianEmail = document.getElementById('guardianEmail').value;
+      const contactNumber = document.getElementById('contactNumber').value;
+      const interest = document.getElementById('interest').value;
+
+      database.ref('registrations').push({
+        playerName,
+        dob,
+        guardianName,
+        guardianEmail,
+        contactNumber,
+        interest,
+        timestamp: new Date().toISOString()
+      })
+      .then(() => {
+        confirmation.style.display = 'block';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        form.reset();
+      })
+      .catch((error) => {
+        alert('Error: ' + error.message);
+      });
+    });
+  </script>
+
+</body>
+</html>
+
+<footer>
+  <a href="#" onclick="adminLogin()">Admin Login</a>
+
+<script>
+  function adminLogin() {
+    const password = prompt("Enter admin password:");
+    if (password === "hanley123") {
+      window.location.href = "view-registrations.html";
+    } else if (password !== null) {
+      alert("Incorrect password.");
+    }
+  }
+</script>
+
+</footer>

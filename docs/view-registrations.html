@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Registrations</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="styles/styles.css" />
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+
+  <style>
+    .table-container {
+      max-width: 90%;
+      margin: 40px auto;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #004080;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <header style="text-align: center; padding-top: 20px;">
+    <img src="images/HanleyBadge.png" alt="FC Hanley Logo" style="max-width: 100px;">
+    <h1>Submitted Registrations</h1>
+  </header>
+
+  <div class="table-container">
+    <table id="registrationsTable">
+      <thead>
+        <tr>
+          <th>Player Name</th>
+          <th>Date of Birth</th>
+          <th>Guardian Name</th>
+          <th>Email</th>
+          <th>Contact</th>
+          <th>Interest</th>
+          <th>Submitted</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Entries will be inserted here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDXXX-LMkY4Q0oN0M9e5wLdVhANzL8ifHs",
+      authDomain: "fchanley-8d910.firebaseapp.com",
+      databaseURL: "https://fchanley-8d910-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "fchanley-8d910",
+      storageBucket: "fchanley-8d910.firebasestorage.app",
+      messagingSenderId: "384977183977",
+      appId: "1:384977183977:web:7805c8ba7e9122b883bc78",
+      measurementId: "G-1CBV4NK83L"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const database = firebase.database();
+
+    const tableBody = document.querySelector("#registrationsTable tbody");
+
+    database.ref("registrations").once("value", (snapshot) => {
+      snapshot.forEach((child) => {
+        const data = child.val();
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${data.playerName}</td>
+          <td>${data.dob}</td>
+          <td>${data.guardianName}</td>
+          <td>${data.guardianEmail}</td>
+          <td>${data.contactNumber}</td>
+          <td>${data.interest}</td>
+          <td>${new Date(data.timestamp).toLocaleString()}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    });
+  </script>
+</body>
+</html>

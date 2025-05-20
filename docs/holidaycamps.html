@@ -1,60 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Holiday Camps - FC Hanley</title>
-    <link rel="stylesheet" href="styles/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Holiday Camps - FC Hanley</title>
+  <link rel="stylesheet" href="styles/styles.css" />
+  <style>
+    /* Video styles */
+    .camp-video {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto 20px auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .camp-poster {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .camp-poster img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      margin-bottom: 15px;
+    }
+
+    .signup-link {
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      padding: 12px 30px;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .signup-link:hover {
+      background-color: #0056b3;
+    }
+  </style>
 </head>
 <body>
-    <header class="club-header">
-        <a href="index.html">
-            <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge">
-        </a>
-    </header>
-    
-    <nav class="navbar">
-        <ul>
-            <li><a href="fixtures.html">Fixtures</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
-            <li><a href="news.html">News & Events</a></li>
-            <li><a href="holidaycamps.html">Holiday Camps</a></li>
-            <li><a href="toptier.html">Top Tier Trophies</a></li>
-            <li><a href="subz.html">Subz</a></li>
-            <li><a href="guestbook.html">feedback</a></li>
-        </ul>
-    </nav>
+  <header class="club-header">
+    <a href="index.html">
+      <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge" />
+    </a>
+  </header>
 
-    <section class="hero">
-        <div class="hero-content">
-            <h1>Holiday Camps</h1>
-            <p>Get ready for fun-filled football during the school holidays!</p>
-            <p>UEFA & FA Qualified coaches focusing on all elements of the game</p>
-        </div>
-    </section>
+  <nav class="navbar">
+    <ul>
+      <li><a href="fixtures.html">Fixtures</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="news.html">News & Events</a></li>
+      <li><a href="holidaycamps.html">Holiday Camps</a></li>
+      <li><a href="toptier.html">Top Tier Trophies</a></li>
+      <li><a href="subz.html">Subz</a></li>
+      <li><a href="guestbook.html">Feedback</a></li>
+    </ul>
+  </nav>
 
-    <section class="camp-poster">
-        <div class="poster-content">
-            <div class="poster-text">
-                <h2> Easter Holiday Football Camp</h2>
-                <ul class="camp-list">
-                    <li><span class="highlight">Top Coaches:</span> FA & UEFA qualified</li>
-                    <li><span class="highlight">Dates:</span> 14–17 April</li>
-                    <li><span class="highlight">Ages:</span> 5–14 years</li>
-                    <li><span class="highlight">Price:</span> £25 per day or £75 for all 4</li>
-                    <li><span class="highlight">Includes:</span> Skill sessions, games & fun!</li>
-                </ul>
-                <a href="https://northwood-stadium.hivelink.co.uk/" target="_blank" class="signup-link">Book Now</a>
-            </div>
-            <div class="poster-image">
-                <img src="images/footycamp2.jpg" alt="Kids at FC Hanley Holiday Camp">
-            </div>
-        </div>
-    </section>
-    
-    
-    <footer>
-        <p>&copy; 2025 FC Hanley. All rights reserved.</p>
-    </footer>
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Holiday Camps</h1>
+      <p>Get ready for fun-filled football during the school holidays!</p>
+      <p>UEFA & FA Qualified coaches focusing on all elements of the game</p>
+    </div>
+  </section>
+
+  <!-- Video Section -->
+  <section class="camp-video-container" style="text-align:center; margin: 20px 0;">
+    <video class="camp-video" autoplay muted loop playsinline>
+      <source src="videos/coachingschoolvid.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </section>
+
+  <!-- Poster and Button -->
+  <section class="camp-poster">
+    <img src="images/footycamp2.jpg" alt="Kids at FC Hanley Holiday Camp" />
+    <a href="https://northwood-stadium.hivelink.co.uk/" target="_blank" class="signup-link">Book Now</a>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 FC Hanley. All rights reserved.</p>
+  </footer>
 </body>
 </html>
