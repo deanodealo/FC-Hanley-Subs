@@ -6,6 +6,10 @@
     <title>FC Hanley Guestbook</title>
     <link rel="stylesheet" href="styles/styles.css" />
     <link rel="stylesheet" href="styles/guestbook.css" />
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 </head>
 
 <body>
@@ -36,39 +40,70 @@
         <p>We'd love to hear your comments, feedback and suggestions from your experience at FC Hanley. Please leave a message or shoutout!</p>
 
         <form id="guestbookForm" class="guestbook-form">
-            <input type="text" id="guestName" placeholder="Your Name" required>
+            <input type="text" id="guestName" placeholder="Your Name" required />
             <textarea id="guestMessage" rows="4" placeholder="Your Message" required></textarea>
             <button type="submit">Post Message</button>
         </form>
 
-        <!-- Comment list will be populated by JavaScript -->
         <div id="commentList"></div>
-
-        <!-- Admin Section -->
-        <div id="adminControls" style="text-align: right; margin-top: 1rem;">
-            <button id="adminLoginBtn">🔒 Admin Tools</button>
-            <button id="clearMessagesBtn" class="clear-btn" style="display: none;">🗑️ Clear All Messages</button>
-        </div>
+        <button id="clearCommentsBtn" class="clear-btn" style="display:none;">Clear All Messages</button>
     </div>
 
-    <!-- Script -->
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 FC Hanley. All rights reserved.</p>
+    </footer>
+
     <script>
+        // Your Firebase configuration — replace with your real config
+        const firebaseConfig = {
+  apiKey: "AIzaSyDXXX-LMkY4Q0oN0M9e5wLdVhANzL8ifHs",
+  authDomain: "fchanley-8d910.firebaseapp.com",
+  databaseURL: "https://fchanley-8d910-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "fchanley-8d910",
+  storageBucket: "fchanley-8d910.firebasestorage.app",
+  messagingSenderId: "384977183977",
+  appId: "1:384977183977:web:7805c8ba7e9122b883bc78",
+  measurementId: "G-1CBV4NK83L"
+};
+
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
         const form = document.getElementById('guestbookForm');
         const commentList = document.getElementById('commentList');
-        const clearBtn = document.getElementById('clearMessagesBtn');
-        const adminLoginBtn = document.getElementById('adminLoginBtn');
+        const clearBtn = document.getElementById('clearCommentsBtn');
 
-        const ADMIN_PASSWORD = "hanley123"; // Change this as needed
-
+        // Load comments from Firebase realtime database
         function loadComments() {
-            const comments = JSON.parse(localStorage.getItem('fcHanleyComments')) || [];
-            commentList.innerHTML = comments.reverse().map(c => `
-                <div class="comment">
-                    <h4>${c.name}</h4>
-                    <small>${c.date}</small>
-                    <p>${c.message}</p>
-                </div>
-            `).join('');
+            commentList.innerHTML = "Loading messages...";
+            db.ref('guestbookMessages').orderByChild('timestamp').once('value', snapshot => {
+                const comments = [];
+                snapshot.forEach(childSnapshot => {
+                    comments.push(childSnapshot.val());
+                });
+                comments.reverse(); // newest first
+                if (comments.length === 0) {
+                    commentList.innerHTML = "<p>No messages yet. Be the first to post!</p>";
+                    return;
+                }
+                commentList.innerHTML = comments.map(c => `
+                    <div class="comment">
+                        <h4>${escapeHtml(c.name)}</h4>
+                        <small>${new Date(c.timestamp).toLocaleString()}</small>
+                        <p>${escapeHtml(c.message)}</p>
+                    </div>
+                `).join('');
+            });
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            return text.replace(/[&<>"']/g, function(m) {
+                return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
+            });
         }
 
         form.addEventListener('submit', function(e) {
@@ -76,49 +111,44 @@
             const name = document.getElementById('guestName').value.trim();
             const message = document.getElementById('guestMessage').value.trim();
 
-            if (name && message) {
-                const comment = {
-                    name,
-                    message,
-                    date: new Date().toLocaleString()
-                };
+            if (!name || !message) return;
 
-                const comments = JSON.parse(localStorage.getItem('fcHanleyComments')) || [];
-                comments.push(comment);
-                localStorage.setItem('fcHanleyComments', JSON.stringify(comments));
-
+            // Push new comment to Firebase
+            db.ref('guestbookMessages').push({
+                name,
+                message,
+                timestamp: Date.now()
+            }).then(() => {
                 form.reset();
                 loadComments();
-            }
+            }).catch(error => {
+                alert("Error posting message: " + error.message);
+            });
         });
 
-        // Admin login button click
-        adminLoginBtn.addEventListener('click', () => {
-            const input = prompt("Enter admin password:");
-            if (input === ADMIN_PASSWORD) {
-                clearBtn.style.display = "inline-block";
-                alert("Admin access granted.");
-            } else if (input !== null) {
-                alert("Incorrect password.");
-            }
-        });
+        // Admin password to enable clear messages button
+        const adminPassword = "hanley123"; // Change as needed
+        const enteredPassword = prompt("Enter admin password to enable message management:");
 
-        // Clear all messages
+        if (enteredPassword === adminPassword) {
+            clearBtn.style.display = 'inline-block';
+        }
+
         clearBtn.addEventListener('click', () => {
             if (confirm("Are you sure you want to delete all guestbook messages?")) {
-                localStorage.removeItem('fcHanleyComments');
-                loadComments();
+                db.ref('guestbookMessages').remove()
+                .then(() => {
+                    alert("All messages cleared.");
+                    loadComments();
+                }).catch(error => {
+                    alert("Error clearing messages: " + error.message);
+                });
             }
         });
 
         // Initial load
         loadComments();
     </script>
-
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 FC Hanley. All rights reserved.</p>
-    </footer>
 
 </body>
 </html>
