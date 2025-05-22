@@ -787,7 +787,7 @@ input.player-input {
 
 .social-link {
   display: inline-block;
-  margin-left: 10px;           /* space from other header items */
+  margin-left: 100px;           /* space from other header items */
   vertical-align: middle;      /* align with logo/text */
 }
 
