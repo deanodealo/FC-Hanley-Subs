@@ -951,3 +951,19 @@ input[type="date"]:valid::before {
 .hidden {
   display: none;
 }
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.menu-panel {
+  transition: all 0.3s ease-in-out;
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.menu-panel.open {
+  transform: translateX(0);
+  opacity: 1;
+  display: flex;
+}
