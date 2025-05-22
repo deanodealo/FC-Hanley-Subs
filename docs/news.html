@@ -8,6 +8,18 @@
 </head>
 <body>
 
+      <!-- Burger Menu -->
+<div class="burger-menu">
+  <button id="burger-toggle" aria-label="Toggle menu">
+    ☰
+  </button>
+  <div id="burger-dropdown" class="burger-dropdown hidden">
+    <a href="toptier.html">Top Tier Trophies</a>
+    <a href="subz.html">Subz</a>
+    <a href="guestbook.html">Feedback</a>
+  </div>
+</div>
+
     <!-- Header -->
     <header class="club-header">
         <a href="index.html">
@@ -18,14 +30,10 @@
     <!-- Navigation Bar -->
     <nav class="navbar">
         <ul>
-            <li><a href="fixtures.html">Fixtures</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="gallery.html">Coaching School</a></li>
             <li><a href="news.html">News & Events</a></li>
             <li><a href="holidaycamps.html">Holiday Camps</a></li>
-            <li><a href="toptier.html">Top Tier Trophies</a></li>
-            <li><a href="subz.html">Subz</a></li>
-            <li><a href="guestbook.html">feedback</a></li>
-            
+             <li><a href="fixtures.html">Fixtures</a></li>
         </ul>
     </nav>
 
@@ -84,6 +92,14 @@
     <footer>
         <p>&copy; 2025 FC Hanley. All rights reserved.</p>
     </footer>
+
+      <!-- Burger Menu js -->
+<script>
+  document.getElementById("burger-toggle").addEventListener("click", function () {
+    document.getElementById("burger-dropdown").classList.toggle("hidden");
+  });
+</script>
+
 
 </body>
 </html>

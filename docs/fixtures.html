@@ -7,23 +7,34 @@
     <link rel="stylesheet" href="styles/styles.css">
 </head>
 
+<body>
+
+    <!-- Burger Menu -->
+<div class="burger-menu">
+  <button id="burger-toggle" aria-label="Toggle menu">
+    ☰
+  </button>
+  <div id="burger-dropdown" class="burger-dropdown hidden">
+    <a href="toptier.html">Top Tier Trophies</a>
+    <a href="subz.html">Subz</a>
+    <a href="guestbook.html">Feedback</a>
+  </div>
+</div>
+
     <!-- Header with centered FC Hanley Badge -->
     <header class="club-header">
         <a href="index.html">
             <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge">
         </a>
     </header>
-<body>
+
     <!-- Navigation Bar -->
     <nav class="navbar">
         <ul>
-            <li><a href="fixtures.html">Fixtures</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="gallery.html">Coaching School</a></li>
             <li><a href="news.html">News & Events</a></li>
             <li><a href="holidaycamps.html">Holiday Camps</a></li>
-            <li><a href="toptier.html">Top Tier Trophies</a></li>
-            <li><a href="subz.html">Subz</a></li>
-            <li><a href="guestbook.html">feedback</a></li>
+             <li><a href="fixtures.html">Fixtures</a></li>
         </ul>
     </nav>
 
@@ -35,7 +46,7 @@
         <!-- Age Group Fixtures Sections -->
         <section id="u7" class="content-section">
             <h2>U7's Fixtures</h2>
-            <p>Details of upcoming U7's fixtures will go here.</p>
+            <p>FC Hanley U7 Blue vs Werrington Wanderers  KO 10:00am.  Pitch 2.  (Setup)</p>
         </section>
 
         <section id="u8" class="content-section">
@@ -78,5 +89,13 @@
     <footer>
         <p>&copy; 2025 FC Hanley. All rights reserved.</p>
     </footer>
+
+        <!-- Burger Menu js -->
+<script>
+  document.getElementById("burger-toggle").addEventListener("click", function () {
+    document.getElementById("burger-dropdown").classList.toggle("hidden");
+  });
+</script>
+
 </body>
 </html>

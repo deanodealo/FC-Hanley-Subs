@@ -7,6 +7,19 @@
     <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
+
+    <!-- Burger Menu -->
+<div class="burger-menu">
+  <button id="burger-toggle" aria-label="Toggle menu">
+    ☰
+  </button>
+  <div id="burger-dropdown" class="burger-dropdown hidden">
+    <a href="toptier.html">Top Tier Trophies</a>
+    <a href="subz.html">Subz</a>
+    <a href="guestbook.html">Feedback</a>
+  </div>
+</div>
+
     <!-- Header with centered FC Hanley Badge -->
     <header class="club-header">
         <a href="index.html">
@@ -17,19 +30,34 @@
     <!-- Navigation Bar -->
     <nav class="navbar">
         <ul>
-            <li><a href="fixtures.html">Fixtures</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="gallery.html">Coaching School</a></li>
             <li><a href="news.html">News & Events</a></li>
             <li><a href="holidaycamps.html">Holiday Camps</a></li>
-            <li><a href="toptier.html">Top Tier Trophies</a></li>
-            <li><a href="subz.html">Subz</a></li>
-            <li><a href="guestbook.html">feedback</a></li>
+            <li><a href="fixtures.html">Fixtures</a></li>
         </ul>
     </nav>
 
+    <!-- Hero Section with background image -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Community Coaching Sessions Every Saturday!</h1>
+            <p>9:30-11am age 4+ (Registration from 9)<p>
+            <p>10:15-11am mini ballers aged 2-4 (Registration from 10)<p>
+            <p>£3 a session, no need to book!</p>
+            <p>Potteries Park, Abbey Lane, Bucknall, ST2 8AJ</p>
+            <p>Passion. Pride. Community. </p>
+        </div>
+    </section>
+
+        <section class="cta">
+        <h2>Want to Play!?</h2>
+        <p>Sign up today for our weekly soccer school or just come along.  Want to join a team? Register today and join us!</p>
+        <a href="registration.html" class="btn">Sign Up Now</a>
+    </section>
+
     <!-- Gallery Page Content -->
     <section class="gallery">
-        <h1>FC Hanley Gallery</h1>
+        <h1>Meet the Coaches</h1>
         <p>Take a look at some of the best moments from our games, training, and events!</p>
 
         <!-- Image Section 1 -->
@@ -87,5 +115,13 @@
     <footer>
         <p>&copy; 2025 FC Hanley. All rights reserved.</p>
     </footer>
+
+        <!-- Burger Menu js -->
+<script>
+  document.getElementById("burger-toggle").addEventListener("click", function () {
+    document.getElementById("burger-dropdown").classList.toggle("hidden");
+  });
+</script>
+
 </body>
 </html>

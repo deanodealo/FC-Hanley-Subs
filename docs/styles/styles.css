@@ -787,7 +787,7 @@ input.player-input {
 
 .social-link {
   display: inline-block;
-  margin-left: 100px;           /* space from other header items */
+  margin-left: 20px;           /* space from other header items */
   vertical-align: middle;      /* align with logo/text */
 }
 
@@ -908,5 +908,46 @@ input[type="date"]::before {
 
 input[type="date"]:focus::before,
 input[type="date"]:valid::before {
+  display: none;
+}
+
+.burger-menu {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1000;
+}
+
+#burger-toggle {
+  font-size: 2rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.burger-dropdown {
+  display: flex;
+  flex-direction: column;
+  background-color: #002244;
+  border: 1px solid #ccc;
+  padding: 1rem;
+  position: absolute;
+  top: 3rem;
+  left: 0;
+  min-width: 200px;
+}
+
+.burger-dropdown a {
+  color: white;
+  text-decoration: none;
+  padding: 0.5rem 0;
+}
+
+.burger-dropdown a:hover {
+  background-color: #004488;
+}
+
+.hidden {
   display: none;
 }
