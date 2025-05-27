@@ -146,7 +146,6 @@ footer {
 .club-header {
     position: relative;
     height: 170px;
-    background: url("../images/cool.png"); /* Background image */
     background-size: cover;
     display: flex;
     align-items: center;
