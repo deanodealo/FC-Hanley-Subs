@@ -7,13 +7,96 @@ body {
     color: #333;
 }
 
-/* Header Styles */
-header {
-    background-color: #004080;
-    color: white;
-    padding: 20px;
-    text-align: center;
+.club-header {
+  position: relative;
+  height: 200px;
+  background-image: url('../images/footy.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 20px;
+  color: white;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+  gap: 20px;
 }
+
+.club-header a {
+  flex: 0 0 auto;
+  position: relative;
+  top: 50px;        /* keeps logo overlapping header/hero */
+  margin-left: 250px; /* adjust to move logo further left */
+  height: 180px;    /* logo size */
+}
+
+.header-text {
+  flex-grow: 1;
+  text-align: right;
+  padding-right: 150px;
+}
+
+/* FONT SIZE for desktop */
+.header-text h1 {
+  font-size: 3.1rem;
+  margin: 0;
+}
+
+.header-text p {
+  font-size: 1.2rem;
+  margin: 5px 0 0;
+}
+
+/* MOBILE RESPONSIVE */
+@media (max-width: 600px) {
+  .club-header {
+    flex-wrap: nowrap;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 275px;       /* taller header to fit logo and text */
+    padding: 20px 10px;
+    position: relative;
+    gap: 10px;
+  }
+
+  .header-text {
+    order: 1;
+    align-self: flex-end;  /* text on top right */
+    text-align: right;
+    flex-grow: 0;
+    padding-right: 10px;
+  }
+
+  .header-text h1 {
+    font-size: 1.5rem;
+    margin: 0;
+  }
+
+  .header-text p {
+    font-size: 1rem;
+    margin: 5px 0 0 0;
+  }
+
+  .club-header a {
+    order: 2;
+    flex-grow: 0;
+    align-self: center;   /* logo centered horizontally */
+    margin-top: auto;     /* push logo to bottom of header */
+    position: relative;
+    top: 40px;            /* tweak vertical positioning */
+    margin-left: 0;       /* remove negative left margin on mobile */
+    height: 140px;        /* smaller logo on mobile */
+  }
+}
+
+
+
+
+
+
+
+
 
 /* Navigation Bar */
 nav ul {
@@ -38,11 +121,11 @@ nav ul li a {
 .hero {
     text-align: center;
     padding: 5px 5px;
-    background-image: url("../images/footy.jpg");
+    /*background-image: url("../images/footy.jpg");*/
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
-    color: white;
+    color: rgb(232, 229, 229);
     position: relative;
 }
 
@@ -140,19 +223,6 @@ footer {
     padding: 20px;
     background-color: #002244;
     color: white;
-}
-
-/* Club Header (Centered Badge) */
-.club-header {
-    position: relative;
-    height: 170px;
-    background-size: cover;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* Center the badge horizontally */
-    padding: 10px;
-    color: white;
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
 }
 
 .badge {
@@ -369,7 +439,7 @@ body {
 
 /* Hero Section */
 .hero {
-    background-color: #004080;
+    background-color: #eaeaeb;
     color: white;
     text-align: center;
     padding: 60px 0;
@@ -910,11 +980,12 @@ input[type="date"]:valid::before {
   display: none;
 }
 
+
 .burger-menu {
-  position: absolute;
+  position: fixed;
   top: 1rem;
   left: 1rem;
-  z-index: 1000;
+  z-index: 1001;
 }
 
 #burger-toggle {
@@ -923,28 +994,88 @@ input[type="date"]:valid::before {
   border: none;
   color: white;
   cursor: pointer;
+  z-index: 1002;
 }
 
 .burger-dropdown {
+  position: fixed;
+  top: 0;
+  left: -250px; /* Hidden off-screen initially */
+  width: 250px;
+  height: 100%;
+  background: linear-gradient(180deg, #003366, #001a33); /* gradient background */
+  border-right: 1px solid #ccc;
+  padding-top: 4rem;
   display: flex;
   flex-direction: column;
-  background-color: #002244;
-  border: 1px solid #ccc;
-  padding: 1rem;
-  position: absolute;
-  top: 3rem;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.25);
+  border-radius: 0 10px 10px 0;
+  transition: left 0.3s ease-in-out;
+  z-index: 1000;
+}
+
+.burger-dropdown.open {
   left: 0;
-  min-width: 200px;
 }
 
 .burger-dropdown a {
   color: white;
   text-decoration: none;
-  padding: 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 1rem 1.5rem;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
 }
 
+.burger-dropdown.open a {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Staggered animation delays */
+.burger-dropdown.open a:nth-child(2) { transition-delay: 0.05s; }
+.burger-dropdown.open a:nth-child(3) { transition-delay: 0.10s; }
+.burger-dropdown.open a:nth-child(4) { transition-delay: 0.15s; }
+.burger-dropdown.open a:nth-child(5) { transition-delay: 0.20s; }
+
 .burger-dropdown a:hover {
-  background-color: #004488;
+  background-color: #0055aa;
+  transform: scale(1.07);
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#burger-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 2.5rem;
+  color: #ddd;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+#burger-close:hover {
+  color: white;
+}
+
+/* Overlay background to dim page when menu is open */
+.burger-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* semi-transparent black */
+  z-index: 999; /* below burger menu */
+  display: none; /* hidden by default */
+}
+
+.burger-overlay.show {
+  display: block;
 }
 
 .hidden {
@@ -955,14 +1086,15 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-.menu-panel {
-  transition: all 0.3s ease-in-out;
-  transform: translateX(-100%);
-  opacity: 0;
-}
-
-.menu-panel.open {
-  transform: translateX(0);
-  opacity: 1;
-  display: flex;
+.overlapping-logo {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 8px solid white;
+  position: absolute;
+  bottom: -75px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  object-fit: cover;
 }
