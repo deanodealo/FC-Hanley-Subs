@@ -1,0 +1,128 @@
+/* Reset body and font styles */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+.club-header {
+  position: relative;
+  height: 200px;
+  background-image: url('../images/footy.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 20px;
+  color: white;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+  gap: 20px;
+}
+
+.club-header a {
+  flex: 0 0 auto;
+  position: relative;
+  top: 50px;        /* keeps logo overlapping header/hero */
+  margin-left: 250px; /* adjust to move logo further left */
+  height: 180px;    /* logo size */
+}
+
+.header-text {
+  flex-grow: 1;
+  text-align: right;
+  padding-right: 150px;
+}
+
+/* FONT SIZE for desktop */
+.header-text h1 {
+  font-size: 3.1rem;
+  margin: 0;
+}
+
+.header-text p {
+  font-size: 1.2rem;
+  margin: 5px 0 0;
+}
+
+
+.news-article {
+    background-color: #0f76dd;
+    border-radius: 8px;
+    padding: 55px 20px 20px 20px; /* top right bottom left */
+    margin: 0 auto 20px;
+    max-width: 390px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.news-article img.news-image {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+}
+
+.news-article h2 {
+    color: #004080;
+    margin-bottom: 10px;
+}
+
+.news-article p {
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+.news-article2 {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px 20px 20px 20px; /* top right bottom left */
+    margin: 0 auto 20px;
+    max-width: 390px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.news-article {
+    margin-bottom: 30px;
+}
+
+.news-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.news-text {
+    flex: 1;
+    min-width: 250px;
+}
+
+.news-image {
+    width: 300px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .news-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .news-image {
+        width: 90%;
+    }
+}
+
+.news-article2 div {
+  text-align: center;  /* centers inline elements inside this div */
+}
+
+.news-article2 img.news-image {
+  max-width: 100%;    /* keeps image responsive */
+  height: auto;
+  display: inline-block; /* so it respects text-align */
+}

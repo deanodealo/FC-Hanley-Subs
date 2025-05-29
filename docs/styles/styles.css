@@ -91,13 +91,6 @@ body {
 }
 
 
-
-
-
-
-
-
-
 /* Navigation Bar */
 nav ul {
     list-style: none;
@@ -182,7 +175,7 @@ nav ul li a {
     background-color: #004080; /* Dark blue background */
     color: white;
     text-align: center;
-    padding: 50px 20px;
+    padding: 40px 40px;
     margin: 30px auto; /* Center it horizontally */
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -196,7 +189,7 @@ nav ul li a {
 }
 
 .cta p {
-    font-size: 20px;
+    font-size: 16px;
     margin-bottom: 30px;
     line-height: 1.6;
 }
@@ -205,7 +198,7 @@ nav ul li a {
     font-size: 18px;
     background-color: #ffcc00; /* Gold color for the button */
     color: #003366; /* Dark blue text */
-    padding: 15px 30px;
+    padding: 15px 15px;
     text-decoration: none;
     font-weight: bold;
     border-radius: 5px;
@@ -220,9 +213,10 @@ nav ul li a {
 /* Footer Styles */
 footer {
     text-align: center;
-    padding: 20px;
+    padding: 1px;
     background-color: #002244;
     color: white;
+    padding-top: 10px; /* Push content down */
 }
 
 .badge {
@@ -516,11 +510,19 @@ button:hover {
     }
 }
 .news-article {
-    background-color: white;
+    background-color: #0f76dd;
     border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 55px 20px 20px 20px; /* top right bottom left */
+    margin: 0 auto 20px;
+    max-width: 390px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.news-article img.news-image {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
 }
 
 .news-article h2 {
@@ -532,6 +534,7 @@ button:hover {
     font-size: 16px;
     line-height: 1.6;
 }
+
 /* Google Font Import */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap');
 
@@ -622,7 +625,7 @@ body {
 .signup-link {
     display: inline-block;
     padding: 12px 28px;
-    background: #1221f3;
+    background: #ecf80f;
     color: #fff;
     border-radius: 30px;
     text-decoration: none;
@@ -921,8 +924,8 @@ input.player-input {
 
 .signup-link {
   display: inline-block;
-  background-color: #007bff;
-  color: white;
+  background-color: #efe811;
+  color: rgb(3, 3, 3);
   padding: 12px 30px;
   text-decoration: none;
   font-weight: bold;
@@ -1082,17 +1085,8 @@ body {
   object-fit: cover;
 }
 
-.circle-img {
-  width: 150px;
-  height: 150px;
-  margin: 0 auto; 
-  object-fit: cover;
-  border-radius: 50%;
-  display: block;
-}
-
 .hero-inner {
-  padding: 0px 25px;
+  padding: 25px 25px;
   margin: -5rem -1rem -2rem;
 }
 
@@ -1103,4 +1097,185 @@ body {
     border-radius: 10px;
     z-index: 1;
     position: relative;
+}
+
+.circle-img {
+  width: 200px; /* or any appropriate size */
+  height: auto;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.trophy-img2 {
+  display: block;
+  margin: 20px  8px; /* 40px space below the image */
+  width: 395px;
+  height: auto;
+  border-radius: 10px;  /* Adjust px for more or less rounding */
+}
+
+/* New Hero Content (independently styled) */
+.hero-content-alt {
+  background-color: #0066aa;  /* Slightly different blue */
+  text-align: center;
+  padding: 10px 10px;
+  max-width: 800px;
+  margin: 8px;
+  border-radius: 10px;
+  position: relative;
+  z-index: 1;
+  color: #fff; /* ensure text is visible */
+}
+
+/* New Hero Content (independently styled) */
+.hero-content-alt2 {
+  background-color: #004080;
+  text-align: center;
+  padding: 10px 50px;
+  max-width: 800px;
+  margin: 8px;
+  border-radius: 10px;
+  position: relative;
+  z-index: 1;
+  color: #fff; /* ensure text is visible */
+}
+
+#facebook h2 {
+  font-family: 'Poppins', 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 3.3rem;
+  margin: 0 auto 10px; /* top margin 0, auto horizontal to center, bottom 10px for spacing */
+  font-weight: bold;
+  color: white;
+  text-align: center;  /* centers the text horizontally */
+  padding-top: 0;      /* remove any extra padding on top */
+  line-height: 1.1;    /* tighten line height if needed */
+}
+
+
+@media (max-width: 600px) {
+  #facebook h2 {
+    font-size: 1.5rem;
+  }
+}
+
+.form-wrapper {
+  margin-top: 80px; /* Adjust this value to move the form down */
+}
+
+.fixtures {
+  margin-top: 60px; /* Adjust this value to move the form down */
+}
+
+.toptier-article {
+    background-color: #0f76dd;
+    border-radius: 8px;
+    padding: 35px 20px 35px 20px;
+    margin: 50px auto 30px;
+    max-width: 390px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    /* Optional: text-align center if you want text centered too */
+    /* text-align: center; */
+}
+
+.toptier-image {
+    width: 300px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;          /* makes margin auto work */
+    margin-left: auto;       /* center horizontally */
+    margin-right: auto;      /* center horizontally */
+}
+
+
+.toptier-article h2 {
+    color: #004080;
+    margin-bottom: 10px;
+    text-align: center; /* Optional: center the heading */
+}
+
+.toptier-article p {
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: center; /* Optional: center the paragraph text */
+}
+
+
+.toptier-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.toptier-text {
+    flex: 1;
+    min-width: 250px;
+}
+
+.toptier-image {
+    width: 300px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+    .toptier-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .toptier-image {
+        width: 90%;
+    }
+}
+
+/* Base styles for all articles inside content-section */
+.content-section article {
+    background-color: #0f76dd;
+    border-radius: 8px;
+    margin: 60px auto 30px; /* default margin for all articles */
+    max-width: 390px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.larger-article {
+    background-color: #0f76dd;
+    margin-top: 10px !important; /* or even 0 or negative if you want */
+    border-radius: 8px;
+    padding: 30px 20px;
+    margin: 5px auto 40px; /* controls top, sides, bottom spacing */
+    max-width: 390px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    color: #f0f0f0;
+}
+
+.larger-article h2 {
+    margin: 0 0 20px 0;
+    font-size: 20px;
+    color: #f0f0f0;
+}
+
+.larger-image {
+    width: 340px;
+    height: auto;
+    object-fit: cover;
+    border-radius: 12px;
+    display: block;
+    margin: 0 auto;
+}
+
+.larger-article a {
+    color: #ffffff; /* example: gold/yellow for good contrast */
+    text-decoration: underline; /* optional: keep links underlined */
+}
+
+.larger-article a:hover {
+    color: #e6ff05; /* optional: change color on hover */
 }

@@ -15,7 +15,7 @@
   <style>
     .form-wrapper {
       max-width: 600px;
-      margin: 40px auto;
+      margin: 80px auto;
       padding: 20px;
       background-color: white;
       border-radius: 10px;
@@ -58,13 +58,16 @@
   </style>
 </head>
 <body>
-
-  <!-- Burger Menu -->
+<!-- Burger Menu -->
 <div class="burger-menu">
-  <button id="burger-toggle" aria-label="Toggle menu">
-    ☰
-  </button>
-  <div id="burger-dropdown" class="burger-dropdown hidden">
+  <button id="burger-toggle" aria-label="Toggle menu">☰</button>
+
+  <div id="burger-dropdown" class="burger-dropdown">
+    <a href="#" class="close-btn" id="burger-close">&times;</a>
+    <a href="gallery.html">Coaching School</a>
+    <a href="news.html">News & Events</a>
+    <a href="holidaycamps.html">Holiday Camps</a>
+    <a href="fixtures.html">Fixtures</a>
     <a href="toptier.html">Top Tier Trophies</a>
     <a href="subz.html">Subz</a>
     <a href="guestbook.html">Feedback</a>
@@ -72,24 +75,20 @@
   </div>
 </div>
 
-  <!-- Club Header -->
-  <header class="club-header">
-    <a href="index.html">
-      <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge" />
-    </a>
-  </header>
+<!-- Burger Menu Overlay -->
+<div class="burger-overlay" id="burger-overlay"></div>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="nav-scroll-container">
-      <ul>
-        <li><a href="gallery.html">Coaching School</a></li>
-        <li><a href="news.html">News & Events</a></li>
-        <li><a href="holidaycamps.html">Holiday Camps</a></li>
-        <li><a href="fixtures.html">Fixtures</a></li>
-      </ul>
-    </div>
-  </nav>
+<!--Header-->
+<header class="club-header">
+  <a href="index.html">
+    <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge overlapping-logo">
+  </a>
+  <div class="header-text">
+    <h1>FC Hanley Football Club</h1>
+    <p>Passion. Pride. Community.</p>
+  </div>
+</header>
+
 
   <!-- Registration Form -->
   <div class="form-wrapper">
@@ -184,10 +183,27 @@
       }
     </script>
 
-      <!-- Burger Menu js -->
+<!-- Burger Menu JS -->
 <script>
-  document.getElementById("burger-toggle").addEventListener("click", function () {
-    document.getElementById("burger-dropdown").classList.toggle("hidden");
+  document.addEventListener("DOMContentLoaded", () => {
+    const burgerToggle = document.getElementById("burger-toggle");
+    const burgerDropdown = document.getElementById("burger-dropdown");
+    const burgerClose = document.getElementById("burger-close");
+    const overlay = document.getElementById("burger-overlay");
+
+    function openMenu() {
+      burgerDropdown.classList.add("open");
+      overlay.classList.add("show");
+    }
+
+    function closeMenu() {
+      burgerDropdown.classList.remove("open");
+      overlay.classList.remove("show");
+    }
+
+    burgerToggle.addEventListener("click", openMenu);
+    burgerClose.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
   });
 </script>
 

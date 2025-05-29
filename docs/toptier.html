@@ -6,19 +6,21 @@
   <title>Top Tier Trophies | FC Hanley</title>
 
   <!-- Site‑wide styles (header, nav, background, typography) -->
-  <link rel="stylesheet" href="styles/site-styles.css" />
+    <link rel="stylesheet" href="styles/styles.css">
 
-  <!-- Page‑specific styles -->
-  <link rel="stylesheet" href="styles/toptier.css" />
-</head>
-<body class="page-toptier">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
 
 <!-- Burger Menu -->
 <div class="burger-menu">
-  <button id="burger-toggle" aria-label="Toggle menu">
-    ☰
-  </button>
-  <div id="burger-dropdown" class="burger-dropdown hidden">
+  <button id="burger-toggle" aria-label="Toggle menu">☰</button>
+
+  <div id="burger-dropdown" class="burger-dropdown">
+    <a href="#" class="close-btn" id="burger-close">&times;</a>
+    <a href="gallery.html">Coaching School</a>
+    <a href="news.html">News & Events</a>
+    <a href="holidaycamps.html">Holiday Camps</a>
+    <a href="fixtures.html">Fixtures</a>
     <a href="toptier.html">Top Tier Trophies</a>
     <a href="subz.html">Subz</a>
     <a href="guestbook.html">Feedback</a>
@@ -26,33 +28,31 @@
   </div>
 </div>
 
-  <!-- Club Header -->
-  <header class="club-header">
-    <a href="index.html">
-      <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge" />
-    </a>
-  </header>
+<!-- Burger Menu Overlay -->
+<div class="burger-overlay" id="burger-overlay"></div>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <ul>
-      <li><a href="gallery.html">Coaching School</a></li>
-      <li><a href="news.html">News & Events</a></li>
-      <li><a href="holidaycamps.html">Holiday Camps</a></li>
-        <li><a href="fixtures.html">Fixtures</a></li>
-    </ul>
-  </nav>
+<!--Header-->
+<header class="club-header">
+  <a href="index.html">
+    <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge overlapping-logo">
+  </a>
+  <div class="header-text">
+    <h1>FC Hanley Football Club</h1>
+    <p>Passion. Pride. Community.</p>
+  </div>
+</header>
 
-  <!-- Main Content -->
-  <main class="top-tier-trophy-container">
-    <!-- Hero Banner -->
-    <section class="trophy-section">
-      <img src="images/toptiertrophies.jpg" alt="Top Tier Trophies" class="promo-image" />
+    <!-- toptier Section -->
+    <section class="content-section">
+        <article class="toptier-article">
+        <img src="images/toptiertrophies.jpg" alt="toptier Poster" class="toptier-image">
+        </article>
     </section>
 
-    <section class="hero-section">
-      <div class="hero-content">
-        <h2>Celebrate victory with excellence with Top Tier Trophies</h2>
+
+<section class="content-section">
+  <article class="larger-article">
+    <h2>Celebrate victory with excellence with Top Tier Trophies</h2>
         <p>Get in touch for all your trophy, medals and engraving needs</p>
         <p>Call: <a href="tel:07495051135">07495 051135</a></p>
         <p>Email: <a href="mailto:sales@toptiertrophies.co.uk">sales@toptiertrophies.co.uk</a></p>
@@ -60,32 +60,37 @@
         <h2><a href="https://sportinggreatsonline.com" target="_blank" rel="noopener noreferrer">
     Click to Check out our Online Catalogue!
   </a></h2>
-      </div>
-    </section>
+  </article>
+</section>
 
-    <!-- Product Showcase -->
-    <section class="trophy-section">
-      <img src="images/trophies.jpg" alt="Trophies" class="promo-image" />
-      <p class="promo-text">Trophies – Because Champions deserve more than applause</p>
-    </section>
 
-    <section class="trophy-section">
-      <img src="images/medals.jpg" alt="Medals" class="promo-image" />
-      <p class="promo-text">Medals – Honouring every achievement, one medal at a time</p>
-    </section>
+<section class="content-section">
+  <article class="larger-article">
+    <h2>Because Champions deserve more than applause</h2>
+    <img src="images/trophies.jpg" alt="Another Poster" class="larger-image">
+  </article>
+</section>
 
-    <section class="trophy-section">
-      <img src="images/engraving.jpg" alt="Engraving" class="promo-image" />
-      <p class="promo-text">Engraving – Celebrate Victory! Customise the Glory!</p>
-    </section>
+<section class="content-section">
+  <article class="larger-article">
+    <h2>Honouring every achievement, one medal at a time</h2>
+    <img src="images/medals.jpg" alt="Another Poster" class="larger-image">
+  </article>
+</section>
 
-    <section class="hero-section">
-      <div class="hero-content">
-        <h2>Customisable, Professional & Competitive Service</h2>
-        <p>From Kick Off to Podium – We’ve got you covered!</p>
-      </div>
-    </section>
-  </main>
+<section class="content-section">
+  <article class="larger-article">
+    <h2>FREE Engraving on ALL Trophies & Medals - Celebrate Victory! Customise the Glory!</h2>
+    <img src="images/engraving.jpg" alt="Another Poster" class="larger-image">
+  </article>
+</section>
+
+<section class="content-section">
+  <article class="larger-article">
+    <h2>Customisable, Professional & Competitive Service</h2>
+    <p>From Kick Off to Podium – We’ve got you covered!</p>
+  </article>
+</section>
 
   <!-- Facebook Link (only on this page) -->
   <div class="social-container">
@@ -107,10 +112,27 @@
         <p>&copy; 2025 FC Hanley. All rights reserved.</p>
     </footer>
 
-      <!-- Burger Menu js -->
+<!-- Burger Menu JS -->
 <script>
-  document.getElementById("burger-toggle").addEventListener("click", function () {
-    document.getElementById("burger-dropdown").classList.toggle("hidden");
+  document.addEventListener("DOMContentLoaded", () => {
+    const burgerToggle = document.getElementById("burger-toggle");
+    const burgerDropdown = document.getElementById("burger-dropdown");
+    const burgerClose = document.getElementById("burger-close");
+    const overlay = document.getElementById("burger-overlay");
+
+    function openMenu() {
+      burgerDropdown.classList.add("open");
+      overlay.classList.add("show");
+    }
+
+    function closeMenu() {
+      burgerDropdown.classList.remove("open");
+      overlay.classList.remove("show");
+    }
+
+    burgerToggle.addEventListener("click", openMenu);
+    burgerClose.addEventListener("click", closeMenu);
+    overlay.addEventListener("click", closeMenu);
   });
 </script>
 
