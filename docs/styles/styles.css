@@ -9,35 +9,44 @@ body {
 
 .club-header {
   position: relative;
-  height: 200px;
+  min-height: 200px;
+  width: 100%;
+  box-sizing: border-box;
   background-image: url('../images/footy.jpg');
   background-size: cover;
   background-position: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
+  align-items: flex-start;
   padding: 10px 20px;
   color: white;
   text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
   gap: 20px;
+  overflow: visible;
+  background-color: rgba(0, 102, 170, 0.3); /* temp for debugging */
+  max-width: none; /* remove max-width for full width */
+  margin: 0;       /* remove margin to avoid centering */
 }
 
 .club-header a {
   flex: 0 0 auto;
   position: relative;
-  top: 50px;        /* keeps logo overlapping header/hero */
-  margin-left: 250px; /* adjust to move logo further left */
-  height: 180px;    /* logo size */
+  top: 50px;
+  z-index: 10;
+  height: 180px;
+  margin-left: 0;
 }
 
 .header-text {
   flex-grow: 1;
   text-align: right;
-  padding-right: 150px;
+  padding-right: 120px;
+  position: relative;
+  z-index: 5;
 }
 
-/* FONT SIZE for desktop */
+
+/* Font size */
 .header-text h1 {
   font-size: 3.1rem;
   margin: 0;
@@ -48,24 +57,49 @@ body {
   margin: 5px 0 0;
 }
 
-/* MOBILE RESPONSIVE */
+/* Landscape phones/tablets */
+@media (max-width: 900px) and (orientation: landscape) {
+  .club-header {
+    padding-left: 60px;  /* add enough left padding so logo isn't cut off */
+  }
+
+  .club-header a {
+    position: relative;
+    top: 0;
+    margin-left: 0;      /* remove any big negative or large left margin */
+    height: 140px;       /* or reduce size if needed */
+  }
+}
+
+
 @media (max-width: 600px) {
   .club-header {
-    flex-wrap: nowrap;
     flex-direction: column;
     justify-content: flex-start;
-    height: 250px;       /* taller header to fit logo and text */
-    padding: 20px 10px;
-    position: relative;
+    height: 250px;
+    padding: 20px 20px;    /* increase left/right padding from 10px to 20px */
     gap: 10px;
+    align-items: center;   /* center horizontally */
+  }
+
+  .club-header a {
+    order: 2;
+    flex-grow: 0;
+    align-self: center;    /* center logo horizontally */
+    margin-top: auto;
+    position: relative;
+    top: 40px;
+    margin-left: 0;
+    height: 140px;
   }
 
   .header-text {
     order: 1;
-    align-self: flex-end;  /* text on top right */
-    text-align: right;
+    align-self: center;    /* center text horizontally */
+    text-align: center;    /* center text alignment */
     flex-grow: 0;
-    padding-right: 10px;
+    padding-right: 0;      /* remove right padding */
+    padding-left: 0;       /* remove left padding */
   }
 
   .header-text h1 {
@@ -77,18 +111,40 @@ body {
     font-size: 1rem;
     margin: 5px 0 0 0;
   }
+}
+
+
+/* Landscape mobile */
+@media (max-width: 600px) and (orientation: landscape) {
+  .club-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    /* padding: top right bottom left */
+    padding: 20px 15px 10px 40px;  /* bump left padding from 15px to 40px */
+    gap: 15px;
+  }
+
 
   .club-header a {
-    order: 2;
-    flex-grow: 0;
-    align-self: center;   /* logo centered horizontally */
-    margin-top: auto;     /* push logo to bottom of header */
-    position: relative;
-    top: 40px;            /* tweak vertical positioning */
-    margin-left: 0;       /* remove negative left margin on mobile */
-    height: 140px;        /* smaller logo on mobile */
+    height: 100px;
+    top: 0; /* reduce overlap on landscape */
+  }
+
+  .header-text {
+    padding-right: 50px;
+    text-align: left;
+  }
+
+  .header-text h1 {
+    font-size: 1.8rem;
+  }
+
+  .header-text p {
+    font-size: 1.1rem;
   }
 }
+
 
 
 /* Navigation Bar */
@@ -1108,9 +1164,10 @@ body {
 
 .trophy-img2 {
   display: block;
-  margin: 20px  8px; /* 40px space below the image */
+  margin: 20px auto; /* 40px space below the image */
   width: 395px;
   height: auto;
+  max-width: 100%;
   border-radius: 10px;  /* Adjust px for more or less rounding */
 }
 
@@ -1120,7 +1177,7 @@ body {
   text-align: center;
   padding: 10px 10px;
   max-width: 800px;
-  margin: 8px;
+  margin: 8px auto;
   border-radius: 10px;
   position: relative;
   z-index: 1;
@@ -1133,7 +1190,7 @@ body {
   text-align: center;
   padding: 10px 50px;
   max-width: 800px;
-  margin: 8px;
+  margin: 8px auto;
   border-radius: 10px;
   position: relative;
   z-index: 1;
@@ -1279,3 +1336,14 @@ body {
 .larger-article a:hover {
     color: #e6ff05; /* optional: change color on hover */
 }
+
+.hero-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;        /* horizontal padding only */
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  box-sizing: border-box; /* ensure padding doesn't break layout */
+}
+
