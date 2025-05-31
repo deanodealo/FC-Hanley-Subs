@@ -57,19 +57,52 @@ body {
   margin: 5px 0 0;
 }
 
-/* Landscape phones/tablets */
 @media (max-width: 900px) and (orientation: landscape) {
   .club-header {
-    padding-left: 60px;  /* add enough left padding so logo isn't cut off */
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px;
+    gap: 10px;
+    position: relative;
   }
 
   .club-header a {
+    order: 2;
+    align-self: center;
     position: relative;
-    top: 0;
-    margin-left: 0;      /* remove any big negative or large left margin */
-    height: 140px;       /* or reduce size if needed */
+    top: 40px; /* Lower the badge */
+    height: 120px;
+    z-index: 10;
+  }
+
+  .header-text {
+    order: 1;
+    text-align: center;
+    padding: 0 10px;
+    z-index: 5;
+  }
+
+  .header-text h1 {
+    font-size: clamp(1.5rem, 5vw, 2.5rem);
+  }
+
+  .header-text p {
+    font-size: clamp(1rem, 3vw, 1.2rem);
   }
 }
+
+
+/* For larger landscape screens (like laptops/desktops) */
+@media (min-width: 901px) and (orientation: landscape) {
+  .club-header a {
+    margin-left: 200px;  /* shift logo right */
+    position: relative;
+    top: 50px;          /* keep overlap */
+    height: 180px;      /* adjust if needed */
+  }
+}
+
 
 
 @media (max-width: 600px) {
