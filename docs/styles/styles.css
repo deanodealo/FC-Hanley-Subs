@@ -93,14 +93,15 @@ body {
     height: 140px;
   }
 
-  .header-text {
-    order: 1;
-    align-self: center;    /* center text horizontally */
-    text-align: center;    /* center text alignment */
-    flex-grow: 0;
-    padding-right: 0;      /* remove right padding */
-    padding-left: 0;       /* remove left padding */
-  }
+.header-text {
+  order: 1;
+  align-self: flex-end;   /* push text container to the right side */
+  text-align: right;      /* align text to the right inside the container */
+  flex-grow: 0;
+  padding-right: 20px;    /* add space from the right edge */
+  padding-left: 0;
+}
+
 
   .header-text h1 {
     font-size: 1.5rem;
