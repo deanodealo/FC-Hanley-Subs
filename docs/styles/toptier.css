@@ -118,43 +118,14 @@ footer {
   text-decoration: underline; /* optional hover effect */
 }
 
-.burger-menu {
-  position: absolute;
-  top: 1rem;
-  left: 1rem;
-  z-index: 1000;
-}
 
-#burger-toggle {
-  font-size: 2rem;
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-}
-
-.burger-dropdown {
-  display: flex;
-  flex-direction: column;
-  background-color: #002244;
-  border: 1px solid #ccc;
-  padding: 1rem;
-  position: absolute;
-  top: 3rem;
-  left: 0;
-  min-width: 200px;
-}
-
-.burger-dropdown a {
-  color: white;
-  text-decoration: none;
-  padding: 0.5rem 0;
-}
-
-.burger-dropdown a:hover {
-  background-color: #004488;
-}
-
-.hidden {
-  display: none;
+/* Target the article inside the content-section only for toptier */
+.content-section .toptier-article {
+  background-color: #0f76dd;
+  margin: 70px auto 15px;  /* Adjust margins as needed */
+  padding: 15px;           /* Add padding if needed */
+  border-radius: 10px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  max-width: 400px;        /* Or adjust width */
+  text-align: center;
 }

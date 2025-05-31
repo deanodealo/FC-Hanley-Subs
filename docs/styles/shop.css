@@ -73,11 +73,3 @@
     background-color: #e6b800; /* Slightly darker gold on hover */
 }
 
-/* Footer Styles */
-footer {
-    text-align: center;
-    padding: 1px;
-    background-color: #002244;
-    color: white;
-    padding-top: 10px; /* Push content down */
-}
