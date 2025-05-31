@@ -1407,3 +1407,11 @@ body.page-about::before {
   z-index: -1;
   pointer-events: none;
 }
+
+.designer-logo img {
+  width: 100px;          /* Adjust size as needed */
+  height: auto;         /* Maintain aspect ratio */
+  border-radius: 10px;  /* Rounded corners */
+  display: block;       /* Remove inline spacing */
+  margin: 0 auto;       /* Center the image horizontally */
+}
