@@ -1221,9 +1221,9 @@ body {
 /* New Hero Content (independently styled) */
 .hero-content-alt2 {
   text-align: center;
-  padding: 10px 50px;
+  padding: 5px 50px;
   max-width: 800px;
-  margin: 8px auto;
+  margin: 4px auto;
   border-radius: 10px;
   position: relative;
   z-index: 1;
