@@ -1072,6 +1072,11 @@ input[type="date"]:valid::before {
   color: white;
   cursor: pointer;
   z-index: 1002;
+  background-color: rgba(0, 0, 0, 0.05); /* soft gray background */
+  padding: 0.5rem;
+  border-radius: 6px;
+  filter: drop-shadow(0 0 2px black); /* subtle shadow for contrast */
+  transition: background-color 0.3s ease;
 }
 
 .burger-dropdown {
@@ -1162,6 +1167,8 @@ input[type="date"]:valid::before {
 body {
   font-family: 'Poppins', sans-serif;
 }
+
+
 
 .overlapping-logo {
   width: 200px;
@@ -1440,4 +1447,31 @@ body.page-about::before {
   font-weight: 700;
   margin-bottom: 1rem;
   color: #1e3a8a; /* nice navy-blue */
+}
+
+#backToTop {
+  position: fixed;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.4rem 1rem;
+  font-size: 0.9rem;
+  background-color: #077bee;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  z-index: 999;
+  display: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  white-space: nowrap;
+  max-width: fit-content;  /* important */
+  width: auto;             /* important */
+  text-align: center;
+}
+
+
+
+#backToTop:hover {
+  background-color: #0055aa;
 }
