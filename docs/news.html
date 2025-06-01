@@ -1,137 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FC Hanley News</title>
-    <link rel="stylesheet" href="styles/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FC Hanley News</title>
+  <link rel="stylesheet" href="styles/styles.css" />
 </head>
 <body>
 
-<!-- Burger Menu -->
-<div class="burger-menu">
-  <button id="burger-toggle" aria-label="Toggle menu">☰</button>
-
-  <div id="burger-dropdown" class="burger-dropdown">
-    <a href="#" class="close-btn" id="burger-close">&times;</a>
-    <a href="gallery.html">Coaching School</a>
-    <a href="news.html">News & Events</a>
-    <a href="holidaycamps.html">Holiday Camps</a>
-    <a href="fixtures.html">Fixtures</a>
-    <a href="toptier.html">Top Tier Trophies</a>
-    <a href="subz.html">Subz</a>
-    <a href="guestbook.html">Feedback</a>
-    <a href="shop.html">Shop</a>
+  <!-- Burger Menu -->
+  <div class="burger-menu">
+    <button id="burger-toggle" aria-label="Toggle menu">☰</button>
+    <div id="burger-dropdown" class="burger-dropdown">
+      <a href="#" class="close-btn" id="burger-close">&times;</a>
+      <a href="gallery.html">Coaching School</a>
+      <a href="news.html">News & Events</a>
+      <a href="holidaycamps.html">Holiday Camps</a>
+      <a href="fixtures.html">Fixtures</a>
+      <a href="toptier.html">Top Tier Trophies</a>
+      <a href="subz.html">Subz</a>
+      <a href="guestbook.html">Feedback</a>
+      <a href="shop.html">Shop</a>
+    </div>
   </div>
-</div>
 
-<!-- Burger Menu Overlay -->
-<div class="burger-overlay" id="burger-overlay"></div>
+  <!-- Burger Menu Overlay -->
+  <div class="burger-overlay" id="burger-overlay"></div>
 
-<!--Header-->
-<header class="club-header">
-  <a href="index.html">
-    <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge overlapping-logo">
-  </a>
-  <div class="header-text">
-    <h1>FC Hanley Football Club</h1>
-    <p>Passion. Pride. Community.</p>
+  <!-- Header -->
+  <header class="club-header">
+    <a href="index.html">
+      <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge overlapping-logo" />
+    </a>
+    <div class="header-text">
+      <h1>FC Hanley Football Club</h1>
+      <p>Passion. Pride. Community.</p>
+    </div>
+  </header>
+
+  <!-- Existing News Images / Content (unchanged) -->
+  <section class="content-section">
+    <article class="news-article">
+      <div><img src="images/fchanleyfinal.jpg" alt="Tournament Poster" class="news-image" /></div>
+    </article>
+  </section>
+
+  <!-- Latest News Container where Firebase news text will appear -->
+  <div id="newsContainer">
+    <h2>Latest News</h2>
+    <div id="newsList">
+      <p>Loading latest news...</p>
+    </div>
   </div>
-</header>
 
+  <!-- Other static news sections -->
+  <section class="content-section">
+    <article class="news-article">
+      <div><img src="images/macronchamps2.jpg" alt="Tournament Poster" class="news-image" /></div>
+    </article>
+  </section>
 
-    <!-- News Section -->
-    <section class="content-section">
-        <article class="news-article">
-            <div><img src="images/fchanleyfinal.jpg" alt="Tournament Poster" class="news-image">
-            </div>
-        </article>
-    </section>
+  <section class="content-section">
+    <article class="news-article">
+      <div><img src="images/presidentchamps2.jpg" alt="Another News" class="news-image" /></div>
+    </article>
+  </section>
 
-<!-- News Section 1 -->
-<section class="content-section">
-  <article class="news-article">
-    <div>
-      <img src="images/macronchamps.jpg" alt="Tournament Poster" class="news-image">
-    </div>
-  </article>
-</section>
+  <section class="content-section">
+    <article class="news-article">
+      <div><img src="images/teamoftheweek2.jpg" alt="Yet Another News" class="news-image" /></div>
+    </article>
+  </section>
 
-<!-- News Section 2 -->
-<section class="content-section">
-  <article class="news-article">
-    <div>
-      <img src="images/presidentchamps.jpg" alt="Another News" class="news-image">
-    </div>
-  </article>
-</section>
+  <!-- Facebook Feed Section -->
+  <section id="facebook" class="content-section">
+    <article class="news-article">
+      <h2>Follow Us on Facebook</h2>
+      <div class="fb-page"
+           data-href="https://www.facebook.com/FCHanley/"
+           data-tabs="timeline"
+           data-width="500"
+           data-height="500"
+           data-small-header="false"
+           data-adapt-container-width="true"
+           data-hide-cover="false"
+           data-show-facepile="true">
+        <blockquote cite="https://www.facebook.com/FCHanley/" class="fb-xfbml-parse-ignore">
+          <a href="https://www.facebook.com/FCHanley/">FC Hanley</a>
+        </blockquote>
+      </div>
+    </article>
+  </section>
 
-<!-- News Section 3 -->
-<section class="content-section">
-  <article class="news-article">
-    <div>
-      <img src="images/teamoftheweek.jpg" alt="Yet Another News" class="news-image">
-    </div>
-  </article>
-</section>
+  <!-- Facebook SDK Script -->
+  <div id="fb-root"></div>
+  <script async defer crossorigin="anonymous"
+    src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v22.0"></script>
 
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 FC Hanley. All rights reserved.</p>
+  </footer>
 
+  <!-- Burger Menu JS -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const burgerToggle = document.getElementById("burger-toggle");
+      const burgerDropdown = document.getElementById("burger-dropdown");
+      const burgerClose = document.getElementById("burger-close");
+      const overlay = document.getElementById("burger-overlay");
 
-<!-- Facebook Feed Section -->
-<section id="facebook" class="content-section">
-  <article class="news-article">
-    <h2>Follow Us on Facebook</h2>
-    <div class="fb-page"
-         data-href="https://www.facebook.com/FCHanley/"
-         data-tabs="timeline"
-         data-width="500"
-         data-height="500"
-         data-small-header="false"
-         data-adapt-container-width="true"
-         data-hide-cover="false"
-         data-show-facepile="true">
-      <blockquote cite="https://www.facebook.com/FCHanley/" class="fb-xfbml-parse-ignore">
-        <a href="https://www.facebook.com/FCHanley/">FC Hanley</a>
-      </blockquote>
-    </div>
-  </article>
-</section>
+      function openMenu() {
+        burgerDropdown.classList.add("open");
+        overlay.classList.add("show");
+      }
 
-<!-- Facebook SDK Script -->
-<div id="fb-root"></div>
-<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v22.0"></script>
+      function closeMenu() {
+        burgerDropdown.classList.remove("open");
+        overlay.classList.remove("show");
+      }
 
+      burgerToggle.addEventListener("click", openMenu);
+      burgerClose.addEventListener("click", closeMenu);
+      overlay.addEventListener("click", closeMenu);
+    });
+  </script>
 
+  <!-- Firebase App + Database SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2025 FC Hanley. All rights reserved.</p>
-    </footer>
+  <script>
+    // Your Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDXXX-LMkY4Q0oN0M9e5wLdVhANzL8ifHs",
+      authDomain: "fchanley-8d910.firebaseapp.com",
+      databaseURL: "https://fchanley-8d910-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "fchanley-8d910",
+      storageBucket: "fchanley-8d910.appspot.com",
+      messagingSenderId: "384977183977",
+      appId: "1:384977183977:web:7805c8ba7e9122b883bc78",
+      measurementId: "G-1CBV4NK83L"
+    };
 
-<!-- Burger Menu JS -->
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const burgerToggle = document.getElementById("burger-toggle");
-    const burgerDropdown = document.getElementById("burger-dropdown");
-    const burgerClose = document.getElementById("burger-close");
-    const overlay = document.getElementById("burger-overlay");
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-    function openMenu() {
-      burgerDropdown.classList.add("open");
-      overlay.classList.add("show");
+    // Function to load news from Firebase DB and update the page
+    function loadNews() {
+      const newsRef = db.ref('adminContent/news');
+
+      newsRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        const newsList = document.getElementById('newsList');
+        newsList.innerHTML = ''; // Clear previous content
+
+        if (!data || !data.textContent) {
+          newsList.innerHTML = '<p>No news available right now.</p>';
+          return;
+        }
+
+        // Safely inject text content
+        const p = document.createElement('p');
+        p.textContent = data.textContent;
+        newsList.appendChild(p);
+      });
     }
 
-    function closeMenu() {
-      burgerDropdown.classList.remove("open");
-      overlay.classList.remove("show");
-    }
-
-    burgerToggle.addEventListener("click", openMenu);
-    burgerClose.addEventListener("click", closeMenu);
-    overlay.addEventListener("click", closeMenu);
-  });
-</script>
-
+    // Load news once page is fully loaded
+    window.onload = loadNews;
+  </script>
 
 </body>
 </html>
