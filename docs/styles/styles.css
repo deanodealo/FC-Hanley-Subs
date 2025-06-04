@@ -299,6 +299,84 @@ nav ul li a {
     background-color: #e6b800; /* Slightly darker gold on hover */
 }
 
+/* Social container layout */
+.social-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
+  background-color: #002244;
+  color: white;
+}
+
+/* Ensure images scale properly */
+.social-container a img,
+.social-link img {
+  max-width: 100%;
+  height: auto;
+}
+
+.social-link img,
+.social-container img {
+  height: 80px;
+}
+
+/* Contact info block */
+.contact-info {
+  text-align: right;
+  flex: 1 1 100%;
+  margin-top: 1em;
+}
+
+.contact-info a {
+  color: white;
+  text-decoration: none;
+}
+
+/* Footer base styles */
+footer {
+  background-color: #002244;
+  color: white;
+  text-align: center;
+  padding: 1em 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Dealo image styling */
+.designer-logo img {
+  height: 80px;
+  border-radius: 20%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .social-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .contact-info {
+    text-align: center;
+  }
+
+  .social-container img {
+    height: 60px;
+  }
+
+  .designer-logo img {
+    height: 60px;
+  }
+}
+
+
+
+
 
 /* Footer Styles */
 footer {
