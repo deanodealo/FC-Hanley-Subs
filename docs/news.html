@@ -53,7 +53,15 @@
     </div>
   </div>
 
-  <!-- Other static news sections -->
+
+    <!-- Other static news sections -->
+  <section class="content-section">
+    <article class="news-article">
+      <div><img src="images/pcthanley.jpg" alt="pcthanley" class="news-image" /></div>
+    </article>
+  </section>
+
+    <!-- Other static news sections -->
   <section class="content-section">
     <article class="news-article">
       <div><img src="images/macronchamps2.jpg" alt="Tournament Poster" class="news-image" /></div>
@@ -164,6 +172,7 @@
         // Safely inject text content
         const p = document.createElement('p');
         p.textContent = data.textContent;
+        p.classList.add('news-item'); // Add styling class
         newsList.appendChild(p);
       });
     }
