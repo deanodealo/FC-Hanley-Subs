@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Holiday Camps - FC Hanley</title>
   <link rel="stylesheet" href="styles/styles.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
   <style>
     /* Video styles */
     .camp-video {
@@ -43,6 +44,7 @@
     .signup-link:hover {
       background-color: #fffb05;
     }
+    
   </style>
 </head>
 <body class="page-about">
@@ -95,10 +97,18 @@
   </div>
   <div class="media-item">
     <img src="images/footycamp2.jpg" alt="Kids at FC Hanley Holiday Camp" class="poster-img" />
-    <a href="https://northwood-stadium.hivelink.co.uk/" target="_blank" class="signup-link">Book Now</a>
+    <a href="https://northwood-stadium.hivelink.co.uk/" target="_blank" class="signup-link"
+   data-aos="flip-right" data-aos-duration="1000" data-aos-delay="400">
+   Book Now
+</a>
+
   </div>
 </section>
 
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+  AOS.init();
+</script>
 
   <footer>
     <p>&copy; 2025 FC Hanley. All rights reserved.</p>
