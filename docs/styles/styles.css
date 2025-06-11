@@ -1023,6 +1023,16 @@ input.player-input {
   display: block;
 }
 
+@media (max-width: 600px) {
+  .social-link {
+    max-width: 80px;
+  }
+
+  .social-icon {
+    max-height: 70px;
+  }
+}
+
 
 
 .social-link:hover .social-icon {

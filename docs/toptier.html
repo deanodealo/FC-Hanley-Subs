@@ -12,6 +12,9 @@
    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
 </head>
+<!-- FC Hanley Scroll Progress Bar -->
+<div id="scroll-progress-bar"></div>
+
 
 <!-- Burger Menu -->
 <div class="burger-menu">
@@ -143,6 +146,26 @@
     overlay.addEventListener("click", closeMenu);
   });
 </script>
+
+<script>
+  let timeoutId;
+
+  window.addEventListener('scroll', () => {
+    const progressBar = document.getElementById('scroll-progress-bar');
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = (scrollTop / docHeight) * 100;
+
+    progressBar.style.width = `${scrolled}%`;
+    progressBar.style.opacity = '1';
+
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      progressBar.style.opacity = '0';
+    }, 1500); // fade out 1.5s after user stops scrolling
+  });
+</script>
+
 
 </body>
 </html>
