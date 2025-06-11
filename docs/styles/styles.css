@@ -1017,11 +1017,15 @@ input.player-input {
 }
 
 .social-icon {
-  height: auto;
-  width: 100%;       /* ✅ fills the .social-link space */
-  max-height: 90px;  /* ✅ caps how tall it can get */
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 50%;     /* ✅ makes it circular */
   display: block;
+  margin: 0 auto;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* optional glow */
 }
+
 
 @media (max-width: 600px) {
   .social-container {
