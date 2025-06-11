@@ -1010,16 +1010,20 @@ input.player-input {
 }
 
 .social-link {
-  display: inline-block;
-  margin-left: 20px;           /* space from other header items */
-  vertical-align: middle;      /* align with logo/text */
+  display: block;
+  text-align: center;
+  max-width: 120px;  /* ✅ sets a sensible width for desktop */
+  margin: 0 auto;
 }
 
 .social-icon {
-  width: 100px;                 /* adjust size */
   height: auto;
-  transition: filter 0.3s ease;
+  width: 100%;       /* ✅ fills the .social-link space */
+  max-height: 90px;  /* ✅ caps how tall it can get */
+  display: block;
 }
+
+
 
 .social-link:hover .social-icon {
   filter: brightness(1.5) drop-shadow(0 0 4px rgba(255,255,255,0.7));
