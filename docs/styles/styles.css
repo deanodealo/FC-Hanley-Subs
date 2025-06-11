@@ -1025,6 +1025,7 @@ input.player-input {
 
 @media (max-width: 600px) {
   .social-link {
+    margin: 0 auto 20px auto; /* ✅ adds space below the Facebook icon */
     max-width: 80px;
   }
 
@@ -1032,6 +1033,7 @@ input.player-input {
     max-height: 70px;
   }
 }
+
 
 
 
