@@ -1024,15 +1024,21 @@ input.player-input {
 }
 
 @media (max-width: 600px) {
-  .social-link {
-    margin: 0 auto 20px auto; /* ✅ adds space below the Facebook icon */
-    max-width: 80px;
+  .social-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
-  .social-icon {
-    max-height: 70px;
+  .social-container a {
+    margin-bottom: 20px; /* adds space between each logo */
+  }
+
+  .social-container div {
+    margin-top: 10px; /* spacing above contact text block */
   }
 }
+
 
 
 
