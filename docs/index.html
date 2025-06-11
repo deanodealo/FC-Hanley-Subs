@@ -24,6 +24,9 @@
 </head>
 
 <body class="page-about">
+  <!-- FC Hanley Scroll Progress Bar -->
+<div id="scroll-progress-bar"></div>
+
 
 <!-- Burger Menu -->
 <div class="burger-menu">
@@ -74,7 +77,9 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1>Welcome to FC Hanley</h1>
+            <h1 data-aos="fade-down" data-aos-easing="ease-out-back" data-aos-duration="1200">
+  Welcome to FC Hanley
+</h1>
             <p>Community Coaching School.  Junior & Senior football Teams</p>
             <p>Our Junior & Youth teams compete in the North Staffs Junior Youth League and North Staffs Youth League.</p>
             <p>Our Senior team competes in the Staffordshire County Senior League – Division One North</p>
@@ -127,6 +132,29 @@
     </div>
   </section>
 </div>
+
+
+<section class="feature-grid">
+  <h2 data-aos="fade-up" data-aos-duration="800">Why Join FC Hanley?</h2>
+  <div class="grid-container">
+    <div class="card" data-aos="fade-right" data-aos-duration="800">
+      <h3>Join a Team</h3>
+      <p>We welcome all abilities across multiple age groups. Become part of an inclusive community</p>
+    </div>
+    <div class="card" data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">
+      <h3>Weekly Training</h3>
+      <p>Our FA-qualified coaches run high-energy weekly sessions with a focus on fun and development</p>
+    </div>
+    <div class="card" data-aos="fade-up" data-aos-delay="400" data-aos-duration="800">
+      <h3>Local Tournaments</h3>
+      <p>Take part in competitive and friendly tournaments throughout the season</p>
+    </div>
+    <div class="card" data-aos="fade-left" data-aos-delay="600" data-aos-duration="800">
+      <h3>Photo & Video Gallery</h3>
+      <p>See the action, relive the moments — our gallery is always being updated</p>
+    </div>
+  </div>
+</section>
 
 
 <img src="images/toptiertrophies.jpg" alt="Top Tier Trophies" class="trophy-img2"
@@ -221,6 +249,25 @@
     burgerToggle.addEventListener("click", openMenu);
     burgerClose.addEventListener("click", closeMenu);
     overlay.addEventListener("click", closeMenu);
+  });
+</script>
+
+<script>
+  let timeoutId;
+
+  window.addEventListener('scroll', () => {
+    const progressBar = document.getElementById('scroll-progress-bar');
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const scrolled = (scrollTop / docHeight) * 100;
+
+    progressBar.style.width = `${scrolled}%`;
+    progressBar.style.opacity = '1';
+
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      progressBar.style.opacity = '0';
+    }, 1500); // fade out 1.5s after user stops scrolling
   });
 </script>
 
