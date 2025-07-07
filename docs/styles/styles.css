@@ -1662,13 +1662,17 @@ body.page-about::before {
 
 .map-container {
   position: relative;
-  padding-bottom: 56.25%;
+  width: 100%;              /* Ensure it doesn't overflow parent */
+  max-width: 100%;          /* Force it to stay within bounds */
+  padding-bottom: 56.25%;   /* 16:9 aspect ratio */
   height: 0;
   overflow: hidden;
   margin-top: 1rem;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
 }
+
 
 .map-container iframe {
   position: absolute;
