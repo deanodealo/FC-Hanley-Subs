@@ -1529,17 +1529,18 @@ body.page-about::before {
 
 #newsContainer {
   max-width: 700px;
-  margin: 2rem auto;       /* center with vertical spacing */
+  margin: 2rem auto;
   padding: 1rem 2rem;
   background-color: #f9f9f9;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgb(0 0 0 / 0.1);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Barlow', sans-serif;
   text-align: center;
-  color: #333;
+  color: #020202;
   line-height: 1.6;
   font-size: 1.1rem;
 }
+
 
 #newsList p {
   margin: 0;
