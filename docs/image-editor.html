@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fabric.js Editable Poster</title>
+  <style>
+    #posterCanvas {
+      border: 1px solid #ccc;
+      margin: 20px auto;
+      display: block;
+    }
+    #controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+  <link rel="stylesheet" href="styles/image-editor.css" />
+</head>
+<body>
+
+<div id="controls">
+  <input type="file" id="baseImageInput" accept="image/*" />
+  <input type="file" id="imageUpload" accept="image/*" />
+  <button id="addText">Add Text</button>
+
+  <!-- REMOVED: <input type="text" id="textInput" placeholder="Edit text here" /> -->
+
+  <input type="number" id="fontSize" min="10" max="100" value="40" />
+
+  <select id="fontSelect">
+    <option value="Arial">Arial</option>
+    <option value="Impact">Impact</option>
+    <option value="Georgia">Georgia</option>
+    <option value="Courier New">Courier New</option>
+  </select>
+
+  <input type="color" id="colorPicker" value="#000000" />
+</div>
+
+<div id="buttonGroup">
+  <button id="deleteSelected">Delete Selected</button>
+  <button id="saveImage">Save & Upload</button>
+  <button id="downloadPdf">Download as PDF</button>
+  <button id="downloadJpeg">Download as JPEG</button>
+</div>
+
+
+
+  <canvas id="posterCanvas" width="800" height="600"></canvas>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+  <script src="image-editor-fabric.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</body>
+</html>
