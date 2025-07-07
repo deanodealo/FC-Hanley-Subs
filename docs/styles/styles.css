@@ -1673,6 +1673,10 @@ body.page-about::before {
   box-sizing: border-box;
 }
 
+iframe {
+  max-width: 100%;
+  display: block;
+}
 
 .map-container iframe {
   position: absolute;
