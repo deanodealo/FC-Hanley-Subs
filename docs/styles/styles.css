@@ -1686,3 +1686,30 @@ iframe {
   height: 100%;
   border: 0;
 }
+
+body {
+  overflow-x: hidden;
+}
+
+.hero-wrapper,
+.hero-alt,
+.hero-content-alt {
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+
+@media (max-width: 768px) {
+  .map-container {
+    padding-bottom: 56.25%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .map-container iframe {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
