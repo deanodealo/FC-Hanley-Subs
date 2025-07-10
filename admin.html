@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="admin.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen p-6">
+  <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-xl p-6 space-y-6">
+    <h1 class="text-2xl font-bold text-gray-700">Admin Dashboard</h1>
+
+
+<!-- Page Selector -->
+<div>
+  <label for="pageSelector" class="block text-sm font-medium text-gray-700 mb-2">Select Page</label>
+  <select id="pageSelector" class="w-full p-2 border border-gray-300 rounded-lg">
+    <option value="fixtures">Fixtures</option>
+    <option value="news">News</option>
+    <option value="shop">Shop</option>
+    <option value="holidaycamps">Holiday Camps</option>
+    <option value="guestbook">Guest Book</option>
+  </select>
+</div>
+
+<!-- Fixtures Page Content Wrapper -->
+<div id="fixturesPage" class="pageContent">
+  <!-- Multi-Image Upload for Gallery -->
+  <div id="galleryUploadSection">
+    <label class="block text-sm font-medium text-gray-700 mb-2">Upload Gallery Images</label>
+    <input type="file" id="galleryUpload" class="block w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-100 file:text-blue-700 hover:file:bg-blue-200" accept="image/*" multiple />
+  </div>
+
+  <div>
+    <label for="photoUpload" class="block text-sm font-medium text-gray-700 mb-2">Upload Single Image</label>
+    <input type="file" id="photoUpload" accept="image/*" class="block w-full text-sm text-gray-600" />
+    <img id="preview" class="hidden max-w-xs mt-2 rounded" />
+  </div>
+
+  <!-- Text Editor -->
+  <div>
+    <label for="announcement" class="block text-sm font-medium text-gray-700 mb-2">Text Content</label>
+    <textarea id="announcement" rows="5" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Write your content here..."></textarea>
+  </div>
+
+  <!-- Save Button -->
+  <button id="saveBtn" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">Save</button>
+
+  <!-- Existing Content Display -->
+  <div id="existingContent" class="mt-8 space-y-4">
+    <h2 class="text-lg font-semibold text-gray-800">Existing Content</h2>
+
+    <!-- Gallery Image Grid -->
+    <div id="galleryImages" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-6"></div>
+
+    <!-- Text Content -->
+    <div id="currentText" class="bg-gray-50 p-4 rounded border border-gray-200">
+      <p id="displayText" class="text-gray-700"></p>
+      <button id="deleteTextBtn" class="text-red-500 hover:underline mt-2">Delete Text</button>
+    </div>
+
+    <!-- Image Content -->
+    <div id="currentImage" class="bg-gray-50 p-4 rounded border border-gray-200">
+      <img id="displayImage" class="max-h-64 rounded mb-2" />
+      <button id="deleteImageBtn" class="text-red-500 hover:underline">Delete Image</button>
+    </div>
+  </div>
+</div>
+
+<!-- News Page Content Wrapper -->
+<div id="newsPage" class="pageContent hidden">
+  <!-- News Page Section -->
+  <div id="newsSection">
+    <!-- Upload Image -->
+    <div>
+      <label for="newsImage" class="block text-sm font-medium text-gray-700 mb-2">Upload News Image</label>
+      <input type="file" id="newsImage" accept="image/*" class="block w-full text-sm text-gray-600" />
+      <img id="newsPreview" class="hidden max-w-xs mt-2 rounded" />
+    </div>
+
+    <!-- News Text Fields -->
+    <div>
+      <label for="newsTitle" class="block text-sm font-medium text-gray-700 mt-4 mb-2">Title</label>
+      <input type="text" id="newsTitle" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="Enter title" />
+
+      <label for="newsBody" class="block text-sm font-medium text-gray-700 mt-4 mb-2">Body</label>
+      <textarea id="newsBody" rows="4" class="w-full p-3 border border-gray-300 rounded-lg" placeholder="Write the news or event..."></textarea>
+    </div>
+
+    <!-- Save Button -->
+    <button id="saveNewsBtn" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 mt-4">Save News</button>
+
+    <!-- News Posts -->
+    <div id="newsPosts" class="mt-8 space-y-4">
+      <h2 class="text-lg font-semibold text-gray-800">Existing News Posts</h2>
+    </div>
+  </div>
+</div>
+
+<!-- Shop Page Content Wrapper -->
+<div id="shopPage" class="pageContent hidden">
+  <!-- Put your Shop page content here -->
+</div>
+
+<!-- Holiday Camps Page Content Wrapper -->
+<div id="holidaycampsPage" class="pageContent hidden">
+  <!-- Put your Holiday Camps page content here -->
+</div>
+
+<!-- Guest Book Page Content Wrapper -->
+<div id="guestbookPage" class="pageContent hidden">
+  <!-- Put your Guest Book page content here -->
+</div>
+
+
+<button id="logoutBtn" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+  Logout
+</button>
+
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+
+<!-- Your Admin JS -->
+<script src="admin.js" defer></script>
+
+
+</body>
+</html>

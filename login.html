@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Login</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-6">
+  <div class="max-w-md w-full bg-white rounded-lg shadow p-6">
+    <h2 class="text-2xl font-bold mb-6 text-gray-700">Admin Login</h2>
+
+    <form id="loginForm" class="space-y-4">
+      <input
+        type="email"
+        id="email"
+        placeholder="Email"
+        required
+        class="w-full p-3 border border-gray-300 rounded"
+      />
+      <input
+        type="password"
+        id="password"
+        placeholder="Password"
+        required
+        class="w-full p-3 border border-gray-300 rounded"
+      />
+      <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded hover:bg-blue-700">
+        Log In
+      </button>
+    </form>
+
+    <p id="errorMessage" class="text-red-500 mt-4 hidden"></p>
+  </div>
+
+  <script>
+    // Your Firebase config here (replace with your project config)
+    const firebaseConfig = {
+  apiKey: "AIzaSyDXXX-LMkY4Q0oN0M9e5wLdVhANzL8ifHs",
+  authDomain: "fchanley-8d910.firebaseapp.com",
+  databaseURL: "https://fchanley-8d910-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "fchanley-8d910",
+  storageBucket: "fchanley-8d910.appspot.com",
+  messagingSenderId: "384977183977",
+  appId: "1:384977183977:web:7805c8ba7e9122b883bc78",
+  measurementId: "G-1CBV4NK83L"
+};
+
+    firebase.initializeApp(firebaseConfig);
+
+    const auth = firebase.auth();
+
+    const loginForm = document.getElementById('loginForm');
+    const errorMessage = document.getElementById('errorMessage');
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = loginForm.email.value;
+      const password = loginForm.password.value;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          // On success, redirect to admin dashboard
+          window.location.href = 'admin.html'; // or your dashboard filename
+        })
+        .catch((error) => {
+          errorMessage.textContent = error.message;
+          errorMessage.classList.remove('hidden');
+        });
+    });
+  </script>
+</body>
+</html>
