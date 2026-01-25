@@ -950,7 +950,7 @@ return `
         <h3>${vacancy.position || 'Any Position'}</h3>
         <div class="team-name">${clubName}</div>
         <div class="vacancy-details">
-          <p><span class="icon">📍</span>${vacancy.location || 'Location not specified'}</p>
+          <p><span class="icon">📅</span>${vacancy.day || 'Day not specified'}</p>
           <p><span class="icon">👤</span>${vacancy.managerName || 'Manager'}</p>
           ${vacancy.age ? `<p><span class="icon">🎂</span>${vacancy.age}</p>` : ''}
           ${vacancy.experience ? `<p><span class="icon">📊</span>${vacancy.experience}</p>` : ''}
@@ -994,7 +994,7 @@ function displayCoachVacancies(vacancies) {
         <h3>${vacancy.position || 'Coach/Manager Position'}</h3>
         <div class="team-name">${teamName}</div>
         <div class="vacancy-details">
-          <p><span class="icon">📍</span>${vacancy.location || 'Location not specified'}</p>
+          <p><span class="icon">📅</span>${vacancy.day || 'Day not specified'}</p>
           <p><span class="icon">👤</span>${vacancy.postedBy || vacancy.managerName || 'Contact'}</p>
           ${vacancy.teamLevel || vacancy.age ? `<p><span class="icon">⚽</span>${vacancy.teamLevel || vacancy.age}</p>` : ''}
           ${vacancy.experience ? `<p><span class="icon">📊</span>Experience: ${vacancy.experience}</p>` : ''}
@@ -1011,19 +1011,19 @@ function displayCoachVacancies(vacancies) {
 // Filter Player Vacancies
 function filterPlayers() {
   const teamFilter = document.getElementById('playerTeamFilter').value;
-  const locationFilter = document.getElementById('playerLocationFilter').value;
+  const dayFilter = document.getElementById('playerDayFilter').value;
   const ageFilter = document.getElementById('playerAgeFilter').value;
   const positionFilter = document.getElementById('playerPositionFilter').value;
   const experienceFilter = document.getElementById('playerExperienceFilter').value;
 
   const filtered = allPlayerVacancies.filter(vacancy => {
     const matchesTeam = !teamFilter || vacancy.club === teamFilter;
-    const matchesLocation = !locationFilter || vacancy.location === locationFilter;
+    const matchesDay = !dayFilter || vacancy.day === dayFilter;
     const matchesAge = !ageFilter || vacancy.age === ageFilter;
     const matchesPosition = !positionFilter || vacancy.position === positionFilter;
     const matchesExperience = !experienceFilter || vacancy.experience === experienceFilter;
 
-    return matchesTeam && matchesLocation && matchesAge && matchesPosition && matchesExperience;
+    return matchesTeam && matchesDay && matchesAge && matchesPosition && matchesExperience;
   });
 
   displayPlayerVacancies(filtered);
@@ -1032,7 +1032,7 @@ function filterPlayers() {
 // Filter Coach Vacancies
 function filterCoaches() {
   const teamFilter = document.getElementById('coachTeamFilter').value;
-  const locationFilter = document.getElementById('coachLocationFilter').value;
+  const dayFilter = document.getElementById('coachDayFilter').value;
   const ageFilter = document.getElementById('coachAgeFilter').value;
   const positionFilter = document.getElementById('coachPositionFilter').value;
   const experienceFilter = document.getElementById('coachExperienceFilter').value;
@@ -1040,7 +1040,7 @@ function filterCoaches() {
   const filtered = allCoachVacancies.filter(vacancy => {
     const teamName = vacancy.teamName || vacancy.clubName || vacancy.club;
     const matchesTeam = !teamFilter || teamName === teamFilter;
-    const matchesLocation = !locationFilter || vacancy.location === locationFilter;
+    const matchesDay = !dayFilter || vacancy.day === dayFilter;
     const matchesAge = !ageFilter || vacancy.teamLevel === ageFilter || vacancy.age === ageFilter;
     const matchesPosition = !positionFilter || vacancy.position === positionFilter;
     const matchesExperience = !experienceFilter || vacancy.experience === experienceFilter;
