@@ -662,7 +662,7 @@ function displayPlayerVacancies(vacancies) {
         <h3>${vacancy.position || 'Any Position'}</h3>
         <div class="team-name">${clubName}</div>
         <div class="vacancy-details">
-          <p><span class="icon">📍</span>${vacancy.location || 'Location not specified'}</p>
+          <p><span class="icon">📅</span>${vacancy.day || 'Day not specified'}</p>
           <p><span class="icon">👤</span>${vacancy.managerName || 'Manager'}</p>
           ${vacancy.age ? `<p><span class="icon">🎂</span>${vacancy.age}</p>` : ''}
           ${vacancy.experience ? `<p><span class="icon">📊</span>${vacancy.experience}</p>` : ''}
@@ -740,7 +740,7 @@ function displayCoachVacancies(vacancies) {
         <h3>${vacancy.position || 'Coach/Manager'}</h3>
         <div class="team-name">${teamName}</div>
         <div class="vacancy-details">
-          <p><span class="icon">📍</span>${vacancy.location || 'Location not specified'}</p>
+          <p><span class="icon">📅</span>${vacancy.day || 'Day not specified'}</p>
           <p><span class="icon">👤</span>${vacancy.managerName || 'Manager'}</p>
           ${vacancy.teamLevel ? `<p><span class="icon">⚽</span>${vacancy.teamLevel}</p>` : ''}
           ${vacancy.experience ? `<p><span class="icon">🎯</span>${vacancy.experience}</p>` : ''}
@@ -793,16 +793,17 @@ function displayCoachVacancies(vacancies) {
     e.preventDefault();
     if (!currentUser) return;
 
-    const data = {
-      club: document.getElementById('playerTeamName').value,
-      position: document.getElementById('playerPosition').value,
-      age: document.getElementById('playerAge').value,
-      location: document.getElementById('playerLocation').value,
-      experience: document.getElementById('playerExperience').value,
-      managerId: currentUser.uid,
-      managerEmail: currentUser.email,
-      timestamp: new Date()
-    };
+const data = {
+  club: document.getElementById('playerTeamName').value,
+  position: document.getElementById('playerPosition').value,
+  age: document.getElementById('playerAge').value,
+  day: document.getElementById('playerLocation').value, // reuse field, new meaning
+  experience: document.getElementById('playerExperience').value,
+  managerId: currentUser.uid,
+  managerEmail: currentUser.email,
+  timestamp: new Date()
+};
+
 
     try {
       await addDoc(collection(window.db, 'Vacancies'), data);
@@ -823,17 +824,18 @@ function displayCoachVacancies(vacancies) {
     e.preventDefault();
     if (!currentUser) return;
 
-    const data = {
-      teamName: document.getElementById('coachTeamName').value,
-      position: document.getElementById('coachPosition').value,
-      teamLevel: document.getElementById('coachAge').value,
-      location: document.getElementById('coachLocation').value,
-      experience: document.getElementById('coachExperience').value,
-      managerId: currentUser.uid,
-      email: currentUser.email,
-      postedBy: currentUser.displayName || currentUser.email,
-      createdAt: new Date()
-    };
+const data = {
+  teamName: document.getElementById('coachTeamName').value,
+  position: document.getElementById('coachPosition').value,
+  teamLevel: document.getElementById('coachAge').value,
+  day: document.getElementById('coachLocation').value,
+  experience: document.getElementById('coachExperience').value,
+  managerId: currentUser.uid,
+  email: currentUser.email,
+  postedBy: currentUser.displayName || currentUser.email,
+  createdAt: new Date()
+};
+
 
     try {
       await addDoc(collection(window.db, 'coachVacancies'), data);
