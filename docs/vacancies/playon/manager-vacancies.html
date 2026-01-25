@@ -361,12 +361,13 @@
           <option value="Adult">Adult</option>
         </select>
 
-        <label for="playerLocation">Saturday/Sunday</label>
-        <select id="playerLocation" required>
-          <option value="">Select Day</option>
-          <option value="Stoke On Trent">Saturday</option>
-          <option value="Newcastle under Lyme">Sunday</option>
-        </select>
+<label for="playerDay">Day</label>
+<select id="playerDay" required>
+  <option value="">Select Day</option>
+  <option value="Saturday">Saturday</option>
+  <option value="Sunday">Sunday</option>
+</select>
+
 
         <label for="playerExperience">Experience</label>
         <select id="playerExperience" required>
@@ -427,13 +428,13 @@
           <option value="Adult">Adult</option>
         </select>
 
-        <label for="coachLocation">Location</label>
-        <select id="coachLocation" required>
-          <option value="">Select Location</option>
-          <option value="Stoke On Trent">Stoke on Trent</option>
-          <option value="Newcastle under Lyme">Newcastle under Lyme</option>
-          <option value="Staffordshire">Staffordshire</option>
-        </select>
+<label for="coachDay">Day</label>
+<select id="coachDay" required>
+  <option value="">Select Day</option>
+  <option value="Saturday">Saturday</option>
+  <option value="Sunday">Sunday</option>
+</select>
+
 
         <label for="coachExperience">Experience Required</label>
         <select id="coachExperience" required>
@@ -797,12 +798,13 @@ const data = {
   club: document.getElementById('playerTeamName').value,
   position: document.getElementById('playerPosition').value,
   age: document.getElementById('playerAge').value,
-  day: document.getElementById('playerLocation').value, // reuse field, new meaning
+  day: document.getElementById('playerDay').value,   // ✅ FIX
   experience: document.getElementById('playerExperience').value,
   managerId: currentUser.uid,
   managerEmail: currentUser.email,
   timestamp: new Date()
 };
+
 
 
     try {
@@ -828,13 +830,14 @@ const data = {
   teamName: document.getElementById('coachTeamName').value,
   position: document.getElementById('coachPosition').value,
   teamLevel: document.getElementById('coachAge').value,
-  day: document.getElementById('coachLocation').value,
+  day: document.getElementById('coachDay').value,   // ✅ use new ID matching your HTML
   experience: document.getElementById('coachExperience').value,
   managerId: currentUser.uid,
   email: currentUser.email,
   postedBy: currentUser.displayName || currentUser.email,
   createdAt: new Date()
 };
+
 
 
     try {
