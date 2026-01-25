@@ -1,0 +1,297 @@
+/* ===== General Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', Arial, sans-serif;
+  background: #ffffff;
+  color: #1A2A44;
+  line-height: 1.5;
+}
+
+/* ===== Header ===== */
+header {
+  display: flex;
+  height: 80px;
+  justify-content: space-between; /* burger left, logo right */
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #1A2A44;
+  position: relative;
+  z-index: 1000;
+}
+
+/* Burger button: top-left */
+.burger {
+  width: 30px;
+  height: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 2000;
+}
+
+.burger span {
+  display: block;
+  height: 3px;
+  width: 30px;
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.burger.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.burger.open span:nth-child(2) {
+  opacity: 0;
+}
+.burger.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* Logo top-right */
+.logo-container {
+  position: absolute;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  z-index: 1000;
+}
+
+header img {
+  display: block;
+  max-height: 80px;
+}
+
+/* ===== Overlay ===== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  z-index: 2004;
+}
+
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ===== Side Menu ===== */
+.side-menu {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 250px;
+  height: calc(100% - 80px);
+  background: linear-gradient(to bottom right, #1A2A44, #27AE60);
+  color: #fff;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 2005;
+  border-radius: 0 20px 20px 0; /* rounded edges */
+}
+
+.side-menu.open {
+  transform: translateX(0);
+}
+
+.side-menu a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.side-menu a:hover {
+  color: #f1f1f1;
+}
+
+/* ===== Hero Section ===== */
+.hero {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(to bottom right, #1A2A44, #27AE60);
+  color: #fff;
+}
+
+.hero h1 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.hero .hero-btn {
+  padding: 0.8rem 1.6rem;
+  font-size: 1rem;
+  background: #27AE60;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  transition: 0.3s;
+}
+
+.hero .hero-btn:hover {
+  background: #219653;
+}
+
+/* ===== About Section ===== */
+.about-intro {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background: #f9f9f9;
+}
+
+.about-intro h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.about-intro p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #333;
+}
+/* ===== Roles Section ===== */
+.roles .container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 3rem 1.5rem;
+  max-width: 1400px; /* Add max-width to keep cards from spreading too wide */
+  margin: 0 auto; /* Center the container itself */
+}
+
+.roles .card {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  padding: 2rem;
+  width: calc(50% - 1rem); /* 2 cards per row with gap considered */
+  min-width: 280px; /* Minimum width before wrapping */
+  max-width: 350px; /* Maximum width */
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.roles .card:hover {
+  transform: translateY(-5px);
+}
+
+.roles h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #030022;
+}
+
+.roles p {
+  color: #444;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .roles .card {
+    width: 100%; /* Stack cards on mobile */
+    max-width: 400px;
+  }
+}
+/* Button container */
+.roles .btn-container {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 2rem;
+  background: #1A2A44;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+footer a {
+  color: #27AE60;
+  margin: 0 0.5rem;
+  text-decoration: none;
+}
+
+/* ===== Mobile ===== */
+@media(max-width: 600px) {
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+
+  .roles .container {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+ header img {
+    max-height: 50px;
+  }
+
+}
+
+/* ===== Roles Section Buttons ===== */
+.roles .btn {
+  display: inline-block;
+  padding: 0.8rem 1.6rem;
+  background-color: #27AE60;
+  color: #fff;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 30px;
+  transition: background 0.3s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+.roles .btn:hover {
+  background-color: #219653;
+}
+.menu-logo {
+  text-align: center;
+  padding: 1rem 0; /* space above/below logo */
+}
+
+.logo-wrapper {
+  display: inline-block;
+  background-color: #fff;       /* white square */
+  border-radius: 15px;          /* rounded corners */
+  padding: 20px;                /* space inside square around logo */
+  box-shadow: 0 0 10px rgba(0,0,0,0.2); /* optional subtle shadow */
+}
+
+.logo-wrapper img {
+  max-width: 100px;    /* scale to fit nicely inside square */
+  height: auto;
+  display: block;
+}

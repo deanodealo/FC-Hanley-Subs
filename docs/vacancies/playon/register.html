@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Register - PlayOn</title>
+  <link rel="stylesheet" href="index.css" />
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+    import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAX9ivQ4aKQzokUMEkNpGTIbbAUMJhLlys",
+      authDomain: "playon-1a86b.firebaseapp.com",
+      projectId: "playon-1a86b",
+      storageBucket: "playon-1a86b.firebasestorage.app",
+      messagingSenderId: "28141646391",
+      appId: "1:28141646391:web:98d83339ed46c17efa45b2",
+      measurementId: "G-Z12HWY8PFJ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    
+    window.auth = auth;
+    window.db = db;
+    window.firebaseReady = true;
+    console.log('Firebase initialized successfully');
+  </script>
+
+  <style>
+    .role-selection {
+      margin: 20px 0;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .role-selection h3 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #1A2A44;
+      font-size: 1.1rem;
+    }
+
+    .role-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .role-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 12px;
+      background: white;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .role-option:hover {
+      border-color: #27AE60;
+      background: #f0fdf4;
+    }
+
+    .role-option input[type="radio"] {
+      margin-top: 3px;
+      cursor: pointer;
+    }
+
+    .role-option.selected {
+      border-color: #27AE60;
+      background: #f0fdf4;
+    }
+
+    .role-label {
+      flex: 1;
+    }
+
+    .role-label strong {
+      display: block;
+      color: #1A2A44;
+      margin-bottom: 3px;
+    }
+
+    .role-label span {
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    .conditional-fields {
+      display: none;
+      margin-top: 20px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 4px solid #27AE60;
+    }
+
+    .conditional-fields.active {
+      display: block;
+    }
+
+    .conditional-fields h4 {
+      margin-top: 0;
+      margin-bottom: 15px;
+      color: #1A2A44;
+    }
+
+    .form-section {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Header -->
+<header>
+  <button class="burger" aria-label="Menu" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <div class="logo-container">
+    <img src="images/logo.png" alt="PlayOn Logo" />
+  </div>
+</header>
+
+<!-- Overlay -->
+<div id="menuOverlay" class="overlay" onclick="closeMenu()"></div>
+
+<!-- Side Menu -->
+<nav id="sideMenu" class="side-menu">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="vacancies.html">Vacancies</a>
+  <!--<a href="referees.html">Find a Ref</a>-->
+  <a href="#" onclick="showLogin(event)">Login</a>
+  <a href="register.html">Register</a>
+  <div class="menu-logo">
+    <div class="logo-wrapper">
+      <img src="images/logo.png" alt="PlayOn Logo">
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section for Form -->
+<section class="hero register-hero">
+  <h1>Create Your Account</h1>
+  <p>Register to post vacancies and connect with the grassroots football community.</p>
+
+  <div class="register-form-container">
+    <form id="registerForm">
+      
+      <!-- Basic Information -->
+      <label for="userName">Your Name *</label>
+      <input type="text" id="userName" placeholder="Enter your full name" required>
+
+      <label for="email">Email Address *</label>
+      <input type="email" id="email" placeholder="you@example.com" required>
+
+      <label for="phone">Mobile Number *</label>
+      <input type="tel" id="phone" placeholder="07..." required pattern="^07\d{9}$">
+
+      <label for="location">Location *</label>
+      <select id="location" required>
+        <option value="">Select location</option>
+        <option value="Stoke On Trent">Stoke on Trent</option>
+        <option value="Newcastle under Lyme">Newcastle under Lyme</option>
+        <option value="Staffordshire">Staffordshire</option>
+      </select>
+
+      <!-- Role Selection -->
+      <div class="role-selection">
+        <h3>I am registering as: *</h3>
+        <div class="role-options">
+          <label class="role-option" for="roleManager">
+            <input type="radio" name="userRole" id="roleManager" value="manager" required>
+            <div class="role-label">
+              <strong>Team Manager/Coach</strong>
+              <span>I manage or coach a team and may need players or assistants</span>
+            </div>
+          </label>
+
+          <label class="role-option" for="roleClub">
+            <input type="radio" name="userRole" id="roleClub" value="club_rep">
+            <div class="role-label">
+              <strong>Club Representative</strong>
+              <span>I represent a club that needs managers or coaches for our teams</span>
+            </div>
+          </label>
+
+          <!--<label class="role-option" for="roleReferee">
+            <input type="radio" name="userRole" id="roleReferee" value="referee">
+            <div class="role-label">
+              <strong>Referee</strong>
+              <span>I want to be listed in the referee directory</span>
+            </div>
+          </label>
+        </div>-->
+      </div>
+
+      <!-- Conditional Fields: Team Manager/Coach -->
+      <div id="managerFields" class="conditional-fields">
+        <h4>Team Manager/Coach Details</h4>
+        
+        <div class="form-section">
+          <label for="managerTeamName">Club/Team Name *</label>
+          <select id="managerTeamName">
+            <option value="">Loading teams...</option>
+          </select>
+        </div>
+
+        <div class="form-section">
+          <label for="teamLevel">Team Level *</label>
+          <select id="teamLevel">
+            <option value="">Select team level</option>
+            <option value="U7">Under 7</option>
+            <option value="U8">Under 8</option>
+            <option value="U9">Under 9</option>
+            <option value="U10">Under 10</option>
+            <option value="U11">Under 11</option>
+            <option value="U12">Under 12</option>
+            <option value="U13">Under 13</option>
+            <option value="U14">Under 14</option>
+            <option value="U15">Under 15</option>
+            <option value="U16">Under 16</option>
+            <option value="U17">Under 17</option>
+            <option value="U18">Under 18</option>
+            <option value="Adult">Adult</option>
+            <option value="Veteran">Veteran</option>
+          </select>
+        </div>
+
+        <div class="form-section">
+          <label for="managerRole">Your Role *</label>
+          <select id="managerRole">
+            <option value="">Select your role</option>
+            <option value="Manager">Manager</option>
+            <option value="Head Coach">Head Coach</option>
+            <option value="Assistant Coach">Assistant Coach</option>
+            <option value="Coach">Coach</option>
+          </select>
+        </div>
+
+        <!--<div class="form-section">
+          <label for="qualifications">Qualifications/Badges (Optional)</label>
+          <input type="text" id="qualifications" placeholder="e.g., FA Level 1, UEFA B">
+        </div>-->
+      </div>
+
+      <!-- Conditional Fields: Club Representative -->
+      <div id="clubFields" class="conditional-fields">
+        <h4>Club Representative Details</h4>
+        
+        <div class="form-section">
+          <label for="clubName">Club Name *</label>
+          <select id="clubName">
+            <option value="">Loading clubs...</option>
+          </select>
+        </div>
+
+        <div class="form-section">
+          <label for="clubPosition">Your Position *</label>
+          <select id="clubPosition">
+            <option value="">Select your position</option>
+            <option value="Secretary">Secretary</option>
+            <option value="Chairman">Chairman</option>
+            <option value="Committee Member">Committee Member</option>
+            <option value="Treasurer">Treasurer</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-section">
+          <label for="clubLocation">Club Location *</label>
+          <input type="text" id="clubLocation" placeholder="e.g., Stoke-on-Trent">
+        </div>
+      </div>
+
+ <!-- Conditional Fields: Referee -->
+<div id="refereeFields" class="conditional-fields">
+  <h4>Referee Details</h4>
+  
+  <div class="form-section">
+    <label for="refereeGrade">Referee Level/Grade *</label>
+    <select id="refereeGrade">
+      <option value="">Select your grade</option>
+      <option value="Level 7">Level 7 (Basic Referee)</option>
+      <option value="Level 6">Level 6</option>
+      <option value="Level 5">Level 5</option>
+      <option value="Level 4">Level 4</option>
+      <option value="Level 3">Level 3</option>
+      <option value="Youth Referee">Youth Referee</option>
+      <option value="Trainee">Trainee</option>
+    </select>
+  </div>
+
+  <div class="form-section">
+    <label for="refereeExperience">Years of Experience *</label>
+    <input type="number" id="refereeExperience" min="0" max="50" placeholder="0">
+  </div>
+
+  <div class="form-section">
+    <label style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+      <input type="checkbox" id="refereeAvailable" checked>
+      <span>I am currently available for matches</span>
+    </label>
+  </div>
+</div>
+
+      <!-- Password -->
+      <label for="password">Password *</label>
+      <input type="password" id="password" placeholder="Minimum 6 characters" required minlength="6">
+
+      <label for="confirmPassword">Confirm Password *</label>
+      <input type="password" id="confirmPassword" placeholder="Re-enter password" required>
+
+      <button type="submit" id="registerBtn">Create Account</button>
+    </form>
+    <div id="registerMessage"></div>
+  </div>
+</section>
+
+<div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 20px; font-size: 13px; color: #666; text-align: center;">
+  <p style="margin: 0;">
+    By registering, you consent to your contact details being displayed where relevant. 
+    Your information is stored securely and will not be shared with third parties. 
+    <a href="privacy.html" style="color: #1A2A44; text-decoration: underline;">Privacy Policy</a>
+  </p>
+</div>
+
+<!-- Footer -->
+<footer>
+  <p>&copy; 2025 PlayOn. All rights reserved.</p>
+  <p>
+    <a href="index.html">Home</a> |
+    <a href="about.html">About</a> |
+    <a href="contact.html">Contact</a> |
+    <a href="privacy.html">Privacy</a>
+  </p>
+</footer>
+
+<script>
+  const burger = document.querySelector('.burger');
+  const sideMenu = document.getElementById('sideMenu');
+  const overlay = document.getElementById('menuOverlay');
+
+  function toggleMenu() {
+    const isOpening = !sideMenu.classList.contains('open');
+    sideMenu.classList.toggle('open', isOpening);
+    overlay.classList.toggle('active', isOpening);
+    burger.classList.toggle('open', isOpening);
+    document.body.classList.toggle('menu-open', isOpening);
+  }
+
+  function closeMenu() {
+    sideMenu.classList.remove('open');
+    overlay.classList.remove('active');
+    burger.classList.remove('open');
+    document.body.classList.remove('menu-open');
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const links = sideMenu.querySelectorAll('a');
+    links.forEach(link => link.addEventListener('click', closeMenu));
+  });
+
+  // Handle role selection and show/hide conditional fields
+  document.addEventListener('DOMContentLoaded', function() {
+    const roleRadios = document.querySelectorAll('input[name="userRole"]');
+    const managerFields = document.getElementById('managerFields');
+    const clubFields = document.getElementById('clubFields');
+    const refereeFields = document.getElementById('refereeFields');
+
+    // Style selected role option
+    roleRadios.forEach(radio => {
+      radio.addEventListener('change', function() {
+        // Remove selected class from all options
+        document.querySelectorAll('.role-option').forEach(opt => {
+          opt.classList.remove('selected');
+        });
+        
+        // Add selected class to chosen option
+        this.closest('.role-option').classList.add('selected');
+
+        // Hide all conditional fields
+        managerFields.classList.remove('active');
+        clubFields.classList.remove('active');
+        refereeFields.classList.remove('active');
+
+        // Show relevant fields and set required attributes
+        if (this.value === 'manager') {
+          managerFields.classList.add('active');
+          document.getElementById('managerTeamName').required = true;
+          document.getElementById('teamLevel').required = true;
+          document.getElementById('managerRole').required = true;
+          document.getElementById('clubName').required = false;
+          document.getElementById('clubPosition').required = false;
+          document.getElementById('clubLocation').required = false;
+          document.getElementById('refereeGrade').required = false;
+          document.getElementById('refereeExperience').required = false;
+        } else if (this.value === 'club_rep') {
+          clubFields.classList.add('active');
+          document.getElementById('clubName').required = true;
+          document.getElementById('clubPosition').required = true;
+          document.getElementById('clubLocation').required = true;
+          document.getElementById('managerTeamName').required = false;
+          document.getElementById('teamLevel').required = false;
+          document.getElementById('managerRole').required = false;
+          document.getElementById('refereeGrade').required = false;
+          document.getElementById('refereeExperience').required = false;
+        } else if (this.value === 'referee') {
+          refereeFields.classList.add('active');
+          document.getElementById('refereeGrade').required = true;
+          document.getElementById('refereeExperience').required = true;
+          document.getElementById('managerTeamName').required = false;
+          document.getElementById('teamLevel').required = false;
+          document.getElementById('managerRole').required = false;
+          document.getElementById('clubName').required = false;
+          document.getElementById('clubPosition').required = false;
+          document.getElementById('clubLocation').required = false;
+        }
+      });
+    });
+
+    // Load teams for manager and club dropdowns
+    loadTeams();
+  });
+
+  async function loadTeams() {
+    const managerTeamSelect = document.getElementById('managerTeamName');
+    const clubSelect = document.getElementById('clubName');
+    
+    try {
+      if (!window.firebaseReady) {
+        setTimeout(loadTeams, 500);
+        return;
+      }
+
+      const { collection, getDocs, orderBy, query } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+      
+      const teamsQuery = query(collection(window.db, 'teams'), orderBy('name'));
+      const querySnapshot = await getDocs(teamsQuery);
+      
+      managerTeamSelect.innerHTML = '<option value="">Select your team</option>';
+      clubSelect.innerHTML = '<option value="">Select your club</option>';
+      
+      querySnapshot.forEach((doc) => {
+        const team = doc.data();
+        
+        const option1 = document.createElement('option');
+        option1.value = team.name;
+        option1.textContent = team.name;
+        managerTeamSelect.appendChild(option1);
+        
+        const option2 = document.createElement('option');
+        option2.value = team.name;
+        option2.textContent = team.name;
+        clubSelect.appendChild(option2);
+      });
+      
+      console.log('Teams loaded successfully');
+      
+    } catch (error) {
+      console.error('Error loading teams:', error);
+      managerTeamSelect.innerHTML = '<option value="">Error loading teams</option>';
+      clubSelect.innerHTML = '<option value="">Error loading teams</option>';
+    }
+  }
+
+  // Registration Handler
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById("registerForm");
+    const msg = document.getElementById("registerMessage");
+    const registerBtn = document.getElementById("registerBtn");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const userName = document.getElementById("userName").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const location = document.getElementById("location").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirmPassword").value;
+      const userRole = document.querySelector('input[name="userRole"]:checked')?.value;
+
+      // Validation
+      if (!userRole) {
+        showMessage("Please select a role!", "error");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showMessage("Passwords do not match!", "error");
+        return;
+      }
+
+      if (password.length < 6) {
+        showMessage("Password must be at least 6 characters!", "error");
+        return;
+      }
+
+      if (!phone.match(/^07\d{9}$/)) {
+        showMessage("Please enter a valid UK mobile number (07...)", "error");
+        return;
+      }
+
+      // Get role-specific data
+      let roleData = {};
+      
+      if (userRole === 'manager') {
+        const teamName = document.getElementById('managerTeamName').value;
+        const teamLevel = document.getElementById('teamLevel').value;
+        const managerRole = document.getElementById('managerRole').value;
+        const qualifications = document.getElementById('qualifications').value.trim();
+        
+        if (!teamName || !teamLevel || !managerRole) {
+          showMessage("Please fill in all required manager fields!", "error");
+          return;
+        }
+        
+        roleData = {
+          teamName,
+          teamLevel,
+          managerRole,
+          qualifications
+        };
+      } else if (userRole === 'club_rep') {
+        const clubName = document.getElementById('clubName').value;
+        const clubPosition = document.getElementById('clubPosition').value;
+        const clubLocation = document.getElementById('clubLocation').value.trim();
+        
+        if (!clubName || !clubPosition || !clubLocation) {
+          showMessage("Please fill in all required club representative fields!", "error");
+          return;
+        }
+        
+        roleData = {
+          clubName,
+          clubPosition,
+          clubLocation
+        };
+} else if (userRole === 'referee') {
+  const refereeGrade = document.getElementById('refereeGrade').value;
+  const refereeExperience = document.getElementById('refereeExperience').value;
+  const refereeAvailable = document.getElementById('refereeAvailable').checked;
+  
+  if (!refereeGrade || !refereeExperience) {
+    showMessage("Please fill in all required referee fields!", "error");
+    return;
+  }
+  
+  roleData = {
+    refereeGrade,
+    refereeExperience: parseInt(refereeExperience),
+    isAvailable: refereeAvailable
+  };
+}
+      
+      registerBtn.disabled = true;
+      registerBtn.textContent = "Creating Account...";
+      showMessage("Creating your account...", "info");
+
+      try {
+        if (!window.firebaseReady) {
+          throw new Error("Firebase is not ready. Please refresh and try again.");
+        }
+
+        const { createUserWithEmailAndPassword, updateProfile } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+        const { doc, setDoc, serverTimestamp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+
+        const userCredential = await createUserWithEmailAndPassword(window.auth, email, password);
+        const user = userCredential.user;
+
+        await updateProfile(user, {
+          displayName: userName
+        });
+
+        // Save user data
+        await setDoc(doc(window.db, 'users', user.uid), {
+          email: email,
+          userName: userName,
+          userType: userRole,
+          phone: phone,
+          location: location,
+          createdAt: serverTimestamp()
+        });
+
+        // Save role-specific profile
+        const profileCollection = userRole === 'manager' ? 'managerProfiles' :
+                                 userRole === 'club_rep' ? 'clubRepProfiles' :
+                                 'refereeProfiles';
+
+        await setDoc(doc(window.db, profileCollection, user.uid), {
+          ...roleData,
+          userName,
+          email,
+          phone,
+          location,
+          createdAt: serverTimestamp()
+        });
+
+        console.log("User registered successfully:", user.uid);
+        showMessage("Account created successfully! Redirecting...", "success");
+        
+        form.reset();
+
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 2000);
+
+      } catch (error) {
+        console.error("Registration error:", error);
+        
+        let errorMessage = "Registration failed. Please try again.";
+        
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            errorMessage = "This email is already registered. Try logging in instead.";
+            break;
+          case 'auth/invalid-email':
+            errorMessage = "Please enter a valid email address.";
+            break;
+          case 'auth/weak-password':
+            errorMessage = "Password is too weak. Please use at least 6 characters.";
+            break;
+          case 'auth/network-request-failed':
+            errorMessage = "Network error. Please check your connection.";
+            break;
+          default:
+            errorMessage = error.message || errorMessage;
+        }
+        
+        showMessage(errorMessage, "error");
+        
+      } finally {
+        registerBtn.disabled = false;
+        registerBtn.textContent = "Create Account";
+      }
+    });
+
+    function showMessage(text, type) {
+      msg.textContent = text;
+      msg.className = type === "success" ? "login-message success" : 
+                     type === "error" ? "login-message error" : 
+                     "login-message";
+      
+      if (type === "success") {
+        setTimeout(() => {
+          msg.textContent = "";
+          msg.className = "";
+        }, 5000);
+      }
+    }
+  });
+</script>
+
+<script src="js/login-popup.js"></script>
+
+</body>
+</html>

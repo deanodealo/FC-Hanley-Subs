@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Vacancies - PlayOn</title>
+  <link rel="stylesheet" href="index.css" />
+<style>
+  .vacancy-tabs {
+    display: flex;
+    gap: 10px;
+    max-width: 1200px;
+    margin: 2rem auto 0;
+    padding: 0 20px;
+  }
+
+  .tab-button {
+    flex: 1;
+    padding: 15px 30px;
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #666;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .tab-button:hover {
+    border-color: #27AE60;
+    color: #27AE60;
+  }
+
+  .tab-button.active {
+    background: #27AE60;
+    border-color: #27AE60;
+    color: white;
+  }
+
+  .tab-content {
+    display: none;
+  }
+
+  .tab-content.active {
+    display: block;
+  }
+
+  .current-vacancies {
+    max-width: 1200px;
+    margin: 20px auto 40px;
+    padding: 20px;
+  }
+
+  .current-vacancies h2 {
+    text-align: center;
+    color: #fdfeff;
+    margin-bottom: 20px;
+  }
+
+  /* Grid layout for vacancy cards */
+  #playerVacanciesList,
+  #coachVacanciesList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+  }
+
+  .vacancy-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .vacancy-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  }
+
+  .club-logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+    height: 80px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .club-logo {
+    max-width: 100%;
+    max-height: 80px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  .vacancy-card h3 {
+    color: #1A2A44;
+    margin: 10px 0;
+    font-size: 1.3rem;
+  }
+
+  .team-name {
+    color: #000000;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+  }
+
+  .vacancy-details {
+    width: 100%;
+    text-align: left;
+    margin: 15px 0;
+    color: #666;
+    line-height: 1.6;
+  }
+
+  .vacancy-details p {
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+  }
+
+  .vacancy-details .icon {
+    min-width: 20px;
+  }
+
+  .delete-btn {
+    width: 100%;
+    padding: 12px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 15px;
+  }
+
+  .delete-btn:hover {
+    background: #c82333;
+    transform: scale(1.03);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+    grid-column: 1 / -1;
+  }
+
+  .empty-state h3 {
+    color: #1A2A44;
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+  }
+
+  .empty-state p {
+    color: #666;
+  }
+
+  .no-vacancies {
+    text-align: center;
+    padding: 40px;
+    color: #ffffff;
+    font-style: italic;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 40px;
+    color: #ffffff;
+  }
+
+  .auth-warning {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px auto;
+    max-width: 1200px;
+    text-align: center;
+    color: #856404;
+  }
+
+  .auth-warning a {
+    color: #1A2A44;
+    font-weight: bold;
+    text-decoration: underline;
+  }
+
+  @media(max-width: 768px) {
+    .vacancy-tabs {
+      flex-direction: column;
+    }
+    
+    #playerVacanciesList,
+    #coachVacanciesList {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+    import { getAuth } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+    import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAX9ivQ4aKQzokUMEkNpGTIbbAUMJhLlys",
+      authDomain: "playon-1a86b.firebaseapp.com",
+      projectId: "playon-1a86b",
+      storageBucket: "playon-1a86b.firebasestorage.app",
+      messagingSenderId: "28141646391",
+      appId: "1:28141646391:web:98d83339ed46c17efa45b2",
+      measurementId: "G-Z12HWY8PFJ"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.auth = auth;
+    window.db = db;
+    window.firebaseReady = true;
+    console.log('Firebase initialized successfully');
+  </script>
+</head>
+<body>
+
+<header>
+  <button class="burger" aria-label="Menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="logo-container">
+    <img src="images/logo.png" alt="PlayOn Logo" />
+  </div>
+</header>
+
+<div id="menuOverlay" class="overlay" onclick="closeMenu()"></div>
+
+<!-- Side Menu -->
+<nav id="sideMenu" class="side-menu">
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="vacancies.html">Vacancies</a>
+  <!--<a href="referees.html">Find a Ref</a>-->
+  <a href="#" onclick="showLogin(event)">Login</a>
+  <a href="register.html">Register</a>
+  <div class="menu-logo">
+    <div class="logo-wrapper">
+      <img src="images/logo.png" alt="PlayOn Logo">
+    </div>
+  </div>
+</nav>
+
+<!-- Login Popup Overlay -->
+<div id="loginOverlay" class="login-overlay" onclick="closeLogin(event)">
+  <div class="login-form-container" onclick="event.stopPropagation()">
+    <button class="login-close" onclick="closeLogin()" aria-label="Close">&times;</button>
+    
+    <div class="login-logo">
+      <div class="login-logo-wrapper">
+        <img src="images/logo.png" alt="PlayOn Logo">
+      </div>
+    </div>
+
+    <form class="login-form" id="loginForm">
+      <h2>Welcome Back</h2>
+      
+      <label for="loginEmail">Email</label>
+      <input type="email" id="loginEmail" required>
+      
+      <label for="loginPassword">Password</label>
+      <input type="password" id="loginPassword" required>
+      
+      <button type="submit" id="loginBtn">Login</button>
+      
+      <div class="forgot-password">
+        <a href="#" onclick="forgotPassword(event)">Forgot Password?</a>
+      </div>
+      
+      <div id="loginMessage" class="login-message"></div>
+      
+      <div class="register-link">
+        Don't have an account? <a href="register.html">Register here</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Auth Warning (shown if not logged in) -->
+<div id="authWarning" class="auth-warning" style="display: none;">
+  ⚠️ You must be logged in to add or manage vacancies. 
+  <a href="#" onclick="event.preventDefault(); showLogin(event);">Click here to login</a>
+</div>
+
+<section class="hero vacancy-hero">
+  <h1>Manage Your Vacancies</h1>
+  <p>Add and remove your player or coach/manager vacancies. All vacancies display on the Vacancies page.</p>
+
+  <!-- Tabs -->
+  <div class="vacancy-tabs">
+    <button class="tab-button active" onclick="switchVacancyTab('player')" id="playerTabBtn">
+      Player Vacancies
+    </button>
+    <button class="tab-button" onclick="switchVacancyTab('coach')" id="coachTabBtn">
+      Coach/Manager Vacancies
+    </button>
+  </div>
+
+  <!-- Player Vacancy Form -->
+  <div id="playerVacancyContent" class="tab-content active" style="max-width: 800px; margin: 2rem auto;">
+    <div class="vacancy-form-container" id="playerFormContainer">
+      <form id="playerVacancyForm">
+        <label for="playerTeamName">Team</label>
+        <select id="playerTeamName" required>
+          <option value="">Loading teams...</option>
+        </select>
+
+        <label for="playerPosition">Position</label>
+        <select id="playerPosition" required>
+          <option value="">Select Position</option>
+          <option value="Goalkeeper">Goalkeeper</option>
+          <option value="Defender">Defender</option>
+          <option value="Midfielder">Midfielder</option>
+          <option value="Forward">Forward</option>
+          <option value="Any">Any Position</option>
+        </select>
+
+        <label for="playerAge">Age Group</label>
+        <select id="playerAge" required>
+          <option value="">Select Age</option>
+          <option value="Under 7">Under 7</option>
+          <option value="Under 8">Under 8</option>
+          <option value="Under 9">Under 9</option>
+          <option value="Under 10">Under 10</option>
+          <option value="Under 11">Under 11</option>
+          <option value="Under 12">Under 12</option>
+          <option value="Under 13">Under 13</option>
+          <option value="Under 14">Under 14</option>
+          <option value="Under 15">Under 15</option>
+          <option value="Under 16">Under 16</option>
+          <option value="Under 17">Under 17</option>
+          <option value="Under 18">Under 18</option>
+          <option value="Adult">Adult</option>
+        </select>
+
+        <label for="playerLocation">Saturday/Sunday</label>
+        <select id="playerLocation" required>
+          <option value="">Select Day</option>
+          <option value="Stoke On Trent">Saturday</option>
+          <option value="Newcastle under Lyme">Sunday</option>
+        </select>
+
+        <label for="playerExperience">Experience</label>
+        <select id="playerExperience" required>
+          <option value="">Select experience</option>
+          <option value="Beginner">Beginner</option>
+          <option value="Intermediate">Intermediate</option>
+          <option value="Advanced">Advanced</option>
+          <option value="Any">Any Level</option>
+        </select>
+
+        <button type="submit">Add Player Vacancy</button>
+      </form>
+      <div id="playerMessage"></div>
+    </div>
+
+    <!-- Player Vacancies List -->
+    <div class="current-vacancies">
+      <h2>Your Player Vacancies</h2>
+      <div id="playerVacanciesList">
+        <p class="loading">Please select a team to view vacancies</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Coach Vacancy Form -->
+  <div id="coachVacancyContent" class="tab-content" style="max-width: 800px; margin: 2rem auto;">
+    <div class="vacancy-form-container" id="coachFormContainer">
+      <form id="coachVacancyForm">
+        <label for="coachTeamName">Team/Club</label>
+        <select id="coachTeamName" required>
+          <option value="">Loading teams...</option>
+        </select>
+
+        <label for="coachPosition">Position</label>
+        <select id="coachPosition" required>
+          <option value="">Select Position</option>
+          <option value="Manager">Manager</option>
+          <option value="Head Coach">Head Coach</option>
+          <option value="Assistant Coach">Assistant Coach</option>
+          <option value="Coach">Coach</option>
+        </select>
+
+        <label for="coachAge">Age</label>
+        <select id="coachAge" required>
+          <option value="">Select Level</option>
+          <option value="U7">Under 7</option>
+          <option value="U8">Under 8</option>
+          <option value="U9">Under 9</option>
+          <option value="U10">Under 10</option>
+          <option value="U11">Under 11</option>
+          <option value="U12">Under 12</option>
+          <option value="U13">Under 13</option>
+          <option value="U14">Under 14</option>
+          <option value="U15">Under 15</option>
+          <option value="U16">Under 16</option>
+          <option value="U17">Under 17</option>
+          <option value="U18">Under 18</option>
+          <option value="Adult">Adult</option>
+        </select>
+
+        <label for="coachLocation">Location</label>
+        <select id="coachLocation" required>
+          <option value="">Select Location</option>
+          <option value="Stoke On Trent">Stoke on Trent</option>
+          <option value="Newcastle under Lyme">Newcastle under Lyme</option>
+          <option value="Staffordshire">Staffordshire</option>
+        </select>
+
+        <label for="coachExperience">Experience Required</label>
+        <select id="coachExperience" required>
+          <option value="">Select experience</option>
+          <option value="Beginner">Beginner Welcome</option>
+          <option value="Some Experience">Some Experience</option>
+          <option value="Experienced">Experienced</option>
+          <option value="Any">Any Level</option>
+        </select>
+
+        <button type="submit">Add Coach Vacancy</button>
+      </form>
+      <div id="coachMessage"></div>
+    </div>
+
+    <!-- Coach Vacancies List -->
+    <div class="current-vacancies">
+      <h2>Your Coach/Manager Vacancies</h2>
+      <div id="coachVacanciesList">
+        <p class="loading">Please select a team to view vacancies</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2025 PlayOn. All rights reserved.</p>
+  <p>
+    <a href="index.html">Home</a> |
+    <a href="about.html">About</a> |
+    <a href="contact.html">Contact</a> |
+    <a href="privacy.html">Privacy</a>
+  </p>
+</footer>
+
+<!-- Menu Toggle Script -->
+<script>
+  const burger = document.querySelector('.burger');
+  const sideMenu = document.getElementById('sideMenu');
+  const overlay = document.getElementById('menuOverlay');
+
+  function toggleMenu() {
+    const isOpening = !sideMenu.classList.contains('open');
+    sideMenu.classList.toggle('open', isOpening);
+    overlay.classList.toggle('active', isOpening);
+    burger.classList.toggle('open', isOpening);
+    document.body.classList.toggle('menu-open', isOpening);
+  }
+
+  function closeMenu() {
+    sideMenu.classList.remove('open');
+    overlay.classList.remove('active');
+    burger.classList.remove('open');
+    document.body.classList.remove('menu-open');
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const links = sideMenu.querySelectorAll('a');
+    links.forEach(link => link.addEventListener('click', closeMenu));
+  });
+
+  // Tab switching
+  function switchVacancyTab(tab) {
+    // Update tab buttons
+    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+    if (tab === 'player') {
+      document.getElementById('playerTabBtn').classList.add('active');
+      document.getElementById('playerVacancyContent').classList.add('active');
+    } else {
+      document.getElementById('coachTabBtn').classList.add('active');
+      document.getElementById('coachVacancyContent').classList.add('active');
+    }
+  }
+</script>
+
+<script src="js/login-popup.js"></script>
+
+<!-- Firebase Vacancy Logic -->
+<script type="module">
+  import { collection, addDoc, getDocs, deleteDoc, doc, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+  import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+
+  let selectedPlayerTeam = '';
+  let selectedCoachTeam = '';
+  let currentUser = null;
+
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!window.firebaseReady) {
+      setTimeout(() => window.location.reload(), 500);
+      return;
+    }
+
+    onAuthStateChanged(window.auth, (user) => {
+      currentUser = user;
+      
+      if (!user) {
+        document.getElementById('authWarning').style.display = 'block';
+        document.getElementById('playerFormContainer').style.display = 'none';
+        document.getElementById('coachFormContainer').style.display = 'none';
+        document.getElementById('playerVacanciesList').innerHTML = '<p class="no-vacancies">Please log in to manage vacancies</p>';
+        document.getElementById('coachVacanciesList').innerHTML = '<p class="no-vacancies">Please log in to manage vacancies</p>';
+      } else {
+        document.getElementById('authWarning').style.display = 'none';
+        document.getElementById('playerFormContainer').style.display = 'block';
+        document.getElementById('coachFormContainer').style.display = 'block';
+        loadTeams();
+      }
+    });
+  });
+
+  // Load teams
+  async function loadTeams() {
+    const playerTeamSelect = document.getElementById('playerTeamName');
+    const coachTeamSelect = document.getElementById('coachTeamName');
+    
+    try {
+      if (!window.firebaseReady) {
+        setTimeout(loadTeams, 500);
+        return;
+      }
+
+      const teamsQuery = query(collection(window.db, 'teams'), orderBy('name'));
+      const querySnapshot = await getDocs(teamsQuery);
+
+      const teamsHTML = '<option value="">Select your team</option>' + 
+        Array.from(querySnapshot.docs)
+          .map(doc => {
+            const team = doc.data();
+            return team.name ? `<option value="${team.name}">${team.name}</option>` : '';
+          })
+          .join('');
+
+      playerTeamSelect.innerHTML = teamsHTML;
+      coachTeamSelect.innerHTML = teamsHTML;
+
+      // Player team selection
+      playerTeamSelect.addEventListener('change', (e) => {
+        selectedPlayerTeam = e.target.value;
+        if (selectedPlayerTeam) {
+          loadPlayerVacancies(selectedPlayerTeam);
+        } else {
+          document.getElementById('playerVacanciesList').innerHTML = '<p class="no-vacancies">Please select a team</p>';
+        }
+      });
+
+      // Coach team selection
+      coachTeamSelect.addEventListener('change', (e) => {
+        selectedCoachTeam = e.target.value;
+        if (selectedCoachTeam) {
+          loadCoachVacancies(selectedCoachTeam);
+        } else {
+          document.getElementById('coachVacanciesList').innerHTML = '<p class="no-vacancies">Please select a team</p>';
+        }
+      });
+
+    } catch (error) {
+      console.error('Error loading teams:', error);
+      playerTeamSelect.innerHTML = '<option value="">Error loading teams</option>';
+      coachTeamSelect.innerHTML = '<option value="">Error loading teams</option>';
+    }
+  }
+
+  // Load player vacancies
+async function loadPlayerVacancies(teamName) {
+  const list = document.getElementById('playerVacanciesList');
+  list.innerHTML = '<p class="loading">Loading...</p>';
+
+  if (!currentUser) {
+    list.innerHTML = '<p class="no-vacancies">Please log in</p>';
+    return;
+  }
+
+  try {
+    const q = query(
+      collection(window.db, 'Vacancies'),
+      where('club', '==', teamName),
+      where('managerId', '==', currentUser.uid)
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      list.innerHTML = '<p class="no-vacancies">No player vacancies for this team</p>';
+      return;
+    }
+
+    const vacancies = [];
+    querySnapshot.forEach((docSnap) => {
+      vacancies.push({ id: docSnap.id, ...docSnap.data() });
+    });
+
+    displayPlayerVacancies(vacancies);
+  } catch (error) {
+    console.error('Error:', error);
+    list.innerHTML = '<p class="no-vacancies">Error loading vacancies</p>';
+  }
+}
+
+// Display Player Vacancies (matching the main vacancies page)
+function displayPlayerVacancies(vacancies) {
+  const container = document.getElementById('playerVacanciesList');
+  
+  if (vacancies.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <h3>No player vacancies found</h3>
+        <p>No vacancies for this team yet</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = vacancies.map(vacancy => {
+    const clubName = vacancy.club || 'Team Name';
+    const logoUrl = vacancy.clubLogo || `images/teamLogos/${clubName.toLowerCase().replace(/\s+/g, '-')}.png`;
+    
+    return `
+      <div class="vacancy-card">
+        <div class="club-logo-container">
+          <img src="${logoUrl}" 
+               alt="${clubName} logo" 
+               class="club-logo"
+               onerror="this.onerror=null; this.src='images/default-club-logo.png';">
+        </div>
+        <h3>${vacancy.position || 'Any Position'}</h3>
+        <div class="team-name">${clubName}</div>
+        <div class="vacancy-details">
+          <p><span class="icon">📍</span>${vacancy.location || 'Location not specified'}</p>
+          <p><span class="icon">👤</span>${vacancy.managerName || 'Manager'}</p>
+          ${vacancy.age ? `<p><span class="icon">🎂</span>${vacancy.age}</p>` : ''}
+          ${vacancy.experience ? `<p><span class="icon">📊</span>${vacancy.experience}</p>` : ''}
+          ${vacancy.description ? `<p><span class="icon">ℹ️</span>${vacancy.description}</p>` : ''}
+        </div>
+        <button class="delete-btn" onclick="deletePlayerVacancy('${vacancy.id}', '${vacancy.club}')">
+          Delete
+        </button>
+      </div>
+    `;
+  }).join('');
+}
+
+// Load coach vacancies
+async function loadCoachVacancies(teamName) {
+  const list = document.getElementById('coachVacanciesList');
+  list.innerHTML = '<p class="loading">Loading...</p>';
+
+  if (!currentUser) {
+    list.innerHTML = '<p class="no-vacancies">Please log in</p>';
+    return;
+  }
+
+  try {
+    const q = query(
+      collection(window.db, 'coachVacancies'),
+      where('teamName', '==', teamName),
+      where('managerId', '==', currentUser.uid)
+    );
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      list.innerHTML = '<p class="no-vacancies">No coach vacancies for this team</p>';
+      return;
+    }
+
+    const vacancies = [];
+    querySnapshot.forEach((docSnap) => {
+      vacancies.push({ id: docSnap.id, ...docSnap.data() });
+    });
+
+    displayCoachVacancies(vacancies);
+  } catch (error) {
+    console.error('Error:', error);
+    list.innerHTML = '<p class="no-vacancies">Error loading vacancies</p>';
+  }
+}
+
+// Display Coach Vacancies (matching the card layout)
+function displayCoachVacancies(vacancies) {
+  const container = document.getElementById('coachVacanciesList');
+  
+  if (vacancies.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state">
+        <h3>No coach vacancies found</h3>
+        <p>No vacancies for this team yet</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = vacancies.map(vacancy => {
+    const teamName = vacancy.teamName || 'Team Name';
+    const logoUrl = vacancy.clubLogo || `images/teamLogos/${teamName.toLowerCase().replace(/\s+/g, '-')}.png`;
+    
+    return `
+      <div class="vacancy-card">
+        <div class="club-logo-container">
+          <img src="${logoUrl}" 
+               alt="${teamName} logo" 
+               class="club-logo"
+               onerror="this.onerror=null; this.src='images/default-club-logo.png';">
+        </div>
+        <h3>${vacancy.position || 'Coach/Manager'}</h3>
+        <div class="team-name">${teamName}</div>
+        <div class="vacancy-details">
+          <p><span class="icon">📍</span>${vacancy.location || 'Location not specified'}</p>
+          <p><span class="icon">👤</span>${vacancy.managerName || 'Manager'}</p>
+          ${vacancy.teamLevel ? `<p><span class="icon">⚽</span>${vacancy.teamLevel}</p>` : ''}
+          ${vacancy.experience ? `<p><span class="icon">🎯</span>${vacancy.experience}</p>` : ''}
+          ${vacancy.description ? `<p><span class="icon">ℹ️</span>${vacancy.description}</p>` : ''}
+        </div>
+        <button class="delete-btn" onclick="deleteCoachVacancy('${vacancy.id}', '${vacancy.teamName}')">
+          Delete
+        </button>
+      </div>
+    `;
+  }).join('');
+}
+
+  // Delete player vacancy
+  window.deletePlayerVacancy = async function(id, team) {
+    if (!currentUser || !confirm(`Delete this player vacancy for ${team}?`)) return;
+    
+    try {
+      await deleteDoc(doc(window.db, 'Vacancies', id));
+      document.getElementById('playerMessage').textContent = 'Deleted successfully!';
+      document.getElementById('playerMessage').style.color = 'green';
+      setTimeout(() => { document.getElementById('playerMessage').textContent = ''; }, 3000);
+      if (selectedPlayerTeam) loadPlayerVacancies(selectedPlayerTeam);
+    } catch (error) {
+      console.error('Error:', error);
+      document.getElementById('playerMessage').textContent = 'Error deleting vacancy';
+      document.getElementById('playerMessage').style.color = 'red';
+    }
+  };
+
+  // Delete coach vacancy
+  window.deleteCoachVacancy = async function(id, team) {
+    if (!currentUser || !confirm(`Delete this coach vacancy for ${team}?`)) return;
+    
+    try {
+      await deleteDoc(doc(window.db, 'coachVacancies', id));
+      document.getElementById('coachMessage').textContent = 'Deleted successfully!';
+      document.getElementById('coachMessage').style.color = 'green';
+      setTimeout(() => { document.getElementById('coachMessage').textContent = ''; }, 3000);
+      if (selectedCoachTeam) loadCoachVacancies(selectedCoachTeam);
+    } catch (error) {
+      console.error('Error:', error);
+      document.getElementById('coachMessage').textContent = 'Error deleting vacancy';
+      document.getElementById('coachMessage').style.color = 'red';
+    }
+  };
+
+  // Player form submit
+  document.getElementById('playerVacancyForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!currentUser) return;
+
+    const data = {
+      club: document.getElementById('playerTeamName').value,
+      position: document.getElementById('playerPosition').value,
+      age: document.getElementById('playerAge').value,
+      location: document.getElementById('playerLocation').value,
+      experience: document.getElementById('playerExperience').value,
+      managerId: currentUser.uid,
+      managerEmail: currentUser.email,
+      timestamp: new Date()
+    };
+
+    try {
+      await addDoc(collection(window.db, 'Vacancies'), data);
+      document.getElementById('playerMessage').textContent = 'Player vacancy added!';
+      document.getElementById('playerMessage').style.color = 'green';
+      document.getElementById('playerVacancyForm').reset();
+      if (selectedPlayerTeam) loadPlayerVacancies(selectedPlayerTeam);
+      setTimeout(() => { document.getElementById('playerMessage').textContent = ''; }, 3000);
+    } catch (error) {
+      console.error('Error:', error);
+      document.getElementById('playerMessage').textContent = 'Error adding vacancy';
+      document.getElementById('playerMessage').style.color = 'red';
+    }
+  });
+
+  // Coach form submit
+  document.getElementById('coachVacancyForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!currentUser) return;
+
+    const data = {
+      teamName: document.getElementById('coachTeamName').value,
+      position: document.getElementById('coachPosition').value,
+      teamLevel: document.getElementById('coachAge').value,
+      location: document.getElementById('coachLocation').value,
+      experience: document.getElementById('coachExperience').value,
+      managerId: currentUser.uid,
+      email: currentUser.email,
+      postedBy: currentUser.displayName || currentUser.email,
+      createdAt: new Date()
+    };
+
+    try {
+      await addDoc(collection(window.db, 'coachVacancies'), data);
+      document.getElementById('coachMessage').textContent = 'Coach vacancy added!';
+      document.getElementById('coachMessage').style.color = 'green';
+      document.getElementById('coachVacancyForm').reset();
+      if (selectedCoachTeam) loadCoachVacancies(selectedCoachTeam);
+      setTimeout(() => { document.getElementById('coachMessage').textContent = ''; }, 3000);
+    } catch (error) {
+      console.error('Error:', error);
+      document.getElementById('coachMessage').textContent = 'Error adding vacancy';
+      document.getElementById('coachMessage').style.color = 'red';
+    }
+  });
+</script>
+
+</body>
+</html>
