@@ -1721,3 +1721,26 @@ body {
   margin: 0 auto; /* centers the image horizontally */
 }
 
+.playon-logo {
+  width: 90px;
+  height: 90px;
+  object-fit: contain;
+
+  background: #fff;        /* 👈 important */
+  padding: 10px;           /* breathing room */
+  border-radius: 18px;
+
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.playon-link {
+  display: inline-block;
+  margin-top: 10px;
+}
+
+.playon-link:hover .playon-logo {
+  transform: scale(1.08);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.25);
+}
