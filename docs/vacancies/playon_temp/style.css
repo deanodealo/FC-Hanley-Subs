@@ -1,0 +1,350 @@
+/* ===== General Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', Arial, sans-serif;
+  background: #ffffff;
+  color: #1A2A44;
+  line-height: 1.5;
+}
+
+/* ===== Header ===== */
+header {
+  position: relative;
+  display: flex;
+  justify-content: space-between; /* burger left, logo right */
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #1A2A44;
+  z-index: 1000;
+}
+
+/* Burger button: left side */
+.burger {
+  width: 30px;
+  height: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  z-index: 2000;  /* above logo */
+}
+
+.burger span {
+  display: block;
+  height: 3px;
+  width: 30px;  /* ensure width is fixed */
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Logo: right side */
+.logo-container {
+  background-color: white; /* optional */
+  padding: 10px 15px;
+  border-radius: 5px;
+  z-index: 1000;  /* below burger */
+}
+
+
+/* Logo */
+.logo-container {
+  background-color: white;
+  padding: 10px 15px;
+  border-radius: 5px;
+  z-index: 1000; /* below burger */
+}
+
+header img {
+  display: block;
+  max-height: 80px;
+  width: auto;
+}
+
+@media(max-width: 600px) {
+  header img {
+    max-height: 60px;
+  }
+}
+
+/* ===== Burger Button ===== */
+.burger {
+  width: 30px;
+  height: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  position: absolute;  /* position absolute inside header */
+  right: 2rem;         /* sit at right side */
+  top: 50%;            /* vertically centered */
+  transform: translateY(-50%);
+  z-index: 2000;       /* above logo and content */
+}
+
+.burger span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+
+.burger.open span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+.burger.open span:nth-child(2) {
+  opacity: 0;
+}
+.burger.open span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+/* ===== Overlay ===== */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+  z-index: 2004;
+}
+
+.overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ===== Side Menu ===== */
+.side-menu {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  width: 250px;
+  height: calc(100% - 80px);
+  background: linear-gradient(to bottom right, #1A2A44, #27AE60);
+  color: #fff;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  z-index: 2005;
+  border-radius: 0 10px 10px 0;
+}
+
+.side-menu.open {
+  transform: translateX(0);
+}
+
+.side-menu a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 1.2rem;
+}
+
+.side-menu a:hover {
+  color: #f1f1f1;
+}
+
+/* ===== Hero Section ===== */
+.hero {
+  text-align: center;
+  padding: 4rem 2rem;
+  background: linear-gradient(to bottom right, #1A2A44, #27AE60);
+  color: #fff;
+}
+
+.hero h1 {
+  font-size: 2.2rem;
+  margin-bottom: 1rem;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+/* Hero Buttons */
+.hero button,
+.hero .hero-btn,
+button,
+.btn {
+  padding: 0.8rem 1.6rem;
+  font-size: 1rem;
+  background: #27AE60;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-block;
+  transition: 0.3s;
+  text-align: center;
+}
+
+.hero button:hover,
+.hero .hero-btn:hover,
+button:hover,
+.btn:hover {
+  background: #219653;
+}
+
+/* Center the button container */
+.btn-container {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+/* ===== Features Grid ===== */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  padding: 3rem 2rem;
+}
+
+.feature-card {
+  background: #f9f9f9;
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-card h3 {
+  margin-top: 1rem;
+  font-size: 1.2rem;
+  color: #1A2A44;
+}
+
+/* ===== Footer ===== */
+footer {
+  text-align: center;
+  padding: 2rem;
+  background: #1A2A44;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+footer a {
+  color: #27AE60;
+  margin: 0 0.5rem;
+  text-decoration: none;
+}
+
+/* Mobile adjustments */
+@media(max-width: 600px) {
+  .hero h1 {
+    font-size: 1.8rem;
+  }
+}
+
+/* ===== Icons ===== */
+.icon {
+  width: 24px;
+  height: 24px; 
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+/* ===== About Page ===== */
+.about-intro {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  background: #f9f9f9;
+}
+
+.about-intro h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #1A2A44;
+}
+
+.about-intro p {
+  max-width: 800px;
+  margin: 0 auto;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Roles Section */
+.roles .container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+  padding: 3rem 1.5rem;
+}
+
+.roles .card {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  padding: 2rem;
+  max-width: 350px;
+  flex: 1 1 300px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.roles .card:hover {
+  transform: translateY(-5px);
+}
+
+.roles h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #27AE60;
+}
+
+.roles p {
+  color: #444;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Button placement for Roles section */
+.roles .btn-container {
+  margin-top: 1rem;
+}
+
+/* Ensure roles/cards/buttons appear above background */
+.roles,
+.features,
+.about-intro {
+  position: relative;
+  z-index: 1;
+}
+.feature-card {
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
