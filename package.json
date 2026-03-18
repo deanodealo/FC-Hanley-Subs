@@ -1,0 +1,26 @@
+{
+  "name": "fchanleynew",
+  "version": "1.0.0",
+  "main": "admin.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deanodealo/FC-Hanley-Subs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deanodealo/FC-Hanley-Subs/issues"
+  },
+  "homepage": "https://github.com/deanodealo/FC-Hanley-Subs#readme",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.58.2"
+  }
+}
