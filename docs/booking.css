@@ -200,7 +200,7 @@ body.booking::before {
   width: 24px;
   height: 24px;
   font-size: 16px;
-  color: #ff0000;  /* Red color for the "X" */
+  color: #ff0000 !important;  /* Red color for the "X" */
   background: transparent;
   border: 2px solid #ff0000;
   border-radius: 4px;
