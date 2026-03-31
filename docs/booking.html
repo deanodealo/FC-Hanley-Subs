@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>FC Hanley Easter Camp</title>
+  <link rel="stylesheet" href="booking.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body class="booking">
+
+<div class="container">
+
+  <!-- 🔵 Header -->
+  <header>
+    <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge">
+    <h1>FC Hanley Easter Camp 2026</h1>
+    <p>Join our popular football camps at FC Hanley! Fun, Skills and Development every day</p>
+    <p><strong>Fully licensed FA & UEFA qualified coaches</strong></p>
+  </header>
+
+  <!-- 👨‍👩‍👧 Parent Details -->
+  <section>
+    <h2>Parent / Guardian Details</h2>
+    <input type="text" id="parentName" placeholder="Parent/Guardian Name">
+    <input type="email" id="email" placeholder="Email">
+    <input type="text" id="phone" placeholder="Phone">
+  </section>
+
+  <!-- 👶 Children Booking -->
+  <section>
+    <h2>Children</h2>
+
+    <div id="childrenContainer">
+      <!-- JS will inject child cards here -->
+    </div>
+
+    <button type="button" onclick="addChild()">Add Another Child</button>
+  </section>
+
+  <!-- 💸 Summary -->
+  <section class="summary">
+    <h2>Booking Summary</h2>
+    <div id="summaryDetails"></div>
+    <h3 id="totalPrice">Total: £0</h3>
+  </section>
+
+ <!-- 💳 Buttons -->
+<section class="actions">
+  <button id="continueBooking">Continue</button>
+</section>
+
+</div>
+
+<!-- 🏥 Child Details Page (hidden initially) -->
+<section id="childDetailsPage" style="display:none;">
+  <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge">
+  <h2>Child Details & Medical Information</h2>
+  <div id="childDetailsContainer"></div>
+
+<!-- Media Consent --> 
+<section class="consent">
+  <p>Please indicate your consent for your child/children to be photographed or recorded:</p>
+
+  <label>
+    <input type="radio" name="mediaConsent" value="Yes">
+    Yes – I give permission. Media may be used by FC Hanley or partner organisations (printed & digital).
+  </label><br>
+
+  <label>
+    <input type="radio" name="mediaConsent" value="No">
+    No – I do not give permission. The child will still participate in all activities.
+  </label>
+</section>
+
+  <!-- Buttons -->
+  <section class="actions">
+    <button id="submitChildDetails">Submit & Proceed</button>
+  </section>
+</section>
+
+
+<script src="booking.js"></script>
+</body>
+</html>

@@ -1,0 +1,392 @@
+/* 🔹 Global */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #0b1f3a;
+  color: white;
+  margin: 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: auto;
+  padding: 15px;
+}
+
+/* 🔵 Header */
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 22px;
+  color: #4db8ff;
+}
+
+/* 📦 Sections */
+section {
+  background: #132c4c;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+}
+
+/* 📅 Day cards container */
+#daysContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* 📅 Day cards */
+.day-card {
+  background: #1c3d66;
+  padding: 12px;
+  border-radius: 12px;
+  transition: 0.2s;
+}
+
+/* Highlight selected day */
+.day-card.selected {
+  border: 2px solid #4db8ff;
+  background: #245a94;
+}
+
+/* ✅ Day and wrap checkboxes inline */
+.day-card label {
+  display: flex;
+  align-items: center;
+  gap: 8px;       /* space between checkbox and text */
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Remove previous wrap block style */
+.wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+/* 🧾 Inputs */
+input[type="text"],
+input[type="number"],
+input[type="email"] {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: none;
+  font-size: 16px; /* prevents iPhone zoom */
+}
+
+/* 📊 Sticky Summary */
+.summary {
+  position: sticky;
+  bottom: 0;
+  background: #0073ff76;
+  border: 2px solid #4db8ff;
+  text-align: center;
+  padding: 10px;
+}
+
+/* 💳 Buttons */
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+button {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 10px;
+  background: #4db8ff;
+  color: black;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+/* 💻 Tablet/Desktop tweaks */
+@media (min-width: 768px) {
+  .container {
+    max-width: 800px;
+  }
+
+  .actions {
+    flex-direction: row;
+  }
+
+  button {
+    flex: 1;
+  }
+
+  /* Optional: day cards in two columns on wider screens */
+  #daysContainer {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .day-card {
+    flex: 1 1 calc(50% - 12px);
+  }
+}
+/* FC Hanley badge styling */
+header .badge {
+  display: block;
+  margin: 0 auto 12px; /* centered with space below */
+  max-width: 120px;    /* adjust size as needed */
+  height: auto;
+}
+/* Background image for booking page */
+body.booking::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('images/fun5.jpg'); /* path to your image */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+  opacity: 0.25;  /* adjust transparency */
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* 👶 Child Cards */
+.child-card {
+  background: #1c3d66;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  position: relative;
+}
+
+/* Child header (name + remove) */
+.child-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.child-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #4db8ff;
+}
+
+/* Red ✖ button for removing child */
+.child-header .remove-child {
+  display: inline-flex;           /* inline with heading */
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;               /* space after heading */
+  width: 24px;                     /* button width */
+  height: 24px;                    /* button height */
+  font-size: 16px;                 /* size of the ✖ */
+  color: #ff0000;                  /* red X text */
+  background: transparent;          /* no background circle */
+  border: 2px solid #ff0000;      /* optional outline */
+  border-radius: 4px;              /* small rounded corners */
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.child-header .remove-child:hover {
+  background: #ff0000;             /* fill red on hover */
+  color: white;                    /* X turns white on hover */
+}
+
+.child-header .remove-child:active {
+  transform: translateY(1px);
+}
+
+
+/* 📅 Days inside child */
+.child-days {
+  margin-top: 10px;
+}
+
+/* Make day cards slightly tighter inside child */
+.child-card .day-card {
+  padding: 10px;
+}
+
+/* ➕ Add child button tweak */
+section button {
+  margin-top: 10px;
+  background: #ffffff;
+}
+
+/* 📊 Summary details per child */
+#summaryDetails {
+  text-align: left;
+  font-size: 14px;
+}
+
+.summary-child {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+/* Child details cards */
+.child-details-card {
+  background: #132c4c;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+  color: white;
+}
+
+.child-details-card h3 {
+  margin-top: 0;
+}
+
+/* Textareas & selects */
+.child-details-card textarea,
+.child-details-card select {
+  width: 100%;
+  padding: 10px;
+  margin: 6px 0 12px 0;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+}
+
+/* Media consent checkbox */
+.consent {
+  background: #132c4c;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+}
+
+/* 🔹 Child Details Cards */
+.child-details-card {
+  background: #132c4c;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 12px;
+}
+
+/* ✅ Labels */
+.child-details-card label {
+  display: block;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+/* ✅ Yes/No select boxes */
+.child-details-card select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+/* ✅ Conditional textareas */
+.child-details-card textarea {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  margin-bottom: 10px;
+  resize: vertical; /* allow vertical resizing */
+  min-height: 50px;
+}
+
+/* ✅ Section headers */
+.child-details-card h3 {
+  margin-top: 0;
+  color: #4db8ff;
+  font-size: 18px;
+}
+
+/* ✅ Horizontal rule separation */
+.child-details-card hr {
+  border: 0;
+  border-top: 1px solid #4db8ff;
+  margin: 15px 0;
+}
+
+/* ✅ Media consent styling */
+.consent label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.consent input[type="checkbox"] {
+  margin-top: 2px;
+}
+
+/* 💳 Buttons on child details page */
+#childDetailsPage .actions button {
+  width: 100%;
+  padding: 14px;
+  font-weight: bold;
+  font-size: 16px;
+  background: #4db8ff;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  margin-top: 10px;
+}
+
+#childDetailsPage .actions button:active {
+  transform: scale(0.98);
+}
+
+/* 💻 Tablet/Desktop tweaks */
+@media (min-width: 768px) {
+  .child-details-card select,
+  .child-details-card textarea {
+    font-size: 16px;
+  }
+
+  #childDetailsPage .actions {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  #childDetailsPage .actions button {
+    flex: 1;
+  }
+}
+
+/* Child Details Page Badge */
+#childDetailsPage .badge {
+  display: block;           /* center image as block */
+  margin: 15px auto;        /* center horizontally, add vertical spacing */
+  max-width: 120px;         /* max width on desktop */
+  width: 25%;               /* scale relative to container */
+  height: auto;             /* maintain aspect ratio */
+}
