@@ -193,22 +193,23 @@ body.booking::before {
 
 /* Red ✖ button for removing child */
 .child-header .remove-child {
-  display: inline-flex;           /* inline with heading */
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-left: 8px;               /* space after heading */
-  width: 24px;                     /* button width */
-  height: 24px;                    /* button height */
-  font-size: 16px;                 /* size of the ✖ */
-  color: #ff0000;                  /* red X text */
-  background: transparent;          /* no background circle */
-  border: 2px solid #ff0000;      /* optional outline */
-  border-radius: 4px;              /* small rounded corners */
+  margin-left: 8px;
+  width: 24px;
+  height: 24px;
+  font-size: 16px;
+  color: #ff0000;  /* Red color for the "X" */
+  background: transparent;
+  border: 2px solid #ff0000;
+  border-radius: 4px;
   cursor: pointer;
   line-height: 1;
   padding: 0;
   text-align: center;
   transition: all 0.15s ease;
+  font-family: Arial, sans-serif;  /* Ensure it's using a clean font */
 }
 
 .child-header .remove-child:hover {
