@@ -168,93 +168,58 @@ body.booking::before {
   pointer-events: none;
 }
 
-/* 👶 Child Cards */
 .child-card {
   background: #1c3d66;
-  padding: 15px;
+  padding: 22px 15px 15px 15px;
   border-radius: 12px;
   margin-bottom: 15px;
   position: relative;
 }
 
-/* Child header (name + remove) */
 .child-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
 }
 
 .child-header h3 {
   margin: 0;
   font-size: 16px;
   color: #4db8ff;
+  flex: 1; /* 🔥 THIS pushes the X to the far right */
 }
 
 .child-header .remove-child {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-left: 8px;
+  position: absolute;
+  top: 0px;
+  right: 10px;
   width: 32px;
   height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: white;
-  background: transparent;
+  background: rgba(0, 0, 0, 0.35);
   border: none;
+  border-radius: 50%;
   cursor: pointer;
   padding: 0;
-  transition: opacity 0.15s ease;
+  transition: background 0.2s ease, transform 0.15s ease;
+  z-index: 2;
 }
 
-/* Make SVG scale nicely */
+/* SVG sizing */
 .child-header .remove-child svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
 /* Hover */
 .child-header .remove-child:hover {
-  opacity: 0.6;
+  background: rgba(255, 77, 77, 0.2);
 }
 
-/* Subtle hover */
-.child-header .remove-child:hover {
-  opacity: 0.6;
-}
-
-.child-header .remove-child:hover {
-  background: #ff0000;             /* fill red on hover */
-  color: white;                    /* X turns white on hover */
-}
-
+/* Press */
 .child-header .remove-child:active {
-  transform: translateY(1px);
-}
-.remove-child {
-  position: relative;
-  overflow: hidden; /* important for ripple */
-}
-
-/* Ripple element */
-.remove-child::after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.4);
-  transform: scale(0);
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Trigger animation */
-.remove-child:active::after {
-  width: 100px;
-  height: 100px;
-  transform: scale(1);
-  opacity: 1;
-  transition: transform 0.3s, opacity 0.6s;
+  transform: scale(0.9);
 }
 
 /* Child details page layout */
