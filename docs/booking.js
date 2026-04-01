@@ -137,18 +137,22 @@ function renderChildren() {
     div.innerHTML = `
       <div class="child-header">
         <h3>Child ${index + 1}</h3>
-        ${children.length > 1 ? `
-  <button type="button" class="remove-child" data-index="${index}">
-    <svg viewBox="0 0 24 24" width="18" height="18">
-      <line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      <line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-    </svg>
-  </button>
-` : ""}
+        ${children.length > 1 ? `<button type="button" class="remove-child" data-index="${index}">✖</button>` : ""}
       </div>
 
-      <input type="text" placeholder="Child Name" value="${child.name}" oninput="updateChildName(${index}, this.value)">
-      <input type="number" placeholder="Age" value="${child.age}" oninput="updateChildAge(${index}, this.value)">
+      <input 
+        type="text" 
+        placeholder="Child Name" 
+        value="${child.name || ""}"
+        oninput="updateChildName(${index}, this.value)"
+      >
+
+      <input 
+        type="number" 
+        placeholder="Age" 
+        value="${child.age || ""}"
+        oninput="updateChildAge(${index}, this.value)"
+      >
 
       <div class="child-days" id="days-${index}"></div>
     `;
@@ -157,9 +161,10 @@ function renderChildren() {
     renderDays(index);
   });
 
+  // Attach remove handlers AFTER rendering
   document.querySelectorAll(".remove-child").forEach(btn => {
     btn.addEventListener("click", (e) => {
-      const index = parseInt(e.target.dataset.index, 10);
+      const index = parseInt(e.currentTarget.dataset.index, 10);
       removeChildBooking(index);
     });
   });
@@ -192,7 +197,7 @@ function renderDays(childIndex) {
         <input 
           type="checkbox" 
           ${wrapSelected ? "checked" : ""}
-          ${!daySelected ? "disabled" : ""}
+          ${daySelected ? "" : "disabled"}
           onchange="toggleWrap(${childIndex}, '${day.id}', this)"
         >
         Wrap Around (+£${CAMP.wrapPrice})
@@ -213,20 +218,25 @@ function updateChildAge(index, value) {
   children[index].age = value;
 }
 
-// 📅 Toggle day
 function toggleDay(childIndex, dayId, checkbox, element) {
   const child = children[childIndex];
+  const wrapCheckbox = element.querySelectorAll("input")[1];
 
   if (checkbox.checked) {
     child.selectedDays.add(dayId);
     element.classList.add("selected");
+    if (wrapCheckbox) wrapCheckbox.disabled = false;
   } else {
     child.selectedDays.delete(dayId);
-    child.wrapDays.delete(dayId);
     element.classList.remove("selected");
+
+    child.wrapDays.delete(dayId);
+    if (wrapCheckbox) {
+      wrapCheckbox.checked = false;
+      wrapCheckbox.disabled = true;
+    }
   }
 
-  renderDays(childIndex);
   updateSummary();
 }
 
