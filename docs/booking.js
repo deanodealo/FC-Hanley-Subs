@@ -19,32 +19,57 @@ let children = [];
 document.addEventListener("DOMContentLoaded", () => {
   addChild(); // start with one child
 
-// Continue button
-const continueBtn = document.getElementById("continueBooking");
-if (continueBtn) {
-  continueBtn.addEventListener("click", () => {
+  // Continue button
+  const continueBtn = document.getElementById("continueBooking");
+  if (continueBtn) {
+    continueBtn.addEventListener("click", () => {
+      if (!validateParentDetails()) return;
 
-    // 1️⃣ Validate parent fields first
-    if (!validateParentDetails()) return;
+      if (children.length === 0 || !children.some(c => c.selectedDays.size > 0)) {
+        alert("Please add at least one child and select a day.");
+        return;
+      }
 
-    // 2️⃣ Check at least one child and one selected day
-    if (children.length === 0 || !children.some(c => c.selectedDays.size > 0)) {
-      alert("Please add at least one child and select a day.");
-      return;
-    }
+      document.querySelector(".container").style.display = "none";
+      document.getElementById("childDetailsPage").style.display = "block";
+      renderChildDetailsForm({ children });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
 
-    // 3️⃣ Hide booking form
-    document.querySelector(".container").style.display = "none";
+  // Back to booking button
+  const backBtn = document.getElementById("backToBooking");
+  if (backBtn) {
+    backBtn.addEventListener("click", () => {
+      document.getElementById("childDetailsPage").style.display = "none";
+      document.querySelector(".container").style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
 
-    // 4️⃣ Show child details section
-    document.getElementById("childDetailsPage").style.display = "block";
-
-    // 5️⃣ Render the child details form dynamically
-    renderChildDetailsForm({ children });
+  // Live parent field feedback
+  document.getElementById("parentName")?.addEventListener("input", function () {
+    if (this.value.trim()) this.style.border = "none";
   });
-}
 
-// ✅ Parent field validation function with inline highlighting + live feedback
+  document.getElementById("email")?.addEventListener("input", function () {
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (emailPattern.test(this.value.trim())) this.style.border = "none";
+  });
+
+  document.getElementById("phone")?.addEventListener("input", function () {
+    const phonePattern = /^\+?\d+$/;
+    if (phonePattern.test(this.value.trim())) this.style.border = "none";
+  });
+
+  // Submit child details
+  const submitBtn = document.getElementById("submitChildDetails");
+  if (submitBtn) {
+    submitBtn.addEventListener("click", handleChildDetailsSubmit);
+  }
+});
+
+// ✅ Parent field validation
 function validateParentDetails() {
   const parentName = document.getElementById("parentName");
   const email = document.getElementById("email");
@@ -52,25 +77,21 @@ function validateParentDetails() {
 
   let isValid = true;
 
-  // Reset previous error styles
   [parentName, email, phone].forEach(field => {
-    field.style.border = "none";
+    if (field) field.style.border = "none";
   });
 
-  // Parent name validation
   if (!parentName.value.trim()) {
     parentName.style.border = "2px solid red";
     isValid = false;
   }
 
-  // Email validation
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailPattern.test(email.value.trim())) {
     email.style.border = "2px solid red";
     isValid = false;
   }
 
-  // Phone validation (numbers only)
   const phonePattern = /^\+?\d+$/;
   if (!phonePattern.test(phone.value.trim())) {
     phone.style.border = "2px solid red";
@@ -78,67 +99,11 @@ function validateParentDetails() {
   }
 
   if (!isValid) {
-    alert("Please fix the highlighted fields.");
+    alert("Please fix the highlighted parent/guardian fields.");
   }
 
   return isValid;
 }
-
-// 💻 Real-time feedback on fields while typing
-document.getElementById("parentName").addEventListener("input", function() {
-  if (this.value.trim()) {
-    this.style.border = "none"; // Remove border once valid
-  }
-});
-
-document.getElementById("email").addEventListener("input", function() {
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (emailPattern.test(this.value.trim())) {
-    this.style.border = "none"; // Remove border once valid
-  }
-});
-
-document.getElementById("phone").addEventListener("input", function() {
-  const phonePattern = /^\+?\d+$/;
-  if (phonePattern.test(this.value.trim())) {
-    this.style.border = "none"; // Remove border once valid
-  }
-});
-
-  // Submit child details
-  const submitBtn = document.getElementById("submitChildDetails");
-  if (submitBtn) {
-    submitBtn.addEventListener("click", () => {
-      const finalBooking = {
-        parent: {
-          name: document.getElementById("parentName")?.value || "",
-          email: document.getElementById("email")?.value || "",
-          phone: document.getElementById("phone")?.value || ""
-        },
-        children: [],
-        mediaConsent: document.getElementById("mediaConsent")?.checked || false
-      };
-
-      children.forEach((child, index) => {
-        finalBooking.children.push({
-          name: child.name,
-          age: child.age,
-          selectedDays: Array.from(child.selectedDays),
-          wrapDays: Array.from(child.wrapDays),
-          dietary: document.getElementById(`dietary-${index}`)?.value || "",
-          dietaryDetails: document.getElementById(`dietaryDetails-${index}`)?.value || "",
-          allergies: document.getElementById(`allergies-${index}`)?.value || "",
-          allergiesDetails: document.getElementById(`allergiesDetails-${index}`)?.value || "",
-          otherDetails: document.getElementById(`otherDetails-${index}`)?.value || "",
-          safeguarding: document.getElementById(`safeguarding-${index}`)?.value || ""
-        });
-      });
-
-      console.log("Final Booking:", finalBooking);
-      alert("Booking data ready! Check console for full object.");
-    });
-  }
-});
 
 // ➕ Add Child
 function addChild() {
@@ -149,11 +114,12 @@ function addChild() {
     wrapDays: new Set()
   });
   renderChildren();
+  updateSummary();
 }
 
 // ❌ Remove Child
 function removeChildBooking(index) {
-  if (children.length <= 1) return; // always keep at least one child
+  if (children.length <= 1) return;
   children.splice(index, 1);
   renderChildren();
   updateSummary();
@@ -171,11 +137,18 @@ function renderChildren() {
     div.innerHTML = `
       <div class="child-header">
         <h3>Child ${index + 1}</h3>
-        ${children.length > 1 ? `<button class="remove-child" data-index="${index}">✖</button>` : ""}
+        ${children.length > 1 ? `
+  <button type="button" class="remove-child" data-index="${index}">
+    <svg viewBox="0 0 24 24" width="18" height="18">
+      <line x1="5" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <line x1="19" y1="5" x2="5" y2="19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+` : ""}
       </div>
 
-      <input type="text" placeholder="Child Name" oninput="updateChildName(${index}, this.value)">
-      <input type="number" placeholder="Age" oninput="updateChildAge(${index}, this.value)">
+      <input type="text" placeholder="Child Name" value="${child.name}" oninput="updateChildName(${index}, this.value)">
+      <input type="number" placeholder="Age" value="${child.age}" oninput="updateChildAge(${index}, this.value)">
 
       <div class="child-days" id="days-${index}"></div>
     `;
@@ -184,10 +157,9 @@ function renderChildren() {
     renderDays(index);
   });
 
-  // 🔔 Attach remove handlers AFTER rendering
   document.querySelectorAll(".remove-child").forEach(btn => {
     btn.addEventListener("click", (e) => {
-      const index = parseInt(e.target.dataset.index);
+      const index = parseInt(e.target.dataset.index, 10);
       removeChildBooking(index);
     });
   });
@@ -200,17 +172,29 @@ function renderDays(childIndex) {
   container.innerHTML = "";
 
   CAMP.dates.forEach(day => {
+    const daySelected = child.selectedDays.has(day.id);
+    const wrapSelected = child.wrapDays.has(day.id);
+
     const div = document.createElement("div");
-    div.className = "day-card";
+    div.className = `day-card ${daySelected ? "selected" : ""}`;
 
     div.innerHTML = `
       <strong>${day.label}</strong><br>
       <label>
-        <input type="checkbox" onchange="toggleDay(${childIndex}, '${day.id}', this, this.closest('.day-card'))">
+        <input 
+          type="checkbox" 
+          ${daySelected ? "checked" : ""}
+          onchange="toggleDay(${childIndex}, '${day.id}', this, this.closest('.day-card'))"
+        >
         Select Day (£${CAMP.pricePerDay})
       </label><br>
       <label>
-        <input type="checkbox" onchange="toggleWrap(${childIndex}, '${day.id}', this)">
+        <input 
+          type="checkbox" 
+          ${wrapSelected ? "checked" : ""}
+          ${!daySelected ? "disabled" : ""}
+          onchange="toggleWrap(${childIndex}, '${day.id}', this)"
+        >
         Wrap Around (+£${CAMP.wrapPrice})
       </label>
     `;
@@ -238,19 +222,22 @@ function toggleDay(childIndex, dayId, checkbox, element) {
     element.classList.add("selected");
   } else {
     child.selectedDays.delete(dayId);
-    element.classList.remove("selected");
-
     child.wrapDays.delete(dayId);
-    const wrapCheckbox = element.querySelectorAll("input")[1];
-    if (wrapCheckbox) wrapCheckbox.checked = false;
+    element.classList.remove("selected");
   }
 
+  renderDays(childIndex);
   updateSummary();
 }
 
 // 🕒 Toggle wrap
 function toggleWrap(childIndex, dayId, checkbox) {
   const child = children[childIndex];
+
+  if (!child.selectedDays.has(dayId)) {
+    checkbox.checked = false;
+    return;
+  }
 
   if (checkbox.checked) {
     child.wrapDays.add(dayId);
@@ -264,11 +251,17 @@ function toggleWrap(childIndex, dayId, checkbox) {
 // 💸 Calculate total
 function calculateTotal() {
   let total = 0;
+
   children.forEach(child => {
-    let base = child.selectedDays.size === CAMP.fullWeekDays ? CAMP.fullWeekPrice : child.selectedDays.size * CAMP.pricePerDay;
-    let wrap = child.wrapDays.size * CAMP.wrapPrice;
+    const base =
+      child.selectedDays.size === CAMP.fullWeekDays
+        ? CAMP.fullWeekPrice
+        : child.selectedDays.size * CAMP.pricePerDay;
+
+    const wrap = child.wrapDays.size * CAMP.wrapPrice;
     total += base + wrap;
   });
+
   return total;
 }
 
@@ -276,26 +269,31 @@ function calculateTotal() {
 function updateSummary() {
   const summaryDiv = document.getElementById("summaryDetails");
   if (!summaryDiv) return;
+
   summaryDiv.innerHTML = "";
 
   children.forEach((child, index) => {
     const div = document.createElement("div");
     div.className = "summary-child";
 
-    div.innerHTML = `<strong>${child.name || "Child " + (index + 1)}</strong><br>
-                     Days: ${child.selectedDays.size} | Wrap: ${child.wrapDays.size}`;
+    div.innerHTML = `
+      <strong>${child.name || "Child " + (index + 1)}</strong><br>
+      Days: ${child.selectedDays.size} | Wrap: ${child.wrapDays.size}
+    `;
 
     summaryDiv.appendChild(div);
   });
 
   const totalEl = document.getElementById("totalPrice");
-  if (totalEl) totalEl.innerText = `Total: £${calculateTotal()}`;
+  if (totalEl) {
+    totalEl.innerText = `Total: £${calculateTotal()}`;
+  }
 }
 
 // 🧾 Child Details Form
 function renderChildDetailsForm(bookingData) {
   const container = document.getElementById("childDetailsContainer");
-  container.innerHTML = ""; // clear previous
+  container.innerHTML = "";
 
   bookingData.children.forEach((child, index) => {
     const div = document.createElement("div");
@@ -304,7 +302,6 @@ function renderChildDetailsForm(bookingData) {
     div.innerHTML = `
       <h3>Child ${index + 1}: ${child.name || ""}</h3>
 
-      <!-- Dietary Info -->
       <label>Is there any dietary information we should be aware of?</label>
       <select id="dietary-${index}">
         <option value="">Select</option>
@@ -313,7 +310,6 @@ function renderChildDetailsForm(bookingData) {
       </select>
       <textarea id="dietaryDetails-${index}" placeholder="Please provide full details" style="display:none;"></textarea>
 
-      <!-- Allergies / Medical Conditions -->
       <label>Does your child have any known allergies or medical conditions?</label>
       <select id="allergies-${index}">
         <option value="">Select</option>
@@ -322,8 +318,7 @@ function renderChildDetailsForm(bookingData) {
       </select>
       <textarea id="allergiesDetails-${index}" placeholder="Please provide full details" style="display:none;"></textarea>
 
-      <!-- Behaviour / SEN / Disabilities -->
-      <label>Is there anything else we need to know about your child? (e.g., Behavioural, SEN, Disabilities)</label>
+      <label>Is there anything else we need to know about your child? (e.g. Behavioural, SEN, Disabilities)</label>
       <select id="other-${index}">
         <option value="">Select</option>
         <option value="No">No</option>
@@ -331,7 +326,6 @@ function renderChildDetailsForm(bookingData) {
       </select>
       <textarea id="otherDetails-${index}" placeholder="Please provide full details" style="display:none;"></textarea>
 
-      <!-- Safeguarding -->
       <label>Is there anything we need to know about your child in relation to safeguarding?</label>
       <select id="safeguarding-${index}">
         <option value="">Select</option>
@@ -345,7 +339,6 @@ function renderChildDetailsForm(bookingData) {
 
     container.appendChild(div);
 
-    // Conditional textareas
     ["dietary", "allergies", "other", "safeguarding"].forEach(field => {
       setupConditionalTextarea(index, field);
     });
@@ -357,79 +350,110 @@ function setupConditionalTextarea(index, field) {
   const selectEl = document.getElementById(`${field}-${index}`);
   const textEl = document.getElementById(`${field}Details-${index}`);
 
+  if (!selectEl || !textEl) return;
+
   selectEl.addEventListener("change", (e) => {
     if (e.target.value === "Yes") {
       textEl.style.display = "block";
     } else {
       textEl.style.display = "none";
       textEl.value = "";
+      textEl.style.border = "none";
     }
+
+    selectEl.style.border = "none";
   });
 
-document.getElementById("submitChildDetails").addEventListener("click", () => {
+  textEl.addEventListener("input", () => {
+    if (textEl.value.trim()) {
+      textEl.style.border = "none";
+    }
+  });
+}
+
+// ✅ Final child details submit
+function handleChildDetailsSubmit() {
   let valid = true;
   let errorMessages = [];
 
   children.forEach((child, index) => {
-    const name = child.name.trim();
-    const age = child.age;
-    
-    // Check child name
-    if (!name) {
+    const dietary = document.getElementById(`dietary-${index}`);
+    const dietaryDetails = document.getElementById(`dietaryDetails-${index}`);
+    const allergies = document.getElementById(`allergies-${index}`);
+    const allergiesDetails = document.getElementById(`allergiesDetails-${index}`);
+    const other = document.getElementById(`other-${index}`);
+    const otherDetails = document.getElementById(`otherDetails-${index}`);
+    const safeguarding = document.getElementById(`safeguarding-${index}`);
+    const safeguardingDetails = document.getElementById(`safeguardingDetails-${index}`);
+
+    [
+      dietary,
+      dietaryDetails,
+      allergies,
+      allergiesDetails,
+      other,
+      otherDetails,
+      safeguarding,
+      safeguardingDetails
+    ].forEach(field => {
+      if (field) field.style.border = "none";
+    });
+
+    if (!child.name.trim()) {
       valid = false;
       errorMessages.push(`Please enter a name for Child ${index + 1}`);
     }
 
-    // Check age
-    if (!age) {
+    if (!child.age) {
       valid = false;
       errorMessages.push(`Please enter an age for Child ${index + 1}`);
     }
 
-    // Check dietary select
-    const dietary = document.getElementById(`dietary-${index}`).value;
-    const dietaryDetails = document.getElementById(`dietaryDetails-${index}`).value.trim();
-    if (!dietary) {
+    if (!dietary.value) {
       valid = false;
+      dietary.style.border = "2px solid red";
       errorMessages.push(`Please answer dietary info for Child ${index + 1}`);
-    } else if (dietary === "Yes" && !dietaryDetails) {
+    } else if (dietary.value === "Yes" && !dietaryDetails.value.trim()) {
       valid = false;
+      dietaryDetails.style.border = "2px solid red";
       errorMessages.push(`Please provide dietary details for Child ${index + 1}`);
     }
 
-    // Check allergies select
-    const allergies = document.getElementById(`allergies-${index}`).value;
-    const allergiesDetails = document.getElementById(`allergiesDetails-${index}`).value.trim();
-    if (!allergies) {
+    if (!allergies.value) {
       valid = false;
+      allergies.style.border = "2px solid red";
       errorMessages.push(`Please answer allergies/medical info for Child ${index + 1}`);
-    } else if (allergies === "Yes" && !allergiesDetails) {
+    } else if (allergies.value === "Yes" && !allergiesDetails.value.trim()) {
       valid = false;
+      allergiesDetails.style.border = "2px solid red";
       errorMessages.push(`Please provide allergy/medical details for Child ${index + 1}`);
     }
 
-    // Check behavioural/SEN details (only if Yes is selected)
-    const other = document.getElementById(`other-${index}`).value;
-    const otherDetails = document.getElementById(`otherDetails-${index}`).value.trim();
-    if (other === "Yes" && !otherDetails) {
+    if (!other.value) {
       valid = false;
-      errorMessages.push(`Please provide behavioural/SEN info for Child ${index + 1}`);
+      other.style.border = "2px solid red";
+      errorMessages.push(`Please answer additional needs info for Child ${index + 1}`);
+    } else if (other.value === "Yes" && !otherDetails.value.trim()) {
+      valid = false;
+      otherDetails.style.border = "2px solid red";
+      errorMessages.push(`Please provide additional needs details for Child ${index + 1}`);
     }
 
-    // Check safeguarding details (only if Yes is selected)
-    const safeguarding = document.getElementById(`safeguarding-${index}`).value;
-    const safeguardingDetails = document.getElementById(`safeguardingDetails-${index}`).value.trim();
-    if (safeguarding === "Yes" && !safeguardingDetails) {
+    if (!safeguarding.value) {
       valid = false;
-      errorMessages.push(`Please provide safeguarding info for Child ${index + 1}`);
+      safeguarding.style.border = "2px solid red";
+      errorMessages.push(`Please answer safeguarding info for Child ${index + 1}`);
+    } else if (safeguarding.value === "Yes" && !safeguardingDetails.value.trim()) {
+      valid = false;
+      safeguardingDetails.style.border = "2px solid red";
+      errorMessages.push(`Please provide safeguarding details for Child ${index + 1}`);
     }
   });
 
-  // Check media consent checkbox
-  const consent = document.getElementById("mediaConsent").checked;
-  if (!consent) {
+  const selectedConsent = document.querySelector('input[name="mediaConsent"]:checked');
+  if (!selectedConsent) {
     valid = false;
-    errorMessages.push("Please agree to the media consent");
+    errorMessages.push("Please select Yes or No for media consent.");
   }
 
   if (!valid) {
@@ -437,8 +461,30 @@ document.getElementById("submitChildDetails").addEventListener("click", () => {
     return;
   }
 
-  // ✅ If all valid, proceed
-  console.log("All child details validated, ready to submit!");
+  const finalBooking = {
+    parent: {
+      name: document.getElementById("parentName")?.value || "",
+      email: document.getElementById("email")?.value || "",
+      phone: document.getElementById("phone")?.value || ""
+    },
+    children: children.map((child, index) => ({
+      name: child.name,
+      age: child.age,
+      selectedDays: Array.from(child.selectedDays),
+      wrapDays: Array.from(child.wrapDays),
+      dietary: document.getElementById(`dietary-${index}`)?.value || "",
+      dietaryDetails: document.getElementById(`dietaryDetails-${index}`)?.value || "",
+      allergies: document.getElementById(`allergies-${index}`)?.value || "",
+      allergiesDetails: document.getElementById(`allergiesDetails-${index}`)?.value || "",
+      other: document.getElementById(`other-${index}`)?.value || "",
+      otherDetails: document.getElementById(`otherDetails-${index}`)?.value || "",
+      safeguarding: document.getElementById(`safeguarding-${index}`)?.value || "",
+      safeguardingDetails: document.getElementById(`safeguardingDetails-${index}`)?.value || ""
+    })),
+    mediaConsent: selectedConsent.value,
+    totalPrice: calculateTotal()
+  };
+
+  console.log("Final Booking:", finalBooking);
   alert("All details completed! Proceeding to payment...");
-});
 }

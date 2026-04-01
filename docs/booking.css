@@ -191,25 +191,35 @@ body.booking::before {
   color: #4db8ff;
 }
 
-/* Red ✖ button for removing child */
 .child-header .remove-child {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   margin-left: 8px;
-  width: 24px;
-  height: 24px;
-  font-size: 16px;
-  color: #ff0000 !important;  /* Red color for the "X" */
+  width: 32px;
+  height: 32px;
+  color: white;
   background: transparent;
-  border: 2px solid #ff0000;
-  border-radius: 4px;
+  border: none;
   cursor: pointer;
-  line-height: 1;
   padding: 0;
-  text-align: center;
-  transition: all 0.15s ease;
-  font-family: Arial, sans-serif;  /* Ensure it's using a clean font */
+  transition: opacity 0.15s ease;
+}
+
+/* Make SVG scale nicely */
+.child-header .remove-child svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Hover */
+.child-header .remove-child:hover {
+  opacity: 0.6;
+}
+
+/* Subtle hover */
+.child-header .remove-child:hover {
+  opacity: 0.6;
 }
 
 .child-header .remove-child:hover {
@@ -220,7 +230,79 @@ body.booking::before {
 .child-header .remove-child:active {
   transform: translateY(1px);
 }
+.remove-child {
+  position: relative;
+  overflow: hidden; /* important for ripple */
+}
 
+/* Ripple element */
+.remove-child::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Trigger animation */
+.remove-child:active::after {
+  width: 100px;
+  height: 100px;
+  transform: scale(1);
+  opacity: 1;
+  transition: transform 0.3s, opacity 0.6s;
+}
+
+/* Child details page layout */
+#childDetailsPage {
+  padding: 15px;
+}
+
+#childDetailsPage .details-page-inner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Back button row */
+.back-row {
+  margin-bottom: 10px;
+}
+
+/* Polished back button */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  width: auto;
+  transition: background 0.2s ease, transform 0.15s ease, border-color 0.2s ease;
+}
+
+.back-btn svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.back-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+.back-btn:active {
+  transform: scale(0.98);
+}
 
 /* 📅 Days inside child */
 .child-days {
@@ -390,4 +472,8 @@ section button {
   max-width: 120px;         /* max width on desktop */
   width: 25%;               /* scale relative to container */
   height: auto;             /* maintain aspect ratio */
+}
+
+.child-card {
+  transition: border 0.2s ease;
 }

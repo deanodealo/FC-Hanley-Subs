@@ -54,9 +54,19 @@
 
 <!-- 🏥 Child Details Page (hidden initially) -->
 <section id="childDetailsPage" style="display:none;">
-  <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge">
-  <h2>Child Details & Medical Information</h2>
-  <div id="childDetailsContainer"></div>
+  <div class="details-page-inner">
+    <div class="back-row">
+      <button type="button" id="backToBooking" class="back-btn">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Back to booking
+      </button>
+    </div>
+
+    <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge">
+    <h2>Child Details & Medical Information</h2>
+    <div id="childDetailsContainer"></div>
 
 <!-- Media Consent --> 
 <section class="consent">
@@ -74,9 +84,11 @@
 </section>
 
   <!-- Buttons -->
-  <section class="actions">
-    <button id="submitChildDetails">Submit & Proceed</button>
-  </section>
+    <!-- Buttons -->
+    <section class="actions">
+      <button id="submitChildDetails">Submit & Proceed</button>
+    </section>
+  </div>
 </section>
 
 
