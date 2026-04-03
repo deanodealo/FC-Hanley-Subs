@@ -442,3 +442,23 @@ section button {
 .child-card {
   transition: border 0.2s ease;
 }
+
+.error-box {
+  background: rgba(255, 0, 0, 0.12);
+  border: 1px solid #ff6b6b;
+  color: #fff;
+  padding: 12px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.error-box ul {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.error-box li {
+  margin-bottom: 4px;
+}
