@@ -65,7 +65,7 @@
 
  <!-- 💳 Buttons -->
 <section class="actions">
-  <button id="continueBooking">Continue</button>
+  <button id="continueBooking">Continue to Child Details</button>
 </section>
 
 </div>
@@ -106,9 +106,36 @@
   <!-- Buttons -->
     <!-- Buttons -->
     <section class="actions">
-      <button id="submitChildDetails">Submit & Proceed</button>
+      <button id="submitChildDetails">Review Booking</button>
     </section>
   </div>
+</section>
+
+<!-- 📝 Booking Review Page (hidden initially) -->
+<section id="reviewPage" style="display:none;">
+   <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge">
+  <h2 style="text-align: center;">Please Review Your Booking</h2>
+<p style="text-align:center; font-size:14px;">
+  Please check everything is correct before proceeding to payment.
+</p>
+
+  <!-- Parent Details -->
+  <div id="parentDetailsReview"></div>
+
+  <!-- Children Details -->
+  <div id="childrenDetailsReview"></div>
+
+  <!-- Media Consent -->
+  <div id="mediaConsentReview"></div>
+
+  <!-- Total Price -->
+  <div id="totalPriceReview"></div>
+
+  <!-- Actions -->
+  <section class="actions">
+    <button id="backToEdit">Back to Edit</button>
+    <button id="proceedToPayment">Proceed to Payment</button>
+  </section>
 </section>
 
 

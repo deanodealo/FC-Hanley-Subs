@@ -19,67 +19,63 @@ let children = [];
 document.addEventListener("DOMContentLoaded", () => {
   addChild(); // start with one child
 
-// Continue button
-const continueBtn = document.getElementById("continueBooking");
-if (continueBtn) {
-  continueBtn.addEventListener("click", () => {
-    if (!validateParentDetails()) return;
+  // Continue button
+  const continueBtn = document.getElementById("continueBooking");
+  if (continueBtn) {
+    continueBtn.addEventListener("click", () => {
+      if (!validateParentDetails()) return;
 
-    let valid = true;
-    let errorMessages = [];
+      let valid = true;
+      let errorMessages = [];
 
-    const childCards = document.querySelectorAll(".child-card");
+      const childCards = document.querySelectorAll(".child-card");
 
-    children.forEach((child, index) => {
-      const childCard = childCards[index];
-      const nameInput = childCard?.querySelector('input[type="text"]');
-      const ageInput = childCard?.querySelector('input[type="number"]');
-      const dayCards = childCard?.querySelectorAll(".day-card");
+      children.forEach((child, index) => {
+        const childCard = childCards[index];
+        const nameInput = childCard?.querySelector('input[type="text"]');
+        const ageInput = childCard?.querySelector('input[type="number"]');
+        const dayCards = childCard?.querySelectorAll(".day-card");
 
-      // Reset previous highlighting
-      if (nameInput) nameInput.style.border = "none";
-      if (ageInput) ageInput.style.border = "none";
-      dayCards?.forEach(card => {
-        card.style.border = "";
+        if (nameInput) nameInput.style.border = "none";
+        if (ageInput) ageInput.style.border = "none";
+        dayCards?.forEach(card => {
+          card.style.border = "";
+        });
+
+        if (!child.name.trim()) {
+          valid = false;
+          errorMessages.push(`Please enter a name for Child ${index + 1}`);
+          if (nameInput) nameInput.style.border = "2px solid red";
+        }
+
+        if (!child.age || Number(child.age) <= 0) {
+          valid = false;
+          errorMessages.push(`Please enter a valid age for Child ${index + 1}`);
+          if (ageInput) ageInput.style.border = "2px solid red";
+        }
+
+        if (child.selectedDays.size === 0) {
+          valid = false;
+          errorMessages.push(`Please select at least one day for Child ${index + 1}`);
+          dayCards?.forEach(card => {
+            card.style.border = "2px solid red";
+          });
+        }
       });
 
-      // Child name required
-      if (!child.name.trim()) {
-        valid = false;
-        errorMessages.push(`Please enter a name for Child ${index + 1}`);
-        if (nameInput) nameInput.style.border = "2px solid red";
+      if (!valid) {
+        showErrors("bookingErrors", errorMessages);
+        return;
       }
 
-      // Child age required
-      if (!child.age || Number(child.age) <= 0) {
-        valid = false;
-        errorMessages.push(`Please enter a valid age for Child ${index + 1}`);
-        if (ageInput) ageInput.style.border = "2px solid red";
-      }
+      clearErrors("bookingErrors");
 
-      // At least one day required for each child
-      if (child.selectedDays.size === 0) {
-        valid = false;
-        errorMessages.push(`Please select at least one day for Child ${index + 1}`);
-        dayCards?.forEach(card => {
-          card.style.border = "2px solid red";
-        });
-      }
+      document.querySelector(".container").style.display = "none";
+      document.getElementById("childDetailsPage").style.display = "block";
+      renderChildDetailsForm({ children });
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
-
-if (!valid) {
-  showErrors("bookingErrors", errorMessages);
-  return;
-}
-
-clearErrors("bookingErrors");
-
-    document.querySelector(".container").style.display = "none";
-    document.getElementById("childDetailsPage").style.display = "block";
-    renderChildDetailsForm({ children });
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  });
-}
+  }
 
   // Back to booking button
   const backBtn = document.getElementById("backToBooking");
@@ -88,6 +84,26 @@ clearErrors("bookingErrors");
       document.getElementById("childDetailsPage").style.display = "none";
       document.querySelector(".container").style.display = "block";
       window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  // Back to edit from review page
+  const backToEditBtn = document.getElementById("backToEdit");
+  if (backToEditBtn) {
+    backToEditBtn.addEventListener("click", () => {
+      document.getElementById("reviewPage").style.display = "none";
+      document.getElementById("childDetailsPage").style.display = "block";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
+
+  // Proceed to payment from review page
+  const proceedToPaymentBtn = document.getElementById("proceedToPayment");
+  if (proceedToPaymentBtn) {
+    proceedToPaymentBtn.addEventListener("click", () => {
+      console.log("Proceed to payment clicked");
+      alert("Proceed to payment step next.");
+      // 👉 Replace this with your Square payment logic later
     });
   }
 
@@ -140,7 +156,6 @@ function clearErrors(containerId) {
   errorBox.innerHTML = "";
 }
 
-
 // ✅ Parent field validation
 function validateParentDetails() {
   const parentName = document.getElementById("parentName");
@@ -150,41 +165,34 @@ function validateParentDetails() {
   let isValid = true;
   const messages = [];
 
-  // Reset previous styles
   [parentName, email, phone].forEach(field => {
     if (field) field.style.border = "none";
   });
 
-  // Validation patterns
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const phonePattern = /^[\d+\s]+$/;
 
-  // Name
   if (!parentName.value.trim()) {
     parentName.style.border = "2px solid red";
     messages.push("Enter parent/guardian name.");
     isValid = false;
   }
 
-  // Email
   if (!emailPattern.test(email.value.trim())) {
     email.style.border = "2px solid red";
     messages.push("Enter a valid email address.");
     isValid = false;
   }
 
-  // Phone
   if (!phonePattern.test(phone.value.trim())) {
     phone.style.border = "2px solid red";
     messages.push("Enter a valid phone number.");
     isValid = false;
   }
 
-  // Show / clear errors + scroll
   if (!isValid) {
     showErrors("bookingErrors", messages);
 
-    // Scroll to first invalid field
     const firstInvalid = [parentName, email, phone].find(field => {
       return field && field.style.border === "2px solid red";
     });
@@ -199,7 +207,6 @@ function validateParentDetails() {
     return false;
   }
 
-  // Clear errors if valid
   clearErrors("bookingErrors");
   return true;
 }
@@ -247,14 +254,14 @@ function renderChildren() {
       >
 
       <input 
-  type="number" 
-  placeholder="Age" 
-  value="${child.age || ""}"
-  inputmode="numeric"
-  min="4"
-  max="16"
-  oninput="updateChildAge(${index}, this.value)"
->
+        type="number" 
+        placeholder="Age" 
+        value="${child.age || ""}"
+        inputmode="numeric"
+        min="4"
+        max="16"
+        oninput="updateChildAge(${index}, this.value)"
+      >
 
       <div class="child-days" id="days-${index}"></div>
     `;
@@ -263,7 +270,6 @@ function renderChildren() {
     renderDays(index);
   });
 
-  // Attach remove handlers AFTER rendering
   document.querySelectorAll(".remove-child").forEach(btn => {
     btn.addEventListener("click", (e) => {
       const index = parseInt(e.currentTarget.dataset.index, 10);
@@ -483,6 +489,73 @@ function setupConditionalTextarea(index, field) {
   });
 }
 
+// 📋 Render review page
+function renderReviewPage(finalBooking) {
+  const parentReview = document.getElementById("parentDetailsReview");
+  const childrenReview = document.getElementById("childrenDetailsReview");
+  const consentReview = document.getElementById("mediaConsentReview");
+  const totalReview = document.getElementById("totalPriceReview");
+
+  if (parentReview) {
+    parentReview.innerHTML = `
+      <div class="review-card">
+        <h3>Parent / Guardian Details</h3>
+        <p><strong>Name:</strong> ${finalBooking.parent.name}</p>
+        <p><strong>Email:</strong> ${finalBooking.parent.email}</p>
+        <p><strong>Phone:</strong> ${finalBooking.parent.phone}</p>
+      </div>
+    `;
+  }
+
+  if (childrenReview) {
+    childrenReview.innerHTML = `
+      <div class="review-card">
+        <h3>Children</h3>
+        ${finalBooking.children.map((child, index) => `
+          <div class="review-child">
+            <p><strong>Child ${index + 1}:</strong> ${child.name} (${child.age})</p>
+            <p><strong>Days:</strong> ${
+              (child.selectedDays || []).map(dayId => {
+                const match = CAMP.dates.find(d => d.id === dayId);
+                return match ? match.label : dayId;
+              }).join(", ") || "None"
+            }</p>
+            <p><strong>Wrap:</strong> ${
+              (child.wrapDays || []).map(dayId => {
+                const match = CAMP.dates.find(d => d.id === dayId);
+                return match ? match.label : dayId;
+              }).join(", ") || "None"
+            }</p>
+            <p><strong>Dietary:</strong> ${child.dietary}${child.dietary === "Yes" ? ` - ${child.dietaryDetails}` : ""}</p>
+            <p><strong>Allergies / Medical:</strong> ${child.allergies}${child.allergies === "Yes" ? ` - ${child.allergiesDetails}` : ""}</p>
+            <p><strong>Additional Needs:</strong> ${child.other}${child.other === "Yes" ? ` - ${child.otherDetails}` : ""}</p>
+            <p><strong>Safeguarding:</strong> ${child.safeguarding}${child.safeguarding === "Yes" ? ` - ${child.safeguardingDetails}` : ""}</p>
+          </div>
+        `).join("")}
+      </div>
+    `;
+  }
+
+  if (consentReview) {
+    consentReview.innerHTML = `
+      <div class="review-card">
+        <h3>Media Consent</h3>
+        <p>${finalBooking.mediaConsent}</p>
+      </div>
+    `;
+  }
+
+  if (totalReview) {
+    totalReview.innerHTML = `
+  <div class="review-total">
+    <div class="total-label">Total</div>
+    <div class="total-amount">£${finalBooking.totalPrice}</div>
+    <div class="total-note">Includes all selected days & wrap-around</div>
+  </div>
+`;
+  }
+}
+
 // ✅ Final child details submit
 function handleChildDetailsSubmit() {
   let valid = true;
@@ -568,13 +641,13 @@ function handleChildDetailsSubmit() {
     errorMessages.push("Please select Yes or No for media consent.");
   }
 
-if (!valid) {
-  showErrors("childDetailsErrors", errorMessages);
-  window.scrollTo({ top: 0, behavior: "smooth" });
-  return;
-}
+  if (!valid) {
+    showErrors("childDetailsErrors", errorMessages);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
 
-clearErrors("childDetailsErrors");
+  clearErrors("childDetailsErrors");
 
   const finalBooking = {
     parent: {
@@ -600,6 +673,11 @@ clearErrors("childDetailsErrors");
     totalPrice: calculateTotal()
   };
 
+  renderReviewPage(finalBooking);
+
+  document.getElementById("childDetailsPage").style.display = "none";
+  document.getElementById("reviewPage").style.display = "block";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
   console.log("Final Booking:", finalBooking);
-  alert("All details completed! Proceeding to payment...");
 }
