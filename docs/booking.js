@@ -148,39 +148,60 @@ function validateParentDetails() {
   const phone = document.getElementById("phone");
 
   let isValid = true;
+  const messages = [];
 
+  // Reset previous styles
   [parentName, email, phone].forEach(field => {
     if (field) field.style.border = "none";
   });
 
+  // Validation patterns
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phonePattern = /^[\d+\s]+$/;
+
+  // Name
   if (!parentName.value.trim()) {
     parentName.style.border = "2px solid red";
+    messages.push("Enter parent/guardian name.");
     isValid = false;
   }
 
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  // Email
   if (!emailPattern.test(email.value.trim())) {
     email.style.border = "2px solid red";
+    messages.push("Enter a valid email address.");
     isValid = false;
   }
 
-  const phonePattern = /^\+?\d+$/;
+  // Phone
   if (!phonePattern.test(phone.value.trim())) {
     phone.style.border = "2px solid red";
+    messages.push("Enter a valid phone number.");
     isValid = false;
   }
 
-const messages = [];
+  // Show / clear errors + scroll
+  if (!isValid) {
+    showErrors("bookingErrors", messages);
 
-if (!parentName.value.trim()) messages.push("Enter parent/guardian name.");
-if (!emailPattern.test(email.value.trim())) messages.push("Enter a valid email address.");
-if (!phonePattern.test(phone.value.trim())) messages.push("Enter a valid phone number.");
+    // Scroll to first invalid field
+    const firstInvalid = [parentName, email, phone].find(field => {
+      return field && field.style.border === "2px solid red";
+    });
 
-showErrors("bookingErrors", messages);
+    if (firstInvalid) {
+      firstInvalid.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
 
-clearErrors("bookingErrors");
+    return false;
+  }
 
-  return isValid;
+  // Clear errors if valid
+  clearErrors("bookingErrors");
+  return true;
 }
 
 // ➕ Add Child
