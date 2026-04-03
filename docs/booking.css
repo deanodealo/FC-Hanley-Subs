@@ -509,19 +509,16 @@ section button {
   font-weight: bold;
   background: #0073ff76;
   border: 2px solid #4db8ff;
-  padding: 12px;
-  border-radius: 12px;
+  padding: 6px;
+  border-radius: 6px;
 }
 /* 💳 Premium total section */
 .review-total {
   margin-top: 20px;
-  padding: 20px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #1c3d66, #245a94);
-  border: 2px solid #4db8ff;
+  padding: 10px 0;   /* less boxy padding */
   text-align: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
   animation: totalFadeUp 0.45s ease;
+  border-top: 1px solid rgba(255,255,255,0.1); /* subtle divider */
 }
 
 .total-label {
