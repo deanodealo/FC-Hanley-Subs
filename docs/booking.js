@@ -102,7 +102,7 @@ clearErrors("bookingErrors");
   });
 
   document.getElementById("phone")?.addEventListener("input", function () {
-    const phonePattern = /^\+?\d+$/;
+    const phonePattern = /^[\d+\s]+$/;
     if (phonePattern.test(this.value.trim())) this.style.border = "none";
   });
 
@@ -226,11 +226,14 @@ function renderChildren() {
       >
 
       <input 
-        type="number" 
-        placeholder="Age" 
-        value="${child.age || ""}"
-        oninput="updateChildAge(${index}, this.value)"
-      >
+  type="number" 
+  placeholder="Age" 
+  value="${child.age || ""}"
+  inputmode="numeric"
+  min="4"
+  max="16"
+  oninput="updateChildAge(${index}, this.value)"
+>
 
       <div class="child-days" id="days-${index}"></div>
     `;
