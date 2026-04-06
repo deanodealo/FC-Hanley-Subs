@@ -88,14 +88,14 @@ input[type="tel"] {
   font-size: 16px; /* prevents iPhone zoom */
 }
 
-/* 📊 Sticky Summary */
 .summary {
-  position: sticky;
-  bottom: 0;
-  background: #0073ff76;
-  border: 2px solid #4db8ff;
+  position: static;
+  background: rgba(0, 115, 255, 0.18);
+  border: 1px solid rgba(77, 184, 255, 0.5);
   text-align: center;
   padding: 10px;
+  margin-top: 15px;
+  border-radius: 12px;
 }
 
 /* 💳 Buttons */
@@ -134,7 +134,6 @@ button:active {
     flex: 1;
   }
 
-  /* Optional: day cards in two columns on wider screens */
   #daysContainer {
     flex-direction: row;
     flex-wrap: wrap;
@@ -143,6 +142,12 @@ button:active {
 
   .day-card {
     flex: 1 1 calc(50% - 12px);
+  }
+
+  .summary {
+    position: sticky;
+    bottom: 10px;
+    z-index: 5;
   }
 }
 /* FC Hanley badge styling */
@@ -481,8 +486,9 @@ section button {
 .review-card {
   background: #132c4c;
   padding: 15px;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   border-radius: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.08); /* subtle fade */
 }
 
 .review-card h3 {
@@ -499,15 +505,15 @@ section button {
   color: #4db8ff;
 }
 .review-child {
-  margin-top: 10px;
-  padding-top: 10px;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.06);
 }
 #totalPriceReview {
   text-align: center;
   font-size: 30px;
   font-weight: bold;
-  background: #0073ff76;
+  background: lch(35.59% 31.02 274.79 / 0.463);
   border: 2px solid #4db8ff;
   padding: 6px;
   border-radius: 6px;

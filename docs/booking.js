@@ -14,6 +14,7 @@ const CAMP = {
 
 // 👶 All children
 let children = [];
+let mediaConsent = "";
 
 // ⚡ Initialize
 document.addEventListener("DOMContentLoaded", () => {
@@ -72,7 +73,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
       document.querySelector(".container").style.display = "none";
       document.getElementById("childDetailsPage").style.display = "block";
-      renderChildDetailsForm({ children });
+
+      renderChildDetailsForm({
+        children,
+        mediaConsent
+      });
+
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
@@ -81,6 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const backBtn = document.getElementById("backToBooking");
   if (backBtn) {
     backBtn.addEventListener("click", () => {
+      saveChildDetailsToState();
       document.getElementById("childDetailsPage").style.display = "none";
       document.querySelector(".container").style.display = "block";
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -93,6 +100,12 @@ document.addEventListener("DOMContentLoaded", () => {
     backToEditBtn.addEventListener("click", () => {
       document.getElementById("reviewPage").style.display = "none";
       document.getElementById("childDetailsPage").style.display = "block";
+
+      renderChildDetailsForm({
+        children,
+        mediaConsent
+      });
+
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
@@ -120,6 +133,13 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("phone")?.addEventListener("input", function () {
     const phonePattern = /^[\d+\s]+$/;
     if (phonePattern.test(this.value.trim())) this.style.border = "none";
+  });
+
+  // Media consent listeners
+  document.querySelectorAll('input[name="mediaConsent"]').forEach(radio => {
+    radio.addEventListener("change", (e) => {
+      mediaConsent = e.target.value;
+    });
   });
 
   // Submit child details
@@ -217,7 +237,15 @@ function addChild() {
     name: "",
     age: "",
     selectedDays: new Set(),
-    wrapDays: new Set()
+    wrapDays: new Set(),
+    dietary: "",
+    dietaryDetails: "",
+    allergies: "",
+    allergiesDetails: "",
+    other: "",
+    otherDetails: "",
+    safeguarding: "",
+    safeguardingDetails: ""
   });
   renderChildren();
   updateSummary();
@@ -326,6 +354,7 @@ function updateChildAge(index, value) {
   children[index].age = value;
 }
 
+// 📅 Toggle day
 function toggleDay(childIndex, dayId, checkbox, element) {
   const child = children[childIndex];
   const wrapCheckbox = element.querySelectorAll("input")[1];
@@ -408,6 +437,25 @@ function updateSummary() {
   }
 }
 
+// 🧾 Save child details page values into state
+function saveChildDetailsToState() {
+  children.forEach((child, index) => {
+    child.dietary = document.getElementById(`dietary-${index}`)?.value || child.dietary || "";
+    child.dietaryDetails = document.getElementById(`dietaryDetails-${index}`)?.value || child.dietaryDetails || "";
+    child.allergies = document.getElementById(`allergies-${index}`)?.value || child.allergies || "";
+    child.allergiesDetails = document.getElementById(`allergiesDetails-${index}`)?.value || child.allergiesDetails || "";
+    child.other = document.getElementById(`other-${index}`)?.value || child.other || "";
+    child.otherDetails = document.getElementById(`otherDetails-${index}`)?.value || child.otherDetails || "";
+    child.safeguarding = document.getElementById(`safeguarding-${index}`)?.value || child.safeguarding || "";
+    child.safeguardingDetails = document.getElementById(`safeguardingDetails-${index}`)?.value || child.safeguardingDetails || "";
+  });
+
+  const selectedConsent = document.querySelector('input[name="mediaConsent"]:checked');
+  if (selectedConsent) {
+    mediaConsent = selectedConsent.value;
+  }
+}
+
 // 🧾 Child Details Form
 function renderChildDetailsForm(bookingData) {
   const container = document.getElementById("childDetailsContainer");
@@ -422,35 +470,35 @@ function renderChildDetailsForm(bookingData) {
 
       <label>Is there any dietary information we should be aware of?</label>
       <select id="dietary-${index}">
-        <option value="">Select</option>
-        <option value="No">No</option>
-        <option value="Yes">Yes</option>
+        <option value="" ${!child.dietary ? "selected" : ""}>Select</option>
+        <option value="No" ${child.dietary === "No" ? "selected" : ""}>No</option>
+        <option value="Yes" ${child.dietary === "Yes" ? "selected" : ""}>Yes</option>
       </select>
-      <textarea id="dietaryDetails-${index}" placeholder="Please provide full details" style="display:none;"></textarea>
+      <textarea id="dietaryDetails-${index}" placeholder="Please provide full details" style="display:${child.dietary === "Yes" ? "block" : "none"};">${child.dietaryDetails || ""}</textarea>
 
       <label>Does your child have any known allergies or medical conditions?</label>
       <select id="allergies-${index}">
-        <option value="">Select</option>
-        <option value="No">No</option>
-        <option value="Yes">Yes</option>
+        <option value="" ${!child.allergies ? "selected" : ""}>Select</option>
+        <option value="No" ${child.allergies === "No" ? "selected" : ""}>No</option>
+        <option value="Yes" ${child.allergies === "Yes" ? "selected" : ""}>Yes</option>
       </select>
-      <textarea id="allergiesDetails-${index}" placeholder="Please provide full details" style="display:none;"></textarea>
+      <textarea id="allergiesDetails-${index}" placeholder="Please provide full details" style="display:${child.allergies === "Yes" ? "block" : "none"};">${child.allergiesDetails || ""}</textarea>
 
       <label>Is there anything else we need to know about your child? (e.g. Behavioural, SEN, Disabilities)</label>
       <select id="other-${index}">
-        <option value="">Select</option>
-        <option value="No">No</option>
-        <option value="Yes">Yes</option>
+        <option value="" ${!child.other ? "selected" : ""}>Select</option>
+        <option value="No" ${child.other === "No" ? "selected" : ""}>No</option>
+        <option value="Yes" ${child.other === "Yes" ? "selected" : ""}>Yes</option>
       </select>
-      <textarea id="otherDetails-${index}" placeholder="Please provide full details" style="display:none;"></textarea>
+      <textarea id="otherDetails-${index}" placeholder="Please provide full details" style="display:${child.other === "Yes" ? "block" : "none"};">${child.otherDetails || ""}</textarea>
 
       <label>Is there anything we need to know about your child in relation to safeguarding?</label>
       <select id="safeguarding-${index}">
-        <option value="">Select</option>
-        <option value="No">No</option>
-        <option value="Yes">Yes</option>
+        <option value="" ${!child.safeguarding ? "selected" : ""}>Select</option>
+        <option value="No" ${child.safeguarding === "No" ? "selected" : ""}>No</option>
+        <option value="Yes" ${child.safeguarding === "Yes" ? "selected" : ""}>Yes</option>
       </select>
-      <textarea id="safeguardingDetails-${index}" placeholder="Please provide full details" style="display:none;"></textarea>
+      <textarea id="safeguardingDetails-${index}" placeholder="Please provide full details" style="display:${child.safeguarding === "Yes" ? "block" : "none"};">${child.safeguardingDetails || ""}</textarea>
 
       <hr>
     `;
@@ -461,9 +509,18 @@ function renderChildDetailsForm(bookingData) {
       setupConditionalTextarea(index, field);
     });
   });
+
+  if (bookingData.mediaConsent) {
+    const radio = document.querySelector(`input[name="mediaConsent"][value="${bookingData.mediaConsent}"]`);
+    if (radio) radio.checked = true;
+  } else {
+    document.querySelectorAll('input[name="mediaConsent"]').forEach(radio => {
+      radio.checked = false;
+    });
+  }
 }
 
-// Show/hide textarea if Yes selected
+// Show/hide textarea if Yes selected and save state
 function setupConditionalTextarea(index, field) {
   const selectEl = document.getElementById(`${field}-${index}`);
   const textEl = document.getElementById(`${field}Details-${index}`);
@@ -471,11 +528,14 @@ function setupConditionalTextarea(index, field) {
   if (!selectEl || !textEl) return;
 
   selectEl.addEventListener("change", (e) => {
+    children[index][field] = e.target.value;
+
     if (e.target.value === "Yes") {
       textEl.style.display = "block";
     } else {
       textEl.style.display = "none";
       textEl.value = "";
+      children[index][`${field}Details`] = "";
       textEl.style.border = "none";
     }
 
@@ -483,6 +543,8 @@ function setupConditionalTextarea(index, field) {
   });
 
   textEl.addEventListener("input", () => {
+    children[index][`${field}Details`] = textEl.value;
+
     if (textEl.value.trim()) {
       textEl.style.border = "none";
     }
@@ -547,17 +609,19 @@ function renderReviewPage(finalBooking) {
 
   if (totalReview) {
     totalReview.innerHTML = `
-  <div class="review-total">
-    <div class="total-label">Total</div>
-    <div class="total-amount">£${finalBooking.totalPrice}</div>
-    <div class="total-note">Includes all selected days & wrap-around</div>
-  </div>
-`;
+      <div class="review-total">
+        <div class="total-label">Total</div>
+        <div class="total-amount">£${finalBooking.totalPrice}</div>
+        <div class="total-note">Includes all selected days & wrap-around</div>
+      </div>
+    `;
   }
 }
 
 // ✅ Final child details submit
 function handleChildDetailsSubmit() {
+  saveChildDetailsToState();
+
   let valid = true;
   let errorMessages = [];
 
@@ -594,43 +658,43 @@ function handleChildDetailsSubmit() {
       errorMessages.push(`Please enter an age for Child ${index + 1}`);
     }
 
-    if (!dietary.value) {
+    if (!child.dietary) {
       valid = false;
-      dietary.style.border = "2px solid red";
+      if (dietary) dietary.style.border = "2px solid red";
       errorMessages.push(`Please answer dietary info for Child ${index + 1}`);
-    } else if (dietary.value === "Yes" && !dietaryDetails.value.trim()) {
+    } else if (child.dietary === "Yes" && !child.dietaryDetails.trim()) {
       valid = false;
-      dietaryDetails.style.border = "2px solid red";
+      if (dietaryDetails) dietaryDetails.style.border = "2px solid red";
       errorMessages.push(`Please provide dietary details for Child ${index + 1}`);
     }
 
-    if (!allergies.value) {
+    if (!child.allergies) {
       valid = false;
-      allergies.style.border = "2px solid red";
+      if (allergies) allergies.style.border = "2px solid red";
       errorMessages.push(`Please answer allergies/medical info for Child ${index + 1}`);
-    } else if (allergies.value === "Yes" && !allergiesDetails.value.trim()) {
+    } else if (child.allergies === "Yes" && !child.allergiesDetails.trim()) {
       valid = false;
-      allergiesDetails.style.border = "2px solid red";
+      if (allergiesDetails) allergiesDetails.style.border = "2px solid red";
       errorMessages.push(`Please provide allergy/medical details for Child ${index + 1}`);
     }
 
-    if (!other.value) {
+    if (!child.other) {
       valid = false;
-      other.style.border = "2px solid red";
+      if (other) other.style.border = "2px solid red";
       errorMessages.push(`Please answer additional needs info for Child ${index + 1}`);
-    } else if (other.value === "Yes" && !otherDetails.value.trim()) {
+    } else if (child.other === "Yes" && !child.otherDetails.trim()) {
       valid = false;
-      otherDetails.style.border = "2px solid red";
+      if (otherDetails) otherDetails.style.border = "2px solid red";
       errorMessages.push(`Please provide additional needs details for Child ${index + 1}`);
     }
 
-    if (!safeguarding.value) {
+    if (!child.safeguarding) {
       valid = false;
-      safeguarding.style.border = "2px solid red";
+      if (safeguarding) safeguarding.style.border = "2px solid red";
       errorMessages.push(`Please answer safeguarding info for Child ${index + 1}`);
-    } else if (safeguarding.value === "Yes" && !safeguardingDetails.value.trim()) {
+    } else if (child.safeguarding === "Yes" && !child.safeguardingDetails.trim()) {
       valid = false;
-      safeguardingDetails.style.border = "2px solid red";
+      if (safeguardingDetails) safeguardingDetails.style.border = "2px solid red";
       errorMessages.push(`Please provide safeguarding details for Child ${index + 1}`);
     }
   });
@@ -639,6 +703,8 @@ function handleChildDetailsSubmit() {
   if (!selectedConsent) {
     valid = false;
     errorMessages.push("Please select Yes or No for media consent.");
+  } else {
+    mediaConsent = selectedConsent.value;
   }
 
   if (!valid) {
@@ -655,21 +721,21 @@ function handleChildDetailsSubmit() {
       email: document.getElementById("email")?.value || "",
       phone: document.getElementById("phone")?.value || ""
     },
-    children: children.map((child, index) => ({
+    children: children.map((child) => ({
       name: child.name,
       age: child.age,
       selectedDays: Array.from(child.selectedDays),
       wrapDays: Array.from(child.wrapDays),
-      dietary: document.getElementById(`dietary-${index}`)?.value || "",
-      dietaryDetails: document.getElementById(`dietaryDetails-${index}`)?.value || "",
-      allergies: document.getElementById(`allergies-${index}`)?.value || "",
-      allergiesDetails: document.getElementById(`allergiesDetails-${index}`)?.value || "",
-      other: document.getElementById(`other-${index}`)?.value || "",
-      otherDetails: document.getElementById(`otherDetails-${index}`)?.value || "",
-      safeguarding: document.getElementById(`safeguarding-${index}`)?.value || "",
-      safeguardingDetails: document.getElementById(`safeguardingDetails-${index}`)?.value || ""
+      dietary: child.dietary || "",
+      dietaryDetails: child.dietaryDetails || "",
+      allergies: child.allergies || "",
+      allergiesDetails: child.allergiesDetails || "",
+      other: child.other || "",
+      otherDetails: child.otherDetails || "",
+      safeguarding: child.safeguarding || "",
+      safeguardingDetails: child.safeguardingDetails || ""
     })),
-    mediaConsent: selectedConsent.value,
+    mediaConsent: mediaConsent,
     totalPrice: calculateTotal()
   };
 
