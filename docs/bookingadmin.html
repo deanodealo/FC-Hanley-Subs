@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FC Hanley Booking Admin</title>
+  <link rel="stylesheet" href="bookingadmin.css" />
+</head>
+<body class="booking-admin">
+
+  <!-- Login Section -->
+  <div id="loginSection" class="login-section">
+    <h2>Login to Access Booking Admin</h2>
+    <input type="email" id="emailInput" placeholder="Enter Email" />
+    <input type="password" id="passwordInput" placeholder="Enter Password" />
+    <button id="loginButton">Login</button>
+    <p id="errorMessage" style="color:red; display:none;">Incorrect email or password. Please try again.</p>
+  </div>
+
+  <!-- Booking Admin Section (Initially Hidden) -->
+  <div id="adminSection" class="admin-container" style="display: none;">
+    <header class="admin-header">
+      <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge" />
+      <h1>FC Hanley Booking Admin</h1>
+      <p>View bookings, child numbers, and totals</p>
+    </header>
+
+    <!-- Dashboard content (you can customize this section as per your needs) -->
+    <section class="dashboard">
+      <div class="stat-card">
+        <div class="stat-label">Total Bookings</div>
+        <div class="stat-value" id="totalBookings">0</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total Children</div>
+        <div class="stat-value" id="totalChildren">0</div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">Total Income</div>
+        <div class="stat-value" id="totalIncome">£0</div>
+      </div>
+    </section>
+
+    <section class="filters">
+      <input type="text" id="searchInput" placeholder="Search by parent or child name" />
+      <select id="dayFilter">
+        <!-- Dynamic options will be inserted here -->
+      </select>
+    </section>
+
+    <section class="bookings-section">
+      <h2>Bookings</h2>
+      <div id="bookingsList" class="bookings-list"></div>
+      <div id="noBookingsMessage" class="no-bookings" style="display:none;">
+        No bookings found.
+      </div>
+    </section>
+  </div>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="camp-config.js"></script>
+  <script src="bookingadmin.js"></script>
+
+  <script>
+
+    // Elements
+    const loginSection = document.getElementById("loginSection");
+    const adminSection = document.getElementById("adminSection");
+    const emailInput = document.getElementById("emailInput");
+    const passwordInput = document.getElementById("passwordInput");
+    const loginButton = document.getElementById("loginButton");
+    const errorMessage = document.getElementById("errorMessage");
+
+    // Login event listener
+    loginButton.addEventListener("click", async () => {
+      const email = emailInput.value;
+      const password = passwordInput.value;
+
+      try {
+        // Firebase Authentication login
+        await auth.signInWithEmailAndPassword(email, password);
+
+        // Check if the user has admin privileges
+        const userRef = db.collection("users").doc(auth.currentUser.uid);
+        const userDoc = await userRef.get();
+
+        if (userDoc.exists && userDoc.data().isAdmin) {
+          // If the user is an admin, show the admin section
+          loginSection.style.display = "none";
+          adminSection.style.display = "block";
+
+          // Load bookings
+          loadBookings();
+        } else {
+          // If not admin, show an error
+          errorMessage.textContent = "You do not have permission to access this page.";
+          errorMessage.style.display = "block";
+        }
+      } catch (error) {
+        errorMessage.textContent = "Incorrect email or password. Please try again.";
+        errorMessage.style.display = "block";
+      }
+    });
+
+    // Function to load bookings (Firestore interaction here)
+    async function loadBookings() {
+      try {
+        const snapshot = await db.collection("bookings").get();
+        const allBookings = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
+        allBookings.sort((a, b) => {
+          const aTime = a.createdAt?.seconds || 0;
+          const bTime = b.createdAt?.seconds || 0;
+          return bTime - aTime;
+        });
+
+        applyFilters(allBookings); // Apply filters if needed
+
+      } catch (error) {
+        console.error("Error loading bookings:", error);
+        document.getElementById("noBookingsMessage").style.display = "block";
+        document.getElementById("noBookingsMessage").textContent = "Could not load bookings.";
+      }
+    }
+  </script>
+
+</body>
+</html>

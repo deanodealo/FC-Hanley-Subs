@@ -1,20 +1,24 @@
-// 🔧 CONFIG (EDIT THIS EACH CAMP)
-const CAMP = {
-  pricePerDay: 20,
-  fullWeekPrice: 60,
-  wrapPrice: 5,
-  fullWeekDays: 4,
-  dates: [
-    { id: "tue", label: "Tuesday 7th April" },
-    { id: "wed", label: "Wednesday 8th April" },
-    { id: "thu", label: "Thursday 9th April" },
-    { id: "fri", label: "Friday 10th April" }
-  ]
+// 🔥 Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyDXXX-LMkY4Q0oN0M9e5wLdVhANzL8ifHs",
+  authDomain: "fchanley-8d910.firebaseapp.com",
+  databaseURL: "https://fchanley-8d910-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "fchanley-8d910",
+  storageBucket: "fchanley-8d910.firebasestorage.app",
+  messagingSenderId: "384977183977",
+  appId: "1:384977183977:web:7805c8ba7e9122b883bc78",
+  measurementId: "G-1CBV4NK83L"
 };
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
 
 // 👶 All children
 let children = [];
 let mediaConsent = "";
+let latestFinalBooking = null;
 
 // ⚡ Initialize
 document.addEventListener("DOMContentLoaded", () => {
@@ -110,15 +114,35 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Proceed to payment from review page
-  const proceedToPaymentBtn = document.getElementById("proceedToPayment");
-  if (proceedToPaymentBtn) {
-    proceedToPaymentBtn.addEventListener("click", () => {
-      console.log("Proceed to payment clicked");
-      alert("Proceed to payment step next.");
-      // 👉 Replace this with your Square payment logic later
-    });
-  }
+// Proceed to payment from review page
+const proceedToPaymentBtn = document.getElementById("proceedToPayment");
+if (proceedToPaymentBtn) {
+  proceedToPaymentBtn.addEventListener("click", async () => {
+    if (!latestFinalBooking) {
+      alert("Booking details are missing. Please review the form again.");
+      return;
+    }
+
+    const originalText = proceedToPaymentBtn.textContent;
+    proceedToPaymentBtn.disabled = true;
+    proceedToPaymentBtn.textContent = "Saving booking...";
+
+    try {
+      const bookingId = await saveBookingToFirebase(latestFinalBooking);
+
+      console.log("Booking saved with ID:", bookingId);
+      alert(`Booking saved successfully. Reference: ${bookingId}`);
+
+      // 👉 Later, replace this with Square payment flow
+    } catch (error) {
+      console.error("Error saving booking:", error);
+      alert("There was a problem saving the booking. Please try again.");
+    } finally {
+      proceedToPaymentBtn.disabled = false;
+      proceedToPaymentBtn.textContent = originalText;
+    }
+  });
+}
 
   // Live parent field feedback
   document.getElementById("parentName")?.addEventListener("input", function () {
@@ -327,7 +351,7 @@ function renderDays(childIndex) {
           ${daySelected ? "checked" : ""}
           onchange="toggleDay(${childIndex}, '${day.id}', this, this.closest('.day-card'))"
         >
-        Select Day (£${CAMP.pricePerDay})
+        Select Day (£${CAMP.pricing.pricePerDay})
       </label><br>
       <label>
         <input 
@@ -336,7 +360,7 @@ function renderDays(childIndex) {
           ${daySelected ? "" : "disabled"}
           onchange="toggleWrap(${childIndex}, '${day.id}', this)"
         >
-        Wrap Around (+£${CAMP.wrapPrice})
+        Wrap Around (+£${CAMP.pricing.wrapPrice})
       </label>
     `;
 
@@ -400,17 +424,45 @@ function calculateTotal() {
   let total = 0;
 
   children.forEach(child => {
-    const base =
-      child.selectedDays.size === CAMP.fullWeekDays
-        ? CAMP.fullWeekPrice
-        : child.selectedDays.size * CAMP.pricePerDay;
+    const selectedCount = child.selectedDays.size;
+    const wrapTotal = child.wrapDays.size * CAMP.pricing.wrapPrice;
 
-    const wrap = child.wrapDays.size * CAMP.wrapPrice;
-    total += base + wrap;
+    let baseTotal = selectedCount * CAMP.pricing.pricePerDay;
+
+    if (CAMP.pricing.dealEnabled) {
+      if (
+        CAMP.pricing.dealType === "bundle_price" &&
+        selectedCount === CAMP.pricing.totalDealDays
+      ) {
+        baseTotal = CAMP.pricing.bundlePrice;
+      } else if (
+        CAMP.pricing.dealType === "nth_day_free" &&
+        selectedCount === CAMP.pricing.totalDealDays
+      ) {
+        baseTotal = CAMP.pricing.chargedDays * CAMP.pricing.pricePerDay;
+      }
+    }
+
+    total += baseTotal + wrapTotal;
   });
 
   return total;
 }
+
+async function saveBookingToFirebase(finalBooking) {
+  const bookingRef = db.collection("bookings").doc();
+
+  await bookingRef.set({
+    ...finalBooking,
+    bookingReference: bookingRef.id,
+    campName: CAMP.name,
+    paymentStatus: "Pending",
+    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+
+  return bookingRef.id;
+}
+
 
 // 📊 Update summary
 function updateSummary() {
@@ -576,18 +628,8 @@ function renderReviewPage(finalBooking) {
         ${finalBooking.children.map((child, index) => `
           <div class="review-child">
             <p><strong>Child ${index + 1}:</strong> ${child.name} (${child.age})</p>
-            <p><strong>Days:</strong> ${
-              (child.selectedDays || []).map(dayId => {
-                const match = CAMP.dates.find(d => d.id === dayId);
-                return match ? match.label : dayId;
-              }).join(", ") || "None"
-            }</p>
-            <p><strong>Wrap:</strong> ${
-              (child.wrapDays || []).map(dayId => {
-                const match = CAMP.dates.find(d => d.id === dayId);
-                return match ? match.label : dayId;
-              }).join(", ") || "None"
-            }</p>
+            <p><strong>Days:</strong> ${(child.selectedDays || []).join(", ") || "None"}</p>
+            <p><strong>Wrap:</strong> ${(child.wrapDays || []).join(", ") || "None"}</p>
             <p><strong>Dietary:</strong> ${child.dietary}${child.dietary === "Yes" ? ` - ${child.dietaryDetails}` : ""}</p>
             <p><strong>Allergies / Medical:</strong> ${child.allergies}${child.allergies === "Yes" ? ` - ${child.allergiesDetails}` : ""}</p>
             <p><strong>Additional Needs:</strong> ${child.other}${child.other === "Yes" ? ` - ${child.otherDetails}` : ""}</p>
@@ -724,8 +766,14 @@ function handleChildDetailsSubmit() {
     children: children.map((child) => ({
       name: child.name,
       age: child.age,
-      selectedDays: Array.from(child.selectedDays),
-      wrapDays: Array.from(child.wrapDays),
+      selectedDays: Array.from(child.selectedDays).map(dayId => {
+  const match = CAMP.dates.find(d => d.id === dayId);
+  return match ? match.label : dayId;
+}),
+wrapDays: Array.from(child.wrapDays).map(dayId => {
+  const match = CAMP.dates.find(d => d.id === dayId);
+  return match ? match.label : dayId;
+}),
       dietary: child.dietary || "",
       dietaryDetails: child.dietaryDetails || "",
       allergies: child.allergies || "",
@@ -738,6 +786,8 @@ function handleChildDetailsSubmit() {
     mediaConsent: mediaConsent,
     totalPrice: calculateTotal()
   };
+
+  latestFinalBooking = finalBooking;
 
   renderReviewPage(finalBooking);
 
