@@ -66,71 +66,15 @@
   <script src="camp-config.js"></script>
   <script src="bookingadmin.js"></script>
 
-  <script>
-
-    // Elements
+  <!-- REMOVE THIS INLINE SCRIPT -->
+  <!-- <script>
     const loginSection = document.getElementById("loginSection");
     const adminSection = document.getElementById("adminSection");
     const emailInput = document.getElementById("emailInput");
     const passwordInput = document.getElementById("passwordInput");
     const loginButton = document.getElementById("loginButton");
     const errorMessage = document.getElementById("errorMessage");
-
-    // Login event listener
-    loginButton.addEventListener("click", async () => {
-      const email = emailInput.value;
-      const password = passwordInput.value;
-
-      try {
-        // Firebase Authentication login
-        await auth.signInWithEmailAndPassword(email, password);
-
-        // Check if the user has admin privileges
-        const userRef = db.collection("users").doc(auth.currentUser.uid);
-        const userDoc = await userRef.get();
-
-        if (userDoc.exists && userDoc.data().isAdmin) {
-          // If the user is an admin, show the admin section
-          loginSection.style.display = "none";
-          adminSection.style.display = "block";
-
-          // Load bookings
-          loadBookings();
-        } else {
-          // If not admin, show an error
-          errorMessage.textContent = "You do not have permission to access this page.";
-          errorMessage.style.display = "block";
-        }
-      } catch (error) {
-        errorMessage.textContent = "Incorrect email or password. Please try again.";
-        errorMessage.style.display = "block";
-      }
-    });
-
-    // Function to load bookings (Firestore interaction here)
-    async function loadBookings() {
-      try {
-        const snapshot = await db.collection("bookings").get();
-        const allBookings = snapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-
-        allBookings.sort((a, b) => {
-          const aTime = a.createdAt?.seconds || 0;
-          const bTime = b.createdAt?.seconds || 0;
-          return bTime - aTime;
-        });
-
-        applyFilters(allBookings); // Apply filters if needed
-
-      } catch (error) {
-        console.error("Error loading bookings:", error);
-        document.getElementById("noBookingsMessage").style.display = "block";
-        document.getElementById("noBookingsMessage").textContent = "Could not load bookings.";
-      }
-    }
-  </script>
-
+    // More code...
+  </script> -->
 </body>
 </html>

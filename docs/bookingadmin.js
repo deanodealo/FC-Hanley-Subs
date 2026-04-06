@@ -1,3 +1,4 @@
+
 // Firebase configuration (ensure it's declared only once in bookingadmin.js)
 const firebaseConfig = {
   apiKey: "AIzaSyDXXX-LMkY4Q0oN0M9e5wLdVhANzL8ifHs",
@@ -14,6 +15,9 @@ firebase.initializeApp(firebaseConfig);
 
 // Initialize Firestore
 const db = firebase.firestore();
+
+// Store bookings globally
+let allBookings = [];
 
 // Elements for DOM manipulation
 const emailInput = document.getElementById("emailInput");
@@ -76,18 +80,20 @@ loginButton.addEventListener("click", async () => {
 async function loadBookings() {
   try {
     const snapshot = await db.collection("bookings").get();
-    const allBookings = snapshot.docs.map(doc => ({
+    allBookings = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
 
+    // Sort the bookings by the time they were created
     allBookings.sort((a, b) => {
       const aTime = a.createdAt?.seconds || 0;
       const bTime = b.createdAt?.seconds || 0;
       return bTime - aTime;
     });
 
-    applyFilters(allBookings);
+    // Apply filters to the loaded bookings
+    applyFilters(allBookings); // Now passing allBookings to applyFilters
   } catch (error) {
     console.error("Error loading bookings:", error);
     document.getElementById("noBookingsMessage").style.display = "block";
@@ -100,19 +106,88 @@ function applyFilters(bookings) {
   const searchValue = document.getElementById("searchInput")?.value.trim().toLowerCase() || "";
   const selectedDay = document.getElementById("dayFilter")?.value || "all";
 
+  console.log("Selected Day:", selectedDay); // Log selected day value
+  console.log("Search Term:", searchValue); // Log search term
+  console.log("Total Bookings:", bookings.length); // Log total number of bookings
+
   const filtered = bookings.filter(booking => {
     const parentName = booking.parent?.name?.toLowerCase() || "";
     const childNames = (booking.children || []).map(child => child.name?.toLowerCase() || "").join(" ");
 
     const matchesSearch = !searchValue || parentName.includes(searchValue) || childNames.includes(searchValue);
-    const matchesDay = selectedDay === "all" || (booking.children || []).some(child => (child.selectedDays || []).includes(selectedDay));
+    console.log("Matches Search:", matchesSearch); // Log search match status
 
-    return matchesSearch && matchesDay;
+    let matchesDay = false;
+    if (selectedDay === "all") {
+      matchesDay = true; // No filtering on day when "All Days" is selected
+    } else {
+      // Check if any of the children have the selected day in their selectedDays
+      matchesDay = (booking.children || []).some(child => {
+        const mappedSelectedDays = child.selectedDays?.map(day => mapFullDayToShort(day));
+        return Array.isArray(mappedSelectedDays) && mappedSelectedDays.includes(selectedDay);
+      });
+    }
+
+    return matchesSearch && matchesDay; // Filter by both search and day
   });
 
-  renderDashboard(filtered, selectedDay);
-  renderBookings(filtered);
+  console.log("Filtered Bookings:", filtered.length); // Log number of filtered bookings
+
+  renderDashboard(filtered, selectedDay); // Render the filtered dashboard
+  renderBookings(filtered); // Render the filtered bookings
 }
+
+// Helper function to map full day names (e.g., "Tuesday 7th April") to short day IDs (e.g., "tue")
+function mapFullDayToShort(fullDay) {
+  const dayMapping = {
+    "Monday": "mon",
+    "Tuesday": "tue",
+    "Wednesday": "wed",
+    "Thursday": "thu",
+    "Friday": "fri",
+    "Saturday": "sat",
+    "Sunday": "sun"
+  };
+
+  const dayName = fullDay.split(" ")[0]; // Get the day of the week (e.g., "Tuesday")
+  return dayMapping[dayName] || fullDay; // Return the short day ID or the full day string if not found
+}
+
+// Call this function to populate the dropdown when the admin page is loaded
+function populateDayFilter() {
+  const dayFilter = document.getElementById("dayFilter");
+
+  // Clear existing options (in case the filter is populated before)
+  dayFilter.innerHTML = "";
+
+  // Add an "All" option at the top
+  const allOption = document.createElement("option");
+  allOption.value = "all";
+  allOption.textContent = "All Days";
+  dayFilter.appendChild(allOption);
+
+  // Add each day from CAMP.dates
+  CAMP.dates.forEach(day => {
+    const option = document.createElement("option");
+    option.value = day.id;
+    option.textContent = day.label;
+    dayFilter.appendChild(option);
+  });
+
+  // Add event listener to re-apply the filter when a day is selected
+  dayFilter.addEventListener("change", () => {
+    const selectedDay = dayFilter.value;
+    applyFilters(allBookings); // Pass the stored allBookings array to applyFilters
+  });
+}
+
+// Ensure this function is called when the page has fully loaded
+window.addEventListener('load', function () {
+  populateDayFilter();  // Populate the day filter dropdown
+
+  // Load bookings after populating the filter
+  loadBookings();
+});
 
 // Function to render dashboard stats
 function renderDashboard(bookings, selectedDay) {
