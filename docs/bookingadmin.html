@@ -43,6 +43,11 @@
       </div>
     </section>
 
+    <section class="day-totals">
+  <h2>Daily Income Breakdown</h2>
+  <div id="dayTotalsGrid" class="day-total-grid"></div>
+</section>
+
     <section class="filters">
       <input type="text" id="searchInput" placeholder="Search by parent or child name" />
       <select id="dayFilter">
@@ -50,14 +55,17 @@
       </select>
     </section>
 
-    <section class="bookings-section">
-      <h2>Bookings</h2>
-      <div id="bookingsList" class="bookings-list"></div>
-      <div id="noBookingsMessage" class="no-bookings" style="display:none;">
-        No bookings found.
-      </div>
-    </section>
+<section class="bookings-section">
+  <h2>Bookings</h2>
+  <div class="booking-actions">
+    <button id="expandAllBookings" type="button">Expand All</button>
+    <button id="collapseAllBookings" type="button">Collapse All</button>
   </div>
+  <div id="bookingsList" class="bookings-list"></div>
+  <div id="noBookingsMessage" class="no-bookings" style="display:none;">
+    No bookings found.
+  </div>
+</section>
 
   <!-- Firebase Scripts -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>

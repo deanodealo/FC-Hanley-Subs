@@ -245,3 +245,56 @@ body.booking-admin::before {
     text-align: center;
   }
 }
+.booking-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.booking-actions button {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  background: #4db8ff;
+  color: #0b1f3a;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.booking-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  cursor: pointer;
+}
+
+.booking-summary-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.booking-summary-meta {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.booking-toggle {
+  font-size: 14px;
+  font-weight: bold;
+  color: #4db8ff;
+}
+
+.booking-details {
+  display: none;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.booking-card.expanded .booking-details {
+  display: block;
+}

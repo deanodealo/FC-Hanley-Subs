@@ -1,5 +1,4 @@
-
-// Firebase configuration (ensure it's declared only once in bookingadmin.js)
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyDXXX-LMkY4Q0oN0M9e5wLdVhANzL8ifHs",
   authDomain: "fchanley-8d910.firebaseapp.com",
@@ -28,116 +27,106 @@ const loginSection = document.getElementById("loginSection");
 const adminSection = document.getElementById("adminSection");
 
 // Login button event listener
-loginButton.addEventListener("click", async () => {
-  const email = emailInput.value;
-  const password = passwordInput.value;
+if (loginButton) {
+  loginButton.addEventListener("click", async () => {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
 
-  try {
-    // Firebase Authentication login
-    await firebase.auth().signInWithEmailAndPassword(email, password);
+    try {
+      await firebase.auth().signInWithEmailAndPassword(email, password);
 
-    const currentUser = firebase.auth().currentUser;
-    if (!currentUser) {
-      throw new Error("No user is logged in.");
-    }
+      const currentUser = firebase.auth().currentUser;
+      if (!currentUser) {
+        throw new Error("No user is logged in.");
+      }
 
-    // Log the current user's UID
-    console.log("Current User UID:", currentUser.uid);
+      const userRef = db.collection("users").doc(currentUser.uid);
+      const userDoc = await userRef.get();
 
-    // Query the user document in Firestore using the UID
-    const userRef = db.collection("users").doc(currentUser.uid);
-    const userDoc = await userRef.get();
+      if (!userDoc.exists) {
+        throw new Error("User document not found in Firestore.");
+      }
 
-    if (!userDoc.exists) {
-      throw new Error("User document not found in Firestore.");
-    }
-
-    // Log the user document data
-    console.log("User Doc Data:", userDoc.data());
-
-    // Check if the user is an admin
-    if (userDoc.exists && userDoc.data().isAdmin) {
-      // If the user is an admin, show the admin section
-      loginSection.style.display = "none";
-      adminSection.style.display = "block";
-
-      // Load bookings
-      loadBookings();
-    } else {
-      // If not admin, show an error
-      errorMessage.textContent = "You do not have permission to access this page.";
+      if (userDoc.data().isAdmin) {
+        loginSection.style.display = "none";
+        adminSection.style.display = "block";
+        loadBookings();
+      } else {
+        errorMessage.textContent = "You do not have permission to access this page.";
+        errorMessage.style.display = "block";
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      errorMessage.textContent = error.message;
       errorMessage.style.display = "block";
     }
-  } catch (error) {
-    // Handle login errors
-    console.error("Login error: ", error);
-    errorMessage.textContent = error.message;
-    errorMessage.style.display = "block";
-  }
-});
+  });
+}
 
 // Function to load bookings from Firestore
 async function loadBookings() {
   try {
     const snapshot = await db.collection("bookings").get();
+
     allBookings = snapshot.docs.map(doc => ({
       id: doc.id,
       ...doc.data()
     }));
 
-    // Sort the bookings by the time they were created
     allBookings.sort((a, b) => {
       const aTime = a.createdAt?.seconds || 0;
       const bTime = b.createdAt?.seconds || 0;
       return bTime - aTime;
     });
 
-    // Apply filters to the loaded bookings
-    applyFilters(allBookings); // Now passing allBookings to applyFilters
+    applyFilters(allBookings);
   } catch (error) {
     console.error("Error loading bookings:", error);
-    document.getElementById("noBookingsMessage").style.display = "block";
-    document.getElementById("noBookingsMessage").textContent = "Could not load bookings.";
+    const noBookingsMessage = document.getElementById("noBookingsMessage");
+    if (noBookingsMessage) {
+      noBookingsMessage.style.display = "block";
+      noBookingsMessage.textContent = "Could not load bookings.";
+    }
   }
 }
 
 // Function to apply filters on bookings
 function applyFilters(bookings) {
-  const searchValue = document.getElementById("searchInput")?.value.trim().toLowerCase() || "";
+  const searchInput = document.getElementById("searchInput");
+  const searchValue = searchInput?.value.trim().toLowerCase() || "";
   const selectedDay = document.getElementById("dayFilter")?.value || "all";
-
-  console.log("Selected Day:", selectedDay); // Log selected day value
-  console.log("Search Term:", searchValue); // Log search term
-  console.log("Total Bookings:", bookings.length); // Log total number of bookings
 
   const filtered = bookings.filter(booking => {
     const parentName = booking.parent?.name?.toLowerCase() || "";
-    const childNames = (booking.children || []).map(child => child.name?.toLowerCase() || "").join(" ");
+    const childNames = (booking.children || [])
+      .map(child => child.name?.toLowerCase() || "")
+      .join(" ");
 
-    const matchesSearch = !searchValue || parentName.includes(searchValue) || childNames.includes(searchValue);
-    console.log("Matches Search:", matchesSearch); // Log search match status
+    const matchesSearch =
+      !searchValue ||
+      parentName.includes(searchValue) ||
+      childNames.includes(searchValue);
 
     let matchesDay = false;
+
     if (selectedDay === "all") {
-      matchesDay = true; // No filtering on day when "All Days" is selected
+      matchesDay = true;
     } else {
-      // Check if any of the children have the selected day in their selectedDays
       matchesDay = (booking.children || []).some(child => {
-        const mappedSelectedDays = child.selectedDays?.map(day => mapFullDayToShort(day));
-        return Array.isArray(mappedSelectedDays) && mappedSelectedDays.includes(selectedDay);
+        const mappedSelectedDays = (child.selectedDays || []).map(day => mapFullDayToShort(day));
+        return mappedSelectedDays.includes(selectedDay);
       });
     }
 
-    return matchesSearch && matchesDay; // Filter by both search and day
+    return matchesSearch && matchesDay;
   });
 
-  console.log("Filtered Bookings:", filtered.length); // Log number of filtered bookings
-
-  renderDashboard(filtered, selectedDay); // Render the filtered dashboard
-  renderBookings(filtered); // Render the filtered bookings
+  renderDashboard(filtered, selectedDay);
+  renderDayIncomeBreakdown(allBookings);
+  renderBookings(filtered);
 }
 
-// Helper function to map full day names (e.g., "Tuesday 7th April") to short day IDs (e.g., "tue")
+// Helper function to map full day names to short day IDs
 function mapFullDayToShort(fullDay) {
   const dayMapping = {
     "Monday": "mon",
@@ -149,47 +138,124 @@ function mapFullDayToShort(fullDay) {
     "Sunday": "sun"
   };
 
-  const dayName = fullDay.split(" ")[0]; // Get the day of the week (e.g., "Tuesday")
-  return dayMapping[dayName] || fullDay; // Return the short day ID or the full day string if not found
+  const dayName = String(fullDay || "").split(" ")[0];
+  return dayMapping[dayName] || fullDay;
 }
 
-// Call this function to populate the dropdown when the admin page is loaded
+// Populate day filter dropdown
 function populateDayFilter() {
   const dayFilter = document.getElementById("dayFilter");
+  if (!dayFilter) return;
 
-  // Clear existing options (in case the filter is populated before)
   dayFilter.innerHTML = "";
 
-  // Add an "All" option at the top
   const allOption = document.createElement("option");
   allOption.value = "all";
   allOption.textContent = "All Days";
   dayFilter.appendChild(allOption);
 
-  // Add each day from CAMP.dates
-  CAMP.dates.forEach(day => {
+  (CAMP.dates || []).forEach(day => {
     const option = document.createElement("option");
     option.value = day.id;
     option.textContent = day.label;
     dayFilter.appendChild(option);
   });
 
-  // Add event listener to re-apply the filter when a day is selected
   dayFilter.addEventListener("change", () => {
-    const selectedDay = dayFilter.value;
-    applyFilters(allBookings); // Pass the stored allBookings array to applyFilters
+    applyFilters(allBookings);
   });
 }
 
-// Ensure this function is called when the page has fully loaded
-window.addEventListener('load', function () {
-  populateDayFilter();  // Populate the day filter dropdown
+// Work out which camp days are actually charged for a child after deal logic
+function getChargedCampDaysForChild(child) {
+  const selectedDays = Array.isArray(child.selectedDays) ? child.selectedDays : [];
 
-  // Load bookings after populating the filter
-  loadBookings();
-});
+  const mappedSelectedDays = selectedDays
+    .map(day => mapFullDayToShort(day))
+    .filter(Boolean);
 
-// Function to render dashboard stats
+  const campDayOrder = (CAMP.dates || []).map(day => day.id);
+
+  const orderedSelectedDays = campDayOrder.filter(dayId =>
+    mappedSelectedDays.includes(dayId)
+  );
+
+  const pricing = CAMP.pricing || {};
+  const dealEnabled = pricing.dealEnabled;
+  const dealType = pricing.dealType;
+  const chargedDays = Number(pricing.chargedDays || 0);
+  const totalDealDays = Number(pricing.totalDealDays || 0);
+
+  if (
+    !dealEnabled ||
+    dealType !== "nth_day_free" ||
+    !chargedDays ||
+    !totalDealDays
+  ) {
+    return orderedSelectedDays;
+  }
+
+  const chargedDayIds = [];
+
+  orderedSelectedDays.forEach((dayId, index) => {
+    const cyclePosition = index % totalDealDays;
+
+    if (cyclePosition < chargedDays) {
+      chargedDayIds.push(dayId);
+    }
+  });
+
+  return chargedDayIds;
+}
+
+// Calculate discounted income for one specific day
+function calculateIncomeForDay(bookings, dayId) {
+  const dayPrice = Number(CAMP.pricing?.pricePerDay || 0);
+  const wrapPrice = Number(CAMP.pricing?.wrapPrice || 0);
+
+  let total = 0;
+
+  bookings.forEach(booking => {
+    (booking.children || []).forEach(child => {
+      const wrapDays = Array.isArray(child.wrapDays) ? child.wrapDays : [];
+      const mappedWrapDays = wrapDays.map(day => mapFullDayToShort(day));
+      const chargedCampDays = getChargedCampDaysForChild(child);
+
+      if (chargedCampDays.includes(dayId)) {
+        total += dayPrice;
+      }
+
+      if (mappedWrapDays.includes(dayId)) {
+        total += wrapPrice;
+      }
+    });
+  });
+
+  return total;
+}
+
+// Render daily income cards
+function renderDayIncomeBreakdown(bookings) {
+  const grid = document.getElementById("dayTotalsGrid");
+  if (!grid) return;
+
+  grid.innerHTML = "";
+
+  (CAMP.dates || []).forEach(day => {
+    const total = calculateIncomeForDay(bookings, day.id);
+
+    const card = document.createElement("div");
+    card.className = "day-total-card";
+    card.innerHTML = `
+      <div class="day-name">${day.label}</div>
+      <div class="day-count">£${total}</div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+// Render main dashboard stats
 function renderDashboard(bookings, selectedDay) {
   const totalBookingsElement = document.getElementById("totalBookings");
   const totalChildrenElement = document.getElementById("totalChildren");
@@ -204,11 +270,39 @@ function renderDashboard(bookings, selectedDay) {
   let totalChildren = 0;
   let totalIncome = 0;
 
+  const dayPrice = Number(CAMP.pricing?.pricePerDay || 0);
+  const wrapPrice = Number(CAMP.pricing?.wrapPrice || 0);
+
   bookings.forEach(booking => {
-    totalIncome += Number(booking.totalPrice || 0);
+    if (selectedDay === "all") {
+      totalIncome += Number(booking.totalPrice || 0);
+
+      (booking.children || []).forEach(() => {
+        totalChildren += 1;
+      });
+
+      return;
+    }
 
     (booking.children || []).forEach(child => {
-      totalChildren += 1;
+      const selectedDays = Array.isArray(child.selectedDays) ? child.selectedDays : [];
+      const wrapDays = Array.isArray(child.wrapDays) ? child.wrapDays : [];
+
+      const mappedSelectedDays = selectedDays.map(day => mapFullDayToShort(day));
+      const mappedWrapDays = wrapDays.map(day => mapFullDayToShort(day));
+      const chargedCampDays = getChargedCampDaysForChild(child);
+
+      if (mappedSelectedDays.includes(selectedDay)) {
+        totalChildren += 1;
+      }
+
+      if (chargedCampDays.includes(selectedDay)) {
+        totalIncome += dayPrice;
+      }
+
+      if (mappedWrapDays.includes(selectedDay)) {
+        totalIncome += wrapPrice;
+      }
     });
   });
 
@@ -217,10 +311,12 @@ function renderDashboard(bookings, selectedDay) {
   totalIncomeElement.innerHTML = `£${totalIncome}`;
 }
 
-// Function to render bookings
+// Render bookings list - collapsed by default
 function renderBookings(bookings) {
   const list = document.getElementById("bookingsList");
   const noBookingsMessage = document.getElementById("noBookingsMessage");
+
+  if (!list || !noBookingsMessage) return;
 
   list.innerHTML = "";
 
@@ -241,27 +337,56 @@ function renderBookings(bookings) {
     const mediaConsent = booking.mediaConsent || "-";
     const totalPrice = booking.totalPrice || 0;
     const createdAt = formatTimestamp(booking.createdAt);
+    const childCount = (booking.children || []).length;
 
     card.innerHTML = `
-      <div class="booking-top">
-        <div>
+      <div class="booking-summary" role="button" tabindex="0" aria-expanded="false">
+        <div class="booking-summary-left">
           <div class="booking-name">${parentName}</div>
-          <div class="booking-meta">
-            <div><strong>Email:</strong> ${parentEmail}</div>
-            <div><strong>Phone:</strong> ${parentPhone}</div>
-            <div><strong>Booked:</strong> ${createdAt}</div>
-            <div><strong>Media Consent:</strong> ${mediaConsent}</div>
+          <div class="booking-summary-meta">
+            Booked: ${createdAt} | Children: ${childCount} | Total: £${totalPrice}
           </div>
         </div>
-
-        <div class="booking-total">£${totalPrice}</div>
+        <div class="booking-toggle">View details</div>
       </div>
 
-      <div class="booking-section">
-        <h3>Children</h3>
-        ${(booking.children || []).map(child => renderChildBlock(child)).join("")}
+      <div class="booking-details">
+        <div class="booking-meta">
+          <div><strong>Email:</strong> ${parentEmail}</div>
+          <div><strong>Phone:</strong> ${parentPhone}</div>
+          <div><strong>Media Consent:</strong> ${mediaConsent}</div>
+        </div>
+
+        <div class="booking-section">
+          <h3>Children</h3>
+          ${(booking.children || []).map(child => renderChildBlock(child)).join("")}
+        </div>
       </div>
     `;
+
+    const summary = card.querySelector(".booking-summary");
+    const toggleLabel = card.querySelector(".booking-toggle");
+
+    const toggleCard = () => {
+      const isExpanded = card.classList.toggle("expanded");
+      if (toggleLabel) {
+        toggleLabel.textContent = isExpanded ? "Hide details" : "View details";
+      }
+      if (summary) {
+        summary.setAttribute("aria-expanded", isExpanded ? "true" : "false");
+      }
+    };
+
+    if (summary) {
+      summary.addEventListener("click", toggleCard);
+
+      summary.addEventListener("keydown", event => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          toggleCard();
+        }
+      });
+    }
 
     list.appendChild(card);
   });
@@ -314,3 +439,51 @@ function formatTimestamp(timestamp) {
     minute: "2-digit"
   });
 }
+
+// Expand all / collapse all helpers
+function expandAllBookings() {
+  document.querySelectorAll(".booking-card").forEach(card => {
+    card.classList.add("expanded");
+
+    const toggle = card.querySelector(".booking-toggle");
+    const summary = card.querySelector(".booking-summary");
+
+    if (toggle) toggle.textContent = "Hide details";
+    if (summary) summary.setAttribute("aria-expanded", "true");
+  });
+}
+
+function collapseAllBookings() {
+  document.querySelectorAll(".booking-card").forEach(card => {
+    card.classList.remove("expanded");
+
+    const toggle = card.querySelector(".booking-toggle");
+    const summary = card.querySelector(".booking-summary");
+
+    if (toggle) toggle.textContent = "View details";
+    if (summary) summary.setAttribute("aria-expanded", "false");
+  });
+}
+
+// Page setup
+window.addEventListener("load", function () {
+  populateDayFilter();
+
+  const searchInput = document.getElementById("searchInput");
+  if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      applyFilters(allBookings);
+    });
+  }
+
+  const expandAllBtn = document.getElementById("expandAllBookings");
+  const collapseAllBtn = document.getElementById("collapseAllBookings");
+
+  if (expandAllBtn) {
+    expandAllBtn.addEventListener("click", expandAllBookings);
+  }
+
+  if (collapseAllBtn) {
+    collapseAllBtn.addEventListener("click", collapseAllBookings);
+  }
+});
