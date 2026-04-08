@@ -32,6 +32,7 @@
         <div class="stat-value" id="totalBookings">0</div>
       </div>
 
+
       <div class="stat-card">
         <div class="stat-label">Total Children</div>
         <div class="stat-value" id="totalChildren">0</div>
@@ -43,17 +44,19 @@
       </div>
     </section>
 
+          <section class="day-selector">
+  <label for="dayFilter">Select Day</label>
+  <select id="dayFilter"></select>
+</section>
+
     <section class="day-totals">
   <h2>Daily Income Breakdown</h2>
   <div id="dayTotalsGrid" class="day-total-grid"></div>
 </section>
 
-    <section class="filters">
-      <input type="text" id="searchInput" placeholder="Search by parent or child name" />
-      <select id="dayFilter">
-        <!-- Dynamic options will be inserted here -->
-      </select>
-    </section>
+<section class="filters">
+  <input type="text" id="searchInput" placeholder="Search by parent or child name" />
+</section>
 
 <section class="bookings-section">
   <h2>Bookings</h2>

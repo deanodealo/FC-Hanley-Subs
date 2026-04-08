@@ -298,3 +298,25 @@ body.booking-admin::before {
 .booking-card.expanded .booking-details {
   display: block;
 }
+
+.day-selector {
+  background: #132c4c;
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.day-selector label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+.day-selector select {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+}
