@@ -14,11 +14,27 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-
 // 👶 All children
 let children = [];
 let mediaConsent = "";
 let latestFinalBooking = null;
+
+// 💳 Square config
+// Replace these with your Square SANDBOX values first
+const SQUARE_APP_ID = "sq0idb-UYZ4vS_qriKXRXKP5uNkEQ";
+const SQUARE_LOCATION_ID = "LMMEC838AX8QP";
+
+// Replace with your Firebase Function URL later
+// Example:
+// https://europe-west1-fchanley-8d910.cloudfunctions.net/createSquarePayment
+const SQUARE_PAYMENT_ENDPOINT = "https://console.firebase.google.com/project/fchanley-8d910/overview";
+
+// 💳 Square runtime state
+let squarePayments = null;
+let squareCard = null;
+let paymentSectionShown = false;
+let paymentFormReady = false;
+let savedBookingId = null;
 
 // ⚡ Initialize
 document.addEventListener("DOMContentLoaded", () => {
@@ -110,39 +126,20 @@ document.addEventListener("DOMContentLoaded", () => {
         mediaConsent
       });
 
+      // Reset visible payment state when going back to edit
+      resetPaymentUI();
+
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
 
-// Proceed to payment from review page
-const proceedToPaymentBtn = document.getElementById("proceedToPayment");
-if (proceedToPaymentBtn) {
-  proceedToPaymentBtn.addEventListener("click", async () => {
-    if (!latestFinalBooking) {
-      alert("Booking details are missing. Please review the form again.");
-      return;
-    }
-
-    const originalText = proceedToPaymentBtn.textContent;
-    proceedToPaymentBtn.disabled = true;
-    proceedToPaymentBtn.textContent = "Saving booking...";
-
-    try {
-      const bookingId = await saveBookingToFirebase(latestFinalBooking);
-
-      console.log("Booking saved with ID:", bookingId);
-      alert(`Booking saved successfully. Reference: ${bookingId}`);
-
-      // 👉 Later, replace this with Square payment flow
-    } catch (error) {
-      console.error("Error saving booking:", error);
-      alert("There was a problem saving the booking. Please try again.");
-    } finally {
-      proceedToPaymentBtn.disabled = false;
-      proceedToPaymentBtn.textContent = originalText;
-    }
-  });
-}
+  // Proceed to payment / Pay now
+  const proceedToPaymentBtn = document.getElementById("proceedToPayment");
+  if (proceedToPaymentBtn) {
+    proceedToPaymentBtn.addEventListener("click", async () => {
+      await handleProceedToPayment();
+    });
+  }
 
   // Live parent field feedback
   document.getElementById("parentName")?.addEventListener("input", function () {
@@ -198,6 +195,60 @@ function clearErrors(containerId) {
 
   errorBox.style.display = "none";
   errorBox.innerHTML = "";
+}
+
+function showPaymentStatus(message, isError = true) {
+  const statusEl = document.getElementById("payment-status");
+  if (!statusEl) return;
+
+  statusEl.style.display = "block";
+  statusEl.innerHTML = message;
+
+  if (isError) {
+    statusEl.style.background = "rgba(255, 0, 0, 0.12)";
+    statusEl.style.border = "1px solid #ff6b6b";
+  } else {
+    statusEl.style.background = "rgba(0, 180, 90, 0.15)";
+    statusEl.style.border = "1px solid #58d68d";
+  }
+}
+
+function clearPaymentStatus() {
+  const statusEl = document.getElementById("payment-status");
+  if (!statusEl) return;
+
+  statusEl.style.display = "none";
+  statusEl.innerHTML = "";
+  statusEl.style.background = "";
+  statusEl.style.border = "";
+}
+
+function resetPaymentUI() {
+  const paymentSection = document.getElementById("paymentSection");
+  const proceedBtn = document.getElementById("proceedToPayment");
+  const cardContainer = document.getElementById("card-container");
+
+  paymentSectionShown = false;
+  paymentFormReady = false;
+  savedBookingId = null;
+  squarePayments = null;
+  squareCard = null;
+
+  clearPaymentStatus();
+
+  if (paymentSection) {
+    paymentSection.style.display = "none";
+  }
+
+  if (cardContainer) {
+    cardContainer.innerHTML = "";
+  }
+
+  if (proceedBtn) {
+    proceedBtn.textContent = "Proceed to Payment";
+    proceedBtn.disabled = false;
+    proceedBtn.classList.remove("processing");
+  }
 }
 
 // ✅ Parent field validation
@@ -449,6 +500,18 @@ function calculateTotal() {
   return total;
 }
 
+function convertPoundsToPence(amount) {
+  return Math.round(Number(amount) * 100);
+}
+
+function generateIdempotencyKey() {
+  if (window.crypto?.randomUUID) {
+    return window.crypto.randomUUID();
+  }
+
+  return `fc-hanley-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+}
+
 async function saveBookingToFirebase(finalBooking) {
   const bookingRef = db.collection("bookings").doc();
 
@@ -457,12 +520,238 @@ async function saveBookingToFirebase(finalBooking) {
     bookingReference: bookingRef.id,
     campName: CAMP.name,
     paymentStatus: "Pending",
+    totalPricePence: convertPoundsToPence(finalBooking.totalPrice),
     createdAt: firebase.firestore.FieldValue.serverTimestamp()
   });
 
   return bookingRef.id;
 }
 
+async function updateBookingPayment(bookingId, updates) {
+  await db.collection("bookings").doc(bookingId).update({
+    ...updates,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+  });
+}
+
+async function initialiseSquareCard() {
+  if (paymentFormReady && squareCard) return;
+
+  if (!window.Square) {
+    throw new Error("Square payment library failed to load.");
+  }
+
+  if (
+    !SQUARE_APP_ID ||
+    SQUARE_APP_ID.includes("REPLACE_WITH") ||
+    !SQUARE_LOCATION_ID ||
+    SQUARE_LOCATION_ID.includes("REPLACE_WITH")
+  ) {
+    throw new Error("Square Application ID and Location ID need to be added to booking.js.");
+  }
+
+  squarePayments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
+  squareCard = await squarePayments.card();
+
+  const cardContainer = document.getElementById("card-container");
+  if (!cardContainer) {
+    throw new Error("Card container not found in the page.");
+  }
+
+  cardContainer.innerHTML = "";
+  await squareCard.attach("#card-container");
+
+  paymentFormReady = true;
+}
+
+async function revealPaymentSection() {
+  const paymentSection = document.getElementById("paymentSection");
+  const proceedBtn = document.getElementById("proceedToPayment");
+
+  if (!paymentSection) {
+    throw new Error("Payment section not found in the page.");
+  }
+
+  paymentSection.style.display = "block";
+  clearPaymentStatus();
+
+  if (!paymentFormReady) {
+    await initialiseSquareCard();
+  }
+
+  paymentSectionShown = true;
+
+  if (proceedBtn) {
+    proceedBtn.textContent = "Pay Now";
+  }
+
+  paymentSection.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+
+async function tokenizeSquareCard() {
+  if (!squareCard) {
+    throw new Error("Card form is not ready.");
+  }
+
+  const result = await squareCard.tokenize();
+
+  if (result.status !== "OK") {
+    throw new Error("Your card details could not be validated. Please check them and try again.");
+  }
+
+  return result.token;
+}
+
+async function sendPaymentToBackend({ sourceId, bookingId, amountPence, finalBooking }) {
+  if (
+    !SQUARE_PAYMENT_ENDPOINT ||
+    SQUARE_PAYMENT_ENDPOINT.includes("REPLACE_WITH")
+  ) {
+    throw new Error("Firebase Function URL is missing in booking.js.");
+  }
+
+  const response = await fetch(SQUARE_PAYMENT_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      sourceId,
+      bookingId,
+      idempotencyKey: generateIdempotencyKey(),
+      amountMoney: {
+        amount: amountPence,
+        currency: "GBP"
+      },
+      buyer: {
+        givenName: finalBooking.parent?.name || "",
+        emailAddress: finalBooking.parent?.email || "",
+        phoneNumber: finalBooking.parent?.phone || ""
+      }
+    })
+  });
+
+  let data = {};
+  try {
+    data = await response.json();
+  } catch (e) {
+    // ignore JSON parse failure and handle below
+  }
+
+  if (!response.ok) {
+    const message =
+      data?.error ||
+      data?.message ||
+      "Payment could not be processed. Please try again.";
+    throw new Error(message);
+  }
+
+  return data;
+}
+
+async function handleProceedToPayment() {
+  const proceedBtn = document.getElementById("proceedToPayment");
+
+  if (!latestFinalBooking) {
+    alert("Booking details are missing. Please review the form again.");
+    return;
+  }
+
+  const originalText = proceedBtn?.textContent || "Proceed to Payment";
+
+  try {
+    clearPaymentStatus();
+    if (proceedBtn) {
+      proceedBtn.disabled = true;
+      proceedBtn.classList.add("processing");
+    }
+
+    // Step 1: save booking and reveal card form
+    if (!paymentSectionShown) {
+      if (proceedBtn) {
+        proceedBtn.textContent = "Saving booking...";
+      }
+
+      savedBookingId = await saveBookingToFirebase(latestFinalBooking);
+
+      await revealPaymentSection();
+
+      showPaymentStatus(
+        `Booking saved with reference <strong>${savedBookingId}</strong>. Enter card details and click <strong>Pay Now</strong> to complete payment.`,
+        false
+      );
+
+      return;
+    }
+
+    // Step 2: take payment
+    if (!savedBookingId) {
+      throw new Error("Booking reference missing. Please go back and review the booking again.");
+    }
+
+    if (proceedBtn) {
+      proceedBtn.textContent = "Processing payment...";
+    }
+
+    const sourceId = await tokenizeSquareCard();
+    const amountPence = convertPoundsToPence(latestFinalBooking.totalPrice);
+
+    const paymentResult = await sendPaymentToBackend({
+      sourceId,
+      bookingId: savedBookingId,
+      amountPence,
+      finalBooking: latestFinalBooking
+    });
+
+    await updateBookingPayment(savedBookingId, {
+      paymentStatus: "Paid",
+      paidAt: firebase.firestore.FieldValue.serverTimestamp(),
+      squarePaymentId: paymentResult.paymentId || paymentResult.payment?.id || "",
+      squareOrderId: paymentResult.orderId || paymentResult.payment?.order_id || "",
+      paymentAmountPence: amountPence
+    });
+
+    showPaymentStatus(
+      `Payment successful. Your booking is confirmed. Reference: <strong>${savedBookingId}</strong>`,
+      false
+    );
+
+    if (proceedBtn) {
+      proceedBtn.textContent = "Payment Complete";
+      proceedBtn.disabled = true;
+      proceedBtn.classList.remove("processing");
+    }
+  } catch (error) {
+    console.error("Payment flow error:", error);
+    showPaymentStatus(error.message || "Something went wrong while taking payment.");
+
+    if (savedBookingId) {
+      try {
+        await updateBookingPayment(savedBookingId, {
+          paymentStatus: "Pending"
+        });
+      } catch (updateError) {
+        console.error("Failed to preserve pending status:", updateError);
+      }
+    }
+
+    if (proceedBtn) {
+      proceedBtn.textContent = paymentSectionShown ? "Pay Now" : originalText;
+      proceedBtn.disabled = false;
+      proceedBtn.classList.remove("processing");
+    }
+    return;
+  }
+
+  if (proceedBtn && !proceedBtn.disabled) {
+    proceedBtn.textContent = paymentSectionShown ? "Pay Now" : originalText;
+    proceedBtn.disabled = false;
+    proceedBtn.classList.remove("processing");
+  }
+}
 
 // 📊 Update summary
 function updateSummary() {
@@ -767,13 +1056,13 @@ function handleChildDetailsSubmit() {
       name: child.name,
       age: child.age,
       selectedDays: Array.from(child.selectedDays).map(dayId => {
-  const match = CAMP.dates.find(d => d.id === dayId);
-  return match ? match.label : dayId;
-}),
-wrapDays: Array.from(child.wrapDays).map(dayId => {
-  const match = CAMP.dates.find(d => d.id === dayId);
-  return match ? match.label : dayId;
-}),
+        const match = CAMP.dates.find(d => d.id === dayId);
+        return match ? match.label : dayId;
+      }),
+      wrapDays: Array.from(child.wrapDays).map(dayId => {
+        const match = CAMP.dates.find(d => d.id === dayId);
+        return match ? match.label : dayId;
+      }),
       dietary: child.dietary || "",
       dietaryDetails: child.dietaryDetails || "",
       allergies: child.allergies || "",
@@ -788,6 +1077,9 @@ wrapDays: Array.from(child.wrapDays).map(dayId => {
   };
 
   latestFinalBooking = finalBooking;
+
+  // Reset payment state whenever review is rebuilt
+  resetPaymentUI();
 
   renderReviewPage(finalBooking);
 

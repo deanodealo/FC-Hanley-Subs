@@ -24,23 +24,23 @@
     <h2>Parent / Guardian Details</h2>
     <input type="text" id="parentName" placeholder="Parent/Guardian Name & Surname">
     <input
-  type="email"
-  id="email"
-  placeholder="Email@example.com"
-  autocomplete="email"
-  autocapitalize="off"
-  autocorrect="off"
-  spellcheck="false"
-  inputmode="email"
-  enterkeyhint="next"
->
+      type="email"
+      id="email"
+      placeholder="Email@example.com"
+      autocomplete="email"
+      autocapitalize="off"
+      autocorrect="off"
+      spellcheck="false"
+      inputmode="email"
+      enterkeyhint="next"
+    >
     <input 
-  type="tel" 
-  id="phone" 
-  placeholder="Phone"
-  inputmode="numeric"
-  pattern="[0-9+ ]*"
->
+      type="tel" 
+      id="phone" 
+      placeholder="Phone"
+      inputmode="numeric"
+      pattern="[0-9+ ]*"
+    >
   </section>
 
   <!-- 👶 Children Booking -->
@@ -63,10 +63,10 @@
 
   <div id="bookingErrors" class="error-box" style="display:none;"></div>
 
- <!-- 💳 Buttons -->
-<section class="actions">
-  <button id="continueBooking">Continue to Child Details</button>
-</section>
+  <!-- Continue -->
+  <section class="actions">
+    <button id="continueBooking">Continue to Child Details</button>
+  </section>
 
 </div>
 
@@ -86,25 +86,23 @@
     <h2>Child Details & Medical Information</h2>
     <div id="childDetailsContainer"></div>
 
-<!-- Media Consent --> 
-<section class="consent">
-  <p>Please indicate your consent for your child/children to be photographed or recorded:</p>
+    <!-- Media Consent --> 
+    <section class="consent">
+      <p>Please indicate your consent for your child/children to be photographed or recorded:</p>
 
-  <label>
-    <input type="radio" name="mediaConsent" value="Yes">
-    Yes – I give permission. Media may be used by FC Hanley or partner organisations (printed & digital).
-  </label><br>
+      <label>
+        <input type="radio" name="mediaConsent" value="Yes">
+        Yes – I give permission. Media may be used by FC Hanley or partner organisations (printed & digital).
+      </label><br>
 
-  <label>
-    <input type="radio" name="mediaConsent" value="No">
-    No – I do not give permission. The child will still participate in all activities.
-  </label>
-</section>
+      <label>
+        <input type="radio" name="mediaConsent" value="No">
+        No – I do not give permission. The child will still participate in all activities.
+      </label>
+    </section>
 
-<div id="childDetailsErrors" class="error-box" style="display:none;"></div>
+    <div id="childDetailsErrors" class="error-box" style="display:none;"></div>
 
-  <!-- Buttons -->
-    <!-- Buttons -->
     <section class="actions">
       <button id="submitChildDetails">Review Booking</button>
     </section>
@@ -113,11 +111,11 @@
 
 <!-- 📝 Booking Review Page (hidden initially) -->
 <section id="reviewPage" style="display:none;">
-   <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge">
+  <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge">
   <h2 style="text-align: center;">Please Review Your Booking</h2>
-<p style="text-align:center; font-size:14px;">
-  Please check everything is correct before proceeding to payment.
-</p>
+  <p style="text-align:center; font-size:14px;">
+    Please check everything is correct before proceeding to payment.
+  </p>
 
   <!-- Parent Details -->
   <div id="parentDetailsReview"></div>
@@ -131,6 +129,14 @@
   <!-- Total Price -->
   <div id="totalPriceReview"></div>
 
+  <!-- Square Payment Section -->
+  <div id="paymentSection" class="review-card" style="display:none;">
+    <h3>Payment</h3>
+    <p>Enter your card details below to complete the booking.</p>
+    <div id="card-container"></div>
+    <div id="payment-status" class="error-box" style="display:none;"></div>
+  </div>
+
   <!-- Actions -->
   <section class="actions">
     <button id="backToEdit">Back to Edit</button>
@@ -138,10 +144,13 @@
   </section>
 </section>
 
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script src="camp-config.js"></script>
+
+<!-- Square Web Payments SDK (Sandbox for testing) -->
+<script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
+
 <script src="booking.js"></script>
 </body>
 </html>

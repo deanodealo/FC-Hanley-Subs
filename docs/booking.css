@@ -556,3 +556,38 @@ section button {
     transform: translateY(0);
   }
 }
+
+/* 💳 Square payment section */
+#paymentSection {
+  animation: totalFadeUp 0.35s ease;
+}
+
+#paymentSection p {
+  margin: 8px 0 12px;
+  font-size: 14px;
+  opacity: 0.95;
+}
+
+#card-container {
+  min-height: 90px;
+  margin-top: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(77, 184, 255, 0.35);
+  border-radius: 10px;
+}
+
+#payment-status {
+  margin-top: 12px;
+}
+
+/* Optional loading state for payment button */
+#proceedToPayment.processing {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Slight spacing tweak on review actions */
+#reviewPage .actions {
+  margin-top: 18px;
+}
