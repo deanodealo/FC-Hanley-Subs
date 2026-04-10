@@ -1076,69 +1076,122 @@ function clearCoachFilters() {
 }
 
 // Contact Manager - Show overlay (FIXED VERSION)
+
 async function contactManager(vacancyId, type) {
   try {
     const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
-    
+
     const collectionName = type === 'player' ? 'Vacancies' : 'coachVacancies';
-    const vacancyDoc = await getDoc(doc(window.db, collectionName, vacancyId));
-    
-    if (vacancyDoc.exists()) {
-      const vacancy = vacancyDoc.data();
-      
-      // Get manager details from managerProfiles collection
-      const managerId = vacancy.managerId;
-      let managerName = 'Manager';
-      let managerPhone = '';
-      
-      if (managerId) {
-        const managerDoc = await getDoc(doc(window.db, 'managerProfiles', managerId));
-        if (managerDoc.exists()) {
-          const managerData = managerDoc.data();
-          managerName = managerData.managerName || 'Manager';
-          managerPhone = managerData.phone || '';
-        }
-      }
-      
-      // Store contact details
-      currentContact.email = vacancy.managerEmail || '';
-      currentContact.phone = managerPhone;
-      currentContact.name = managerName;
-      currentContact.teamName = vacancy.club || vacancy.teamName || 'Team';
-      currentContact.position = vacancy.position || vacancy.managerRole || vacancy.role || 'position';
-      
-      console.log('Contact details:', currentContact);
-      
-      // Update overlay content
-      document.getElementById('contactManagerName').textContent = currentContact.name;
-      document.getElementById('contactTeamName').textContent = currentContact.teamName;
-      
-      // Show/hide buttons based on available contact info
-      const emailBtn = document.getElementById('emailBtn');
-      const callBtn = document.getElementById('callBtn');
-      const smsBtn = document.getElementById('smsBtn');
-      const whatsappBtn = document.getElementById('whatsappBtn');
-      
-      if (currentContact.email) {
-        emailBtn.style.display = 'flex';
-      } else {
-        emailBtn.style.display = 'none';
-      }
-      
-      if (currentContact.phone) {
-        callBtn.style.display = 'flex';
-        smsBtn.style.display = 'flex';
-        whatsappBtn.style.display = 'flex';
-      } else {
-        callBtn.style.display = 'none';
-        smsBtn.style.display = 'none';
-        whatsappBtn.style.display = 'none';
-      }
-      
-      // Show overlay
-      document.getElementById('contactOverlay').classList.add('active');
-      document.body.style.overflow = 'hidden';
+    const vacancyRef = doc(window.db, collectionName, vacancyId);
+    const vacancySnap = await getDoc(vacancyRef);
+
+    if (!vacancySnap.exists()) {
+      alert('Vacancy not found.');
+      return;
     }
+
+    const vacancy = vacancySnap.data();
+    console.log('Vacancy loaded for contact:', vacancy);
+
+    let managerName =
+      vacancy.userName ||
+      vacancy.managerName ||
+      vacancy.contactName ||
+      vacancy.createdByName ||
+      vacancy.name ||
+      'Manager';
+
+    let managerPhone =
+      vacancy.phone ||
+      vacancy.managerPhone ||
+      vacancy.contactPhone ||
+      '';
+
+    let managerEmail =
+      vacancy.email ||
+      vacancy.managerEmail ||
+      vacancy.contactEmail ||
+      '';
+
+    const managerId =
+      vacancy.managerId ||
+      vacancy.userId ||
+      vacancy.uid ||
+      vacancy.createdBy ||
+      '';
+
+    if (managerId && (managerName === 'Manager' || !managerPhone || !managerEmail)) {
+      const managerProfileRef = doc(window.db, 'managerProfiles', managerId);
+      const managerProfileSnap = await getDoc(managerProfileRef);
+
+      if (managerProfileSnap.exists()) {
+        const managerData = managerProfileSnap.data();
+        console.log('Manager profile found:', managerData);
+
+        if (managerName === 'Manager') {
+          managerName =
+            managerData.userName ||
+            managerData.managerName ||
+            managerData.name ||
+            managerData.fullName ||
+            'Manager';
+        }
+
+        managerPhone =
+          managerPhone ||
+          managerData.phone ||
+          managerData.mobile ||
+          managerData.contactNumber ||
+          '';
+
+        managerEmail =
+          managerEmail ||
+          managerData.email ||
+          managerData.managerEmail ||
+          '';
+      } else {
+        console.warn('No managerProfiles doc found for id:', managerId);
+      }
+    }
+
+    currentContact.email = managerEmail;
+    currentContact.phone = managerPhone;
+    currentContact.name = managerName;
+    currentContact.teamName =
+      vacancy.club ||
+      vacancy.teamName ||
+      vacancy.clubName ||
+      'Team';
+    currentContact.position =
+      vacancy.position ||
+      vacancy.managerRole ||
+      vacancy.role ||
+      'position';
+
+    console.log('Resolved contact details:', currentContact);
+
+    document.getElementById('contactManagerName').textContent = currentContact.name;
+    document.getElementById('contactTeamName').textContent = currentContact.teamName;
+
+    const emailBtn = document.getElementById('emailBtn');
+    const callBtn = document.getElementById('callBtn');
+    const smsBtn = document.getElementById('smsBtn');
+    const whatsappBtn = document.getElementById('whatsappBtn');
+
+    emailBtn.style.display = currentContact.email ? 'flex' : 'none';
+
+    if (currentContact.phone) {
+      callBtn.style.display = 'flex';
+      smsBtn.style.display = 'flex';
+      whatsappBtn.style.display = 'flex';
+    } else {
+      callBtn.style.display = 'none';
+      smsBtn.style.display = 'none';
+      whatsappBtn.style.display = 'none';
+    }
+
+    document.getElementById('contactOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
   } catch (error) {
     console.error('Error getting contact info:', error);
     alert('Unable to get contact information. Please try again.');
