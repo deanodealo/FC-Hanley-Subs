@@ -551,20 +551,19 @@
       <div class="filter-item">
         <label for="playerAgeFilter">Age Group</label>
         <select id="playerAgeFilter" onchange="filterPlayers()">
-          <option value="">All Ages</option>
-          <option value="U7">Under 7</option>
-          <option value="U8">Under 8</option>
-          <option value="U9">Under 9</option>
-          <option value="U10">Under 10</option>
-          <option value="U11">Under 11</option>
-          <option value="U12">Under 12</option>
-          <option value="U13">Under 13</option>
-          <option value="U14">Under 14</option>
-          <option value="U15">Under 15</option>
-          <option value="U16">Under 16</option>
-          <option value="U17">Under 17</option>
-          <option value="U18">Under 18</option>
-          <option value="Adult">Adult</option>
+          <option value="Under 7">Under 7</option>
+<option value="Under 8">Under 8</option>
+<option value="Under 9">Under 9</option>
+<option value="Under 10">Under 10</option>
+<option value="Under 11">Under 11</option>
+<option value="Under 12">Under 12</option>
+<option value="Under 13">Under 13</option>
+<option value="Under 14">Under 14</option>
+<option value="Under 15">Under 15</option>
+<option value="Under 16">Under 16</option>
+<option value="Under 17">Under 17</option>
+<option value="Under 18">Under 18</option>
+<option value="Adult">Adult</option>
         </select>
       </div>
 
@@ -626,20 +625,19 @@
       <div class="filter-item">
         <label for="coachAgeFilter">Age Group</label>
         <select id="coachAgeFilter" onchange="filterCoaches()">
-          <option value="">All Levels</option>
-          <option value="U7">Under 7</option>
-          <option value="U8">Under 8</option>
-          <option value="U9">Under 9</option>
-          <option value="U10">Under 10</option>
-          <option value="U11">Under 11</option>
-          <option value="U12">Under 12</option>
-          <option value="U13">Under 13</option>
-          <option value="U14">Under 14</option>
-          <option value="U15">Under 15</option>
-          <option value="U16">Under 16</option>
-          <option value="U17">Under 17</option>
-          <option value="U18">Under 18</option>
-          <option value="Adult">Adult</option>
+          <option value="Under 7">Under 7</option>
+<option value="Under 8">Under 8</option>
+<option value="Under 9">Under 9</option>
+<option value="Under 10">Under 10</option>
+<option value="Under 11">Under 11</option>
+<option value="Under 12">Under 12</option>
+<option value="Under 13">Under 13</option>
+<option value="Under 14">Under 14</option>
+<option value="Under 15">Under 15</option>
+<option value="Under 16">Under 16</option>
+<option value="Under 17">Under 17</option>
+<option value="Under 18">Under 18</option>
+<option value="Adult">Adult</option>
         </select>
       </div>
 
@@ -993,11 +991,11 @@ function displayCoachVacancies(vacancies) {
                class="club-logo"
                onerror="this.onerror=function(){this.onerror=null; this.src='images/default-club-logo.png';}; this.src='images/teamLogos/${teamSlug}.jpg';">
         </div>
-        <h3>${vacancy.position || 'Coach/Manager Position'}</h3>
+        <h3>${vacancy.position || vacancy.managerRole || vacancy.role || 'Coach/Manager Position'}</h3>
         <div class="team-name">${teamName}</div>
         <div class="vacancy-details">
           <p><span class="icon">📅</span>${vacancy.day || 'Day not specified'}</p>
-          <p><span class="icon">👤</span>${vacancy.postedBy || vacancy.managerName || 'Contact'}</p>
+          <p><span class="icon">👤</span>${vacancy.position || vacancy.managerRole || vacancy.role || 'Position not specified'}</p>
           ${vacancy.teamLevel || vacancy.age ? `<p><span class="icon">⚽</span>${vacancy.teamLevel || vacancy.age}</p>` : ''}
           ${vacancy.experience ? `<p><span class="icon">📊</span>Experience: ${vacancy.experience}</p>` : ''}
           ${vacancy.description ? `<p><span class="icon">ℹ️</span>${vacancy.description}</p>` : ''}
@@ -1013,7 +1011,7 @@ function displayCoachVacancies(vacancies) {
 // Filter Player Vacancies
 function filterPlayers() {
   const teamFilter = document.getElementById('playerTeamFilter').value;
-  const dayFilter = document.getElementById('playerDayFilter').value;
+  const dayFilter = document.getElementById('playerLocationFilter').value;
   const ageFilter = document.getElementById('playerAgeFilter').value;
   const positionFilter = document.getElementById('playerPositionFilter').value;
   const experienceFilter = document.getElementById('playerExperienceFilter').value;
@@ -1034,20 +1032,22 @@ function filterPlayers() {
 // Filter Coach Vacancies
 function filterCoaches() {
   const teamFilter = document.getElementById('coachTeamFilter').value;
-  const dayFilter = document.getElementById('coachDayFilter').value;
+  const dayFilter = document.getElementById('coachLocationFilter').value;
   const ageFilter = document.getElementById('coachAgeFilter').value;
   const positionFilter = document.getElementById('coachPositionFilter').value;
   const experienceFilter = document.getElementById('coachExperienceFilter').value;
 
   const filtered = allCoachVacancies.filter(vacancy => {
     const teamName = vacancy.teamName || vacancy.clubName || vacancy.club;
+    const vacancyPosition = vacancy.position || vacancy.managerRole || vacancy.role || '';
+
     const matchesTeam = !teamFilter || teamName === teamFilter;
     const matchesDay = !dayFilter || vacancy.day === dayFilter;
     const matchesAge = !ageFilter || vacancy.teamLevel === ageFilter || vacancy.age === ageFilter;
-    const matchesPosition = !positionFilter || vacancy.position === positionFilter;
+    const matchesPosition = !positionFilter || vacancyPosition === positionFilter;
     const matchesExperience = !experienceFilter || vacancy.experience === experienceFilter;
 
-    return matchesTeam && matchesLocation && matchesAge && matchesPosition && matchesExperience;
+    return matchesTeam && matchesDay && matchesAge && matchesPosition && matchesExperience;
   });
 
   displayCoachVacancies(filtered);
@@ -1102,7 +1102,7 @@ async function contactManager(vacancyId, type) {
       currentContact.phone = managerPhone;
       currentContact.name = managerName;
       currentContact.teamName = vacancy.club || vacancy.teamName || 'Team';
-      currentContact.position = vacancy.position || 'position';
+      currentContact.position = vacancy.position || vacancy.managerRole || vacancy.role || 'position';
       
       console.log('Contact details:', currentContact);
       

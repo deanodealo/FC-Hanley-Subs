@@ -9,7 +9,12 @@ exports.createSquarePayment = onRequest(
   {
     region: "europe-west1",
     secrets: [squareAccessToken],
-    cors: true
+    cors: {
+      origin: "*", // Allow all origins (use your domain in production for security)
+      methods: ["GET", "POST", "OPTIONS"],
+      allowedHeaders: ["Content-Type", "Authorization"],
+      maxAgeSeconds: 3600
+    }
   },
   async (req, res) => {
     // Basic method guard

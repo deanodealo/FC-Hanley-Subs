@@ -664,7 +664,7 @@ function displayPlayerVacancies(vacancies) {
         <div class="team-name">${clubName}</div>
         <div class="vacancy-details">
           <p><span class="icon">📅</span>${vacancy.day || 'Day not specified'}</p>
-          <p><span class="icon">👤</span>${vacancy.managerName || 'Manager'}</p>
+          <p><span class="icon">👤</span>${vacancy.position || 'Position not specified'}</p>
           ${vacancy.age ? `<p><span class="icon">🎂</span>${vacancy.age}</p>` : ''}
           ${vacancy.experience ? `<p><span class="icon">📊</span>${vacancy.experience}</p>` : ''}
           ${vacancy.description ? `<p><span class="icon">ℹ️</span>${vacancy.description}</p>` : ''}

@@ -518,24 +518,23 @@
       // Get role-specific data
       let roleData = {};
       
-      if (userRole === 'manager') {
-        const teamName = document.getElementById('managerTeamName').value;
-        const teamLevel = document.getElementById('teamLevel').value;
-        const managerRole = document.getElementById('managerRole').value;
-        const qualifications = document.getElementById('qualifications').value.trim();
-        
-        if (!teamName || !teamLevel || !managerRole) {
-          showMessage("Please fill in all required manager fields!", "error");
-          return;
-        }
-        
-        roleData = {
-          teamName,
-          teamLevel,
-          managerRole,
-          qualifications
-        };
-      } else if (userRole === 'club_rep') {
+if (userRole === 'manager') {
+  const teamName = document.getElementById('managerTeamName').value;
+  const teamLevel = document.getElementById('teamLevel').value;
+  const managerRole = document.getElementById('managerRole').value;
+
+  if (!teamName || !teamLevel || !managerRole) {
+    showMessage("Please fill in all required manager fields!", "error");
+    return;
+  }
+
+  roleData = {
+    teamName,
+    teamLevel,
+    managerRole
+  };
+}
+       else if (userRole === 'club_rep') {
         const clubName = document.getElementById('clubName').value;
         const clubPosition = document.getElementById('clubPosition').value;
         const clubLocation = document.getElementById('clubLocation').value.trim();

@@ -21,13 +21,13 @@ let latestFinalBooking = null;
 
 // 💳 Square config
 // Replace these with your Square SANDBOX values first
-const SQUARE_APP_ID = "sq0idb-UYZ4vS_qriKXRXKP5uNkEQ";
+const SQUARE_APP_ID = "sandbox-sq0idb-UYZ4vS_qriKXRXKP5uNkEQ";
 const SQUARE_LOCATION_ID = "LMMEC838AX8QP";
 
 // Replace with your Firebase Function URL later
 // Example:
 // https://europe-west1-fchanley-8d910.cloudfunctions.net/createSquarePayment
-const SQUARE_PAYMENT_ENDPOINT = "https://console.firebase.google.com/project/fchanley-8d910/overview";
+const SQUARE_PAYMENT_ENDPOINT = "https://createsquarepayment-bxm44u2hxq-ew.a.run.app";
 
 // 💳 Square runtime state
 let squarePayments = null;
@@ -683,6 +683,12 @@ async function handleProceedToPayment() {
         `Booking saved with reference <strong>${savedBookingId}</strong>. Enter card details and click <strong>Pay Now</strong> to complete payment.`,
         false
       );
+
+      if (proceedBtn) {
+        proceedBtn.textContent = "Pay Now";
+        proceedBtn.disabled = false;
+        proceedBtn.classList.remove("processing");
+      }
 
       return;
     }

@@ -11,7 +11,25 @@
         "*.local"
       ],
       "predeploy": []
-      
     }
-  ]
+  ],
+  "hosting": {
+    "public": "docs",
+    "headers": [
+      {
+        "source": "**/*.html",
+        "headers": [
+          {
+            "key": "Content-Security-Policy",
+            "value": "font-src https://square-fonts-production-f.squarecdn.com https://d1g145x70srn7h.cloudfront.net/fonts/sqmarket/ https://cash-f.squarecdn.com;"
+          }
+        ]
+      }
+    ],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
 }
