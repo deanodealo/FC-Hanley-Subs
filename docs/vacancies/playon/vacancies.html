@@ -951,7 +951,7 @@ return `
         <div class="team-name">${clubName}</div>
         <div class="vacancy-details">
           <p><span class="icon">📅</span>${vacancy.day || 'Day not specified'}</p>
-          <p><span class="icon">👤</span>${vacancy.managerName || 'Manager'}</p>
+          <p><span class="icon">👤</span>${vacancy.position || 'Position not specified'}</p>
           ${vacancy.age ? `<p><span class="icon">🎂</span>${vacancy.age}</p>` : ''}
           ${vacancy.experience ? `<p><span class="icon">📊</span>${vacancy.experience}</p>` : ''}
           ${vacancy.description ? `<p><span class="icon">ℹ️</span>${vacancy.description}</p>` : ''}
@@ -979,6 +979,9 @@ function displayCoachVacancies(vacancies) {
   }
 
   container.innerHTML = vacancies.map(vacancy => {
+    // ✅ LOG HERE (inside map)
+    console.log('Coach vacancy data:', vacancy);
+
     const teamName = vacancy.teamName || vacancy.clubName || vacancy.club || 'Club/Team Name';
     const teamSlug = teamName.toLowerCase().replace(/\s+/g, '-');
     const logoUrl = vacancy.clubLogo || `images/teamLogos/${teamSlug}.png`;
