@@ -1775,3 +1775,10 @@ body {
 .tournament-home-ad .btn:hover {
   background-color: #e6b800;
 }
+.disabled-btn {
+  background-color: #888 !important;
+  color: #eee !important;
+  cursor: not-allowed;
+  pointer-events: none; /* stops clicking */
+  opacity: 0.8;
+}
