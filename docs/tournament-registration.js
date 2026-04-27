@@ -14,6 +14,16 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
 const PRICE = "30.00";
+const MAX_TEAMS_PER_GROUP = 12;
+
+async function isAgeGroupFull(ageGroup) {
+  const snapshot = await db
+    .collection("tournamentRegistrations")
+    .where("ageGroup", "==", ageGroup)
+    .get();
+
+  return snapshot.size >= MAX_TEAMS_PER_GROUP;
+}
 
 const ageGroupInfo = {
   U7: {
@@ -75,7 +85,7 @@ function getFormData() {
     ageGroup,
     tournamentDate: selectedInfo ? selectedInfo.date : "",
     session: selectedInfo ? selectedInfo.session : "",
-    format: selectedInfo ? selectedInfo.format : "",
+    format: selectedInfo ? selectedInfo.format : ""
   };
 }
 
@@ -96,7 +106,7 @@ function validateForm() {
   return true;
 }
 
-ageGroupSelect.addEventListener("change", () => {
+ageGroupSelect.addEventListener("change", async () => {
   const selected = ageGroupSelect.value;
   const info = ageGroupInfo[selected];
 
@@ -106,11 +116,22 @@ ageGroupSelect.addEventListener("change", () => {
     return;
   }
 
+  const snapshot = await db
+    .collection("tournamentRegistrations")
+    .where("ageGroup", "==", selected)
+    .get();
+
+  const count = snapshot.size;
+  const isFull = count >= MAX_TEAMS_PER_GROUP;
+
   ageGroupDetails.classList.remove("hidden");
+
   ageGroupDetails.innerHTML = `
     <p><strong>Date:</strong> ${info.date}</p>
     <p><strong>Session:</strong> ${info.session}</p>
     <p><strong>Format:</strong> ${info.format}</p>
+    <p><strong>Teams:</strong> ${count}/${MAX_TEAMS_PER_GROUP}</p>
+    ${isFull ? `<p style="color:red;"><strong>THIS AGE GROUP IS FULL</strong></p>` : ""}
   `;
 });
 
@@ -122,9 +143,20 @@ paypal.Buttons({
     label: "paypal"
   },
 
-  onClick: function () {
-    return validateForm();
-  },
+ onClick: async function () {
+  if (!validateForm()) return false;
+
+  const ageGroup = document.getElementById("ageGroup").value;
+
+  const isFull = await isAgeGroupFull(ageGroup);
+
+  if (isFull) {
+    showMessage("This age group is now FULL. Please choose another.", "error");
+    return false;
+  }
+
+  return true;
+},
 
   createOrder: function (data, actions) {
     return actions.order.create({
