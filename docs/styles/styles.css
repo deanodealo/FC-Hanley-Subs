@@ -1744,3 +1744,34 @@ body {
   transform: scale(1.08);
   box-shadow: 0 10px 20px rgba(0,0,0,0.25);
 }
+.tournament-home-ad {
+  background: rgba(0, 64, 128, 0.95);
+  border: 3px solid #ffcc00;
+}
+
+.tournament-home-ad h1 {
+  font-size: 2rem;
+  color: #ffffff;
+  margin-bottom: 15px;
+}
+
+.tournament-home-ad p {
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.tournament-home-ad .btn {
+  display: inline-block;
+  margin-top: 15px;
+  background-color: #ffcc00;
+  color: #003366;
+  padding: 14px 24px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.tournament-home-ad .btn:hover {
+  background-color: #e6b800;
+}

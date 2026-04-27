@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FC Hanley Tournament Registration</title>
+
+  <link rel="stylesheet" href="styles/styles.css" />
+  <link rel="stylesheet" href="styles/tournament-registration.css" />
+  <link rel="icon" href="images/hanleybadge2.png" type="image/png" sizes="48x48" />
+
+  <script src="https://www.paypal.com/sdk/js?client-id=ATo-jYYz-hIvPEw9oZazyfSwrM-kegXEdWXAs8gKufKbw65T1QehgjRDImeVCMvn9Hu2UkFlp00vlM9P&currency=GBP"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+</head>
+
+<body class="page-about">
+
+  <header class="club-header">
+    <a href="index.html">
+      <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge overlapping-logo">
+    </a>
+    <div class="header-text">
+      <h1>FC Hanley Football Club</h1>
+      <p>Passion. Pride. Community.</p>
+    </div>
+  </header>
+
+  <main class="tournament-page">
+    <section class="tournament-card">
+      <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="tournament-logo">
+
+      <h1>The Will Brazier Festival of Football</h1>
+      <h2>Team Registration</h2>
+
+      <p class="intro">
+        Please complete the form below. Registration is only confirmed once the £30 payment has been completed.
+      </p>
+
+      <form id="tournamentForm">
+        <label for="managerName">Manager / Contact Name</label>
+        <input type="text" id="managerName" required>
+
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required>
+
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" required>
+
+        <label for="teamName">Team Name</label>
+        <input type="text" id="teamName" required>
+
+        <label for="ageGroup">Age Group</label>
+        <select id="ageGroup" required>
+          <option value="">Please select</option>
+          <option value="U7">U7 - Saturday 4th July PM - 5v5</option>
+          <option value="U8">U8 - Sunday 5th July AM - 5v5</option>
+          <option value="U9">U9 - Saturday 4th July AM - 7v7</option>
+          <option value="U10">U10 - Sunday 5th July PM - 7v7</option>
+          <option value="U11">U11 - Sunday 5th July AM - 9v9</option>
+          <option value="U12">U12 - Saturday 4th July AM - 9v9</option>
+          <option value="U13">U13 - Saturday 4th July PM - 11v11</option>
+        </select>
+
+<p class="intro">
+        FCHanley reserves the right to remove any team deemed not to be grass roots
+      </p>
+
+
+        <div id="ageGroupDetails" class="age-details hidden"></div>
+
+
+        <div class="cost-box">
+          <strong>Total to pay: £30</strong>
+        </div>
+      </form>
+
+      <div id="formMessage" class="form-message"></div>
+
+      <div id="paypal-button-container"></div>
+
+      <a href="index.html" class="back-link">Back to FC Hanley</a>
+    </section>
+  </main>
+
+  <script src="tournament-registration.js"></script>
+</body>
+</html>
