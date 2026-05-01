@@ -69,6 +69,7 @@ function renderDashboard() {
 
 function renderAgeBreakdown() {
   const ageGroups = ["U7", "U8", "U9", "U10", "U11", "U12", "U13"];
+  const MAX_TEAMS = 12;
 
   ageBreakdown.innerHTML = ageGroups.map(age => {
     const count = allRegistrations.filter(reg => reg.ageGroup === age).length;
@@ -76,11 +77,25 @@ function renderAgeBreakdown() {
       .filter(reg => reg.ageGroup === age)
       .reduce((total, reg) => total + Number(reg.amountPaid || 0), 0);
 
+    const percentage = Math.min((count / MAX_TEAMS) * 100, 100);
+    const isFull = count >= MAX_TEAMS;
+    const isNearlyFull = count >= MAX_TEAMS * 0.75;
+
+    const barColour = isFull ? '#c0392b' : isNearlyFull ? '#e67e22' : '#27ae60';
+
     return `
       <div class="age-box">
-        <div>${age}</div>
-        <div>${count} teams</div>
-        <div>£${income}</div>
+        <div class="age-box-header">
+          <span>${age}</span>
+          ${isFull ? '<span class="full-badge">FULL</span>' : ''}
+        </div>
+        <div class="capacity-bar-track">
+          <div class="capacity-bar-fill" style="width:${percentage}%; background:${barColour};"></div>
+        </div>
+        <div class="age-box-stats">
+          <span>${count}/${MAX_TEAMS} teams</span>
+          <span>£${income}</span>
+        </div>
       </div>
     `;
   }).join("");
@@ -101,7 +116,7 @@ function renderRegistrations(registrations) {
 
     return `
       <div class="registration-card">
-        <h3>${escapeHtml(reg.teamName || "No team name")}</h3>
+        <h3>${escapeHtml(reg.teamName || "No team name")} <span class="age-badge">${escapeHtml(reg.ageGroup || "")}</span></h3>
 
         <p><strong>Manager:</strong> ${escapeHtml(reg.managerName || "")}</p>
         <p><strong>Email:</strong> ${escapeHtml(reg.email || "")}</p>
