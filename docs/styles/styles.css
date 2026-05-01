@@ -1162,6 +1162,9 @@ input[type="date"]:valid::before {
 }
 
 
+/* ============================= */
+/*      Burger Menu             */
+/* ============================= */
 .burger-menu {
   position: fixed;
   top: 1rem;
@@ -1170,50 +1173,84 @@ input[type="date"]:valid::before {
 }
 
 #burger-toggle {
-  font-size: 2rem;
-  background: none;
-  border: none;
+  font-size: 1.6rem;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,0.15);
   color: white;
   cursor: pointer;
   z-index: 1002;
-  background-color: rgba(0, 0, 0, 0.05); /* soft gray background */
-  padding: 0.5rem;
-  border-radius: 6px;
-  filter: drop-shadow(0 0 2px black); /* subtle shadow for contrast */
-  transition: background-color 0.3s ease;
+  padding: 0.45rem 0.7rem;
+  border-radius: 8px;
+  transition: background 0.2s ease, transform 0.2s ease;
+  line-height: 1;
+}
+
+#burger-toggle:hover {
+  background: rgba(0, 51, 102, 0.8);
+  transform: scale(1.08);
 }
 
 .burger-dropdown {
   position: fixed;
   top: 0;
-  left: -250px; /* Hidden off-screen initially */
-  width: 250px;
+  left: -300px;
+  width: 280px;
   height: 100%;
-  background: linear-gradient(180deg, #003366, #001a33); /* gradient background */
-  border-right: 1px solid #ccc;
-  padding-top: 4rem;
+  background: linear-gradient(160deg, #001f4d 0%, #003080 60%, #00204d 100%);
+  backdrop-filter: blur(12px);
+  border-right: 1px solid rgba(255,255,255,0.08);
+  padding: 0;
   display: flex;
   flex-direction: column;
-  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.25);
-  border-radius: 0 10px 10px 0;
-  transition: left 0.3s ease-in-out;
+  box-shadow: 6px 0 30px rgba(0,0,0,0.5);
+  border-radius: 0 16px 16px 0;
+  transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
+  overflow: hidden;
 }
 
 .burger-dropdown.open {
   left: 0;
 }
 
+/* Badge header at top of menu */
+.burger-dropdown::before {
+  content: "";
+  display: block;
+  height: 90px;
+  background: url('https://fchanley.com/images/HanleyBadge.png') no-repeat center center;
+  background-size: contain;
+  margin: 20px auto 8px;
+  width: 70px;
+  opacity: 0.95;
+  flex-shrink: 0;
+}
+
+/* Divider line below badge */
+.burger-dropdown::after {
+  content: "";
+  display: block;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+  margin: 0 20px 10px;
+  flex-shrink: 0;
+}
+
 .burger-dropdown a {
-  color: white;
+  color: rgba(255,255,255,0.85);
   text-decoration: none;
-  font-size: 1.1rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  padding: 1rem 1.5rem;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 0.75rem 1.5rem;
   opacity: 0;
-  transform: translateX(-10px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transform: translateX(-16px);
+  transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s ease, color 0.2s ease, border-left 0.2s ease;
+  border-left: 3px solid transparent;
+  margin: 1px 10px;
+  border-radius: 8px;
 }
 
 .burger-dropdown.open a {
@@ -1221,47 +1258,74 @@ input[type="date"]:valid::before {
   transform: translateX(0);
 }
 
-/* Staggered animation delays */
-.burger-dropdown.open a:nth-child(2) { transition-delay: 0.05s; }
-.burger-dropdown.open a:nth-child(3) { transition-delay: 0.10s; }
-.burger-dropdown.open a:nth-child(4) { transition-delay: 0.15s; }
-.burger-dropdown.open a:nth-child(5) { transition-delay: 0.20s; }
+/* Staggered animation for all links */
+.burger-dropdown.open a:nth-child(1)  { transition-delay: 0.00s; }
+.burger-dropdown.open a:nth-child(2)  { transition-delay: 0.04s; }
+.burger-dropdown.open a:nth-child(3)  { transition-delay: 0.08s; }
+.burger-dropdown.open a:nth-child(4)  { transition-delay: 0.12s; }
+.burger-dropdown.open a:nth-child(5)  { transition-delay: 0.16s; }
+.burger-dropdown.open a:nth-child(6)  { transition-delay: 0.20s; }
+.burger-dropdown.open a:nth-child(7)  { transition-delay: 0.24s; }
+.burger-dropdown.open a:nth-child(8)  { transition-delay: 0.28s; }
+.burger-dropdown.open a:nth-child(9)  { transition-delay: 0.32s; }
+.burger-dropdown.open a:nth-child(10) { transition-delay: 0.36s; }
+.burger-dropdown.open a:nth-child(11) { transition-delay: 0.40s; }
+.burger-dropdown.open a:nth-child(12) { transition-delay: 0.44s; }
 
 .burger-dropdown a:hover {
-  background-color: #0055aa;
-  transform: scale(1.07);
-  border-radius: 6px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border-left: 3px solid #7ec8ff;
+  padding-left: 1.8rem;
+}
+
+/* Highlight the tournament link */
+.burger-dropdown a[href*="FCHanleytournament"] {
+  color: #ffd700;
+  border-left: 3px solid #ffd700;
+  margin-top: 8px;
+}
+
+.burger-dropdown a[href*="FCHanleytournament"]:hover {
+  background: rgba(255, 215, 0, 0.1);
+  border-left: 3px solid #ffd700;
+  color: #ffe94d;
 }
 
 #burger-close {
   position: absolute;
-  top: 1rem;
+  top: 0.8rem;
   right: 1rem;
-  font-size: 2.5rem;
-  color: #ddd;
+  font-size: 1.8rem;
+  color: rgba(255,255,255,0.5);
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease, transform 0.2s ease;
+  line-height: 1;
+  z-index: 10;
 }
 
 #burger-close:hover {
   color: white;
+  transform: rotate(90deg);
 }
 
-/* Overlay background to dim page when menu is open */
+/* Overlay */
 .burger-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5); /* semi-transparent black */
-  z-index: 999; /* below burger menu */
-  display: none; /* hidden by default */
+  background: rgba(0, 0, 0, 0);
+  z-index: 999;
+  display: none;
+  transition: background 0.35s ease;
+  cursor: pointer;
 }
 
 .burger-overlay.show {
   display: block;
+  background: rgba(0, 0, 0, 0.55);
 }
 
 .hidden {
