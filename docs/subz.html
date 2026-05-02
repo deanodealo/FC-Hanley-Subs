@@ -41,29 +41,58 @@
     }
   </style>
   <link rel="canonical" href="https://fchanley.com/subz.html" />
+
+  <!-- Animated burger styles -->
+  <style>
+    #burger-toggle {
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      width: 30px;
+      height: 22px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: none;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      padding: 0;
+      z-index: 2000;
+    }
+    #burger-toggle span {
+      display: block;
+      height: 3px;
+      width: 100%;
+      background: #fff;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    #burger-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    #burger-toggle.open span:nth-child(2) { opacity: 0; }
+    #burger-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+    .burger-dropdown {
+      position: fixed !important;
+      top: var(--header-height, 90px) !important;
+      left: 0 !important;
+      z-index: 1900 !important;
+      transform: translateX(-100%) !important;
+      transition: transform 0.3s ease !important;
+    }
+    .burger-dropdown.open { transform: translateX(0) !important; }
+  </style>
 </head>
 <body>
 
-<!-- Burger Menu -->
-<div class="burger-menu">
-  <button id="burger-toggle" aria-label="Toggle menu">☰</button>
-
-  <div id="burger-dropdown" class="burger-dropdown">
-    <a href="#" class="close-btn" id="burger-close">&times;</a>
-    <a href="gallery.html">Coaching School</a>
-    <a href="news.html">News & Events</a>
-    <a href="holidaycamps.html">Holiday Camps</a>
-    <a href="fixtures.html">Fixtures</a>
-    <a href="toptier.html">Top Tier Trophies</a>
-    <a href="subz.html">Subz</a>
-    <a href="guestbook.html">Feedback</a>
-    <a href="shop.html">Shop</a>
-    <a href="vacancies/playon/index.html">Find a Team</a>
-  </div>
-</div>
-
 <!-- Burger Menu Overlay -->
 <div class="burger-overlay" id="burger-overlay"></div>
+
+<!-- Burger toggle: fixed top-left, sits over the header -->
+<button id="burger-toggle" aria-label="Toggle menu">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
 
 <!--Header-->
 <header class="club-header">
@@ -75,6 +104,21 @@
     <p>Passion. Pride. Community.</p>
   </div>
 </header>
+
+<!-- Dropdown: slides in from left, below the header -->
+<div id="burger-dropdown" class="burger-dropdown">
+  <a href="gallery.html">Coaching School</a>
+  <a href="news.html">News & Events</a>
+  <a href="holidaycamps.html">Holiday Camps</a>
+  <a href="fixtures.html">Fixtures</a>
+  <a href="toptier.html">Top Tier Trophies</a>
+  <a href="guestbook.html">Feedback</a>
+  <a href="shop.html">Shop</a>
+  <a href="subz.html">Subz</a>
+  <a href="vacancies/playon/index.html">Find a Team</a>
+  <!--<a href="https://deanodealo.github.io/FCHanleytournament/" target="_blank">🏆 Will Brazier Tournament</a>-->
+  <!--<a href="tournament-registration.html">🏆Tournament Registration</a>-->
+</div>
 
 
   <header class="hero">
@@ -180,22 +224,42 @@
   document.addEventListener("DOMContentLoaded", () => {
     const burgerToggle = document.getElementById("burger-toggle");
     const burgerDropdown = document.getElementById("burger-dropdown");
-    const burgerClose = document.getElementById("burger-close");
     const overlay = document.getElementById("burger-overlay");
+    const header = document.querySelector(".club-header");
+
+    function setHeaderHeight() {
+      const textBlock = document.querySelector(".header-text");
+      const bottom = (textBlock || header).getBoundingClientRect().bottom;
+      document.documentElement.style.setProperty("--header-height", bottom + "px");
+    }
+    setHeaderHeight();
+    window.addEventListener("resize", setHeaderHeight);
 
     function openMenu() {
       burgerDropdown.classList.add("open");
       overlay.classList.add("show");
+      burgerToggle.classList.add("open");
     }
 
     function closeMenu() {
       burgerDropdown.classList.remove("open");
       overlay.classList.remove("show");
+      burgerToggle.classList.remove("open");
     }
 
-    burgerToggle.addEventListener("click", openMenu);
-    burgerClose.addEventListener("click", closeMenu);
+    burgerToggle.addEventListener("click", () => {
+      if (burgerDropdown.classList.contains("open")) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
+    });
+
     overlay.addEventListener("click", closeMenu);
+
+    burgerDropdown.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", closeMenu);
+    });
   });
 </script>
 
