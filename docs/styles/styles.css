@@ -1112,6 +1112,16 @@ input[type="date"]:valid::before {
   border-radius: 8px;
   transition: background 0.2s ease, transform 0.2s ease;
   line-height: 1;
+  outline: none;
+-webkit-tap-highlight-color: transparent;
+}
+
+#burger-toggle:focus,
+#burger-toggle:active,
+#burger-toggle:focus-visible {
+  outline: none;
+  background: none;
+  box-shadow: none;
 }
 
 #burger-toggle:hover {
