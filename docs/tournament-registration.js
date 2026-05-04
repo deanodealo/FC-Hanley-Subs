@@ -149,15 +149,8 @@ async function initSquare() {
 
   try {
     const payments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
-
-    cardNumber     = await payments.cardNumber();
-    expirationDate = await payments.expirationDate();
-    cvv            = await payments.cvv();
-
-    await cardNumber.attach("#card-number-container");
-    await expirationDate.attach("#expiration-date-container");
-    await cvv.attach("#cvv-container");
-
+    card = await payments.card();
+    await card.attach("#card-container");
   } catch (err) {
     console.error("Square init error:", err);
     showMessage("Payment system could not be initialised. Please refresh.", "error");
