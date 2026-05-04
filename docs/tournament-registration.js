@@ -147,9 +147,8 @@ async function initSquare() {
 
   try {
     const payments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
-    card = await payments.card({
-  postalCode: ""
-});
+    card = await payments.card();
+    await card.configure({ postalCode: false });
     await card.attach("#card-container");
   } catch (err) {
     console.error("Square init error:", err);
