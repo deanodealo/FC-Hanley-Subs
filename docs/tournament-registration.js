@@ -216,22 +216,23 @@ payButton.addEventListener("click", async () => {
     const registrationId  = generateIdempotencyKey();
     const idempotencyKey  = generateIdempotencyKey();
 
-    const response = await fetch(CHARGE_FUNCTION_URL, {
-      method:  "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        sourceId:       verificationResult.token,
-        registrationId,
-        idempotencyKey,
-        amountMoney: {
-          amount:   PRICE * 100,  // £30 → 3000 pence
-          currency: "GBP"
-        },
-        teamName:  formData.teamName,
-        ageGroup:  formData.ageGroup,
-        buyerEmail: formData.email
-      })
-    });
+const response = await fetch(CHARGE_FUNCTION_URL, {
+  method:  "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    sourceId:          result.token,
+    verificationToken: verificationResult.token,
+    registrationId,
+    idempotencyKey,
+    amountMoney: {
+      amount:   PRICE * 100,
+      currency: "GBP"
+    },
+    teamName:  formData.teamName,
+    ageGroup:  formData.ageGroup,
+    buyerEmail: formData.email
+  })
+});
 
     const chargeResult = await response.json();
 

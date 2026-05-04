@@ -22,14 +22,15 @@ exports.createSquarePayment = onRequest(
 
       try {
         const {
-          sourceId,
-          registrationId,
-          idempotencyKey,
-          amountMoney,
-          teamName,
-          ageGroup,
-          buyerEmail
-        } = req.body || {};
+  sourceId,
+  verificationToken,
+  registrationId,
+  idempotencyKey,
+  amountMoney,
+  teamName,
+  ageGroup,
+  buyerEmail
+} = req.body || {};
 
         if (!sourceId)       return res.status(400).json({ error: "Missing sourceId" });
         if (!registrationId) return res.status(400).json({ error: "Missing registrationId" });
@@ -50,17 +51,18 @@ const client = new SquareClient({
 });
 
         const paymentResponse = await client.payments.create({
-          sourceId,
-          idempotencyKey,
-          amountMoney: {
-            amount: BigInt(amountMoney.amount),
-            currency: amountMoney.currency
-          },
-          locationId: "LH6SFF775591G",
-          referenceId: registrationId,
-          note: `FC Hanley Tournament - ${teamName || ""} (${ageGroup || ""})`,
-          buyerEmailAddress: buyerEmail || undefined
-        });
+  sourceId,
+  verificationToken,
+  idempotencyKey,
+  amountMoney: {
+    amount: BigInt(amountMoney.amount),
+    currency: amountMoney.currency
+  },
+  locationId: "YOUR_PRODUCTION_LOCATION_ID",
+  referenceId: registrationId,
+  note: `FC Hanley Tournament - ${teamName || ""} (${ageGroup || ""})`,
+  buyerEmailAddress: buyerEmail || undefined
+});
 
         const payment = paymentResponse.payment;
 
