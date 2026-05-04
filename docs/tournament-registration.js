@@ -19,8 +19,8 @@ const db = firebase.firestore();
 // Square config
 // TODO: swap to production App ID & Location ID when going live
 // -----------------------------------------------
-const SQUARE_APP_ID      = "sandbox-sq0idb-UYZ4vS_qriKXRXKP5uNkEQ";    // replace with your sandbox App ID
-const SQUARE_LOCATION_ID = "LMMEC838AX8QP";                 // your sandbox Location ID
+const SQUARE_APP_ID      = "sq0idp-J-uv2nIgAaoWq8qaITDdnA";    // replace with your sandbox App ID
+const SQUARE_LOCATION_ID = "LH6SFF775591G";                 // your sandbox Location ID
 
 // Cloud Function URL
 // TODO: confirm this matches your deployed function URL

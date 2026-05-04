@@ -44,9 +44,9 @@ exports.createSquarePayment = onRequest(
           return res.status(400).json({ error: "Invalid amountMoney payload" });
         }
 
-        const client = new SquareClient({
+const client = new SquareClient({
   token: squareAccessToken.value(),
-  environment: SquareEnvironment.Sandbox  // hardcoded for testing
+  environment: SquareEnvironment.Production
 });
 
         const paymentResponse = await client.payments.create({
