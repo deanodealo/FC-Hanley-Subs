@@ -129,7 +129,7 @@ function renderRegistrations(registrations) {
 
         <p><strong>Payment:</strong> <span class="paid">${escapeHtml(reg.paymentStatus || "")}</span></p>
         <p><strong>Amount Paid:</strong> £${Number(reg.amountPaid || 0)}</p>
-        <p><strong>PayPal Order ID:</strong> ${escapeHtml(reg.paypalOrderId || "")}</p>
+        <p><strong>Square Payment ID:</strong> ${escapeHtml(reg.squarePaymentId || "")}</p>
         <p><strong>Registered:</strong> ${createdDate}</p>
       </div>
     `;
@@ -153,7 +153,7 @@ function exportCsv() {
     "Format",
     "Amount Paid",
     "Payment Status",
-    "PayPal Order ID",
+    "Square Payment ID",
     "Registered Date"
   ];
 
@@ -173,7 +173,7 @@ function exportCsv() {
       reg.format || "",
       reg.amountPaid || "",
       reg.paymentStatus || "",
-      reg.paypalOrderId || "",
+      reg.squarePaymentId || "",
       createdDate
     ];
   });

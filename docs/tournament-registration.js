@@ -24,8 +24,7 @@ const SQUARE_LOCATION_ID = "LMMEC838AX8QP";                 // your sandbox Loca
 
 // Cloud Function URL
 // TODO: confirm this matches your deployed function URL
-const CHARGE_FUNCTION_URL =
-  "https://europe-west1-fchanley-8d910.cloudfunctions.net/createSquarePayment";
+const CHARGE_FUNCTION_URL = "https://europe-west1-fchanley-8d910.cloudfunctions.net/createSquarePayment";
 
 // -----------------------------------------------
 // Constants
@@ -148,7 +147,9 @@ async function initSquare() {
 
   try {
     const payments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
-    card = await payments.card();
+    card = await payments.card({
+  postalCode: false
+});
     await card.attach("#card-container");
   } catch (err) {
     console.error("Square init error:", err);
@@ -230,8 +231,8 @@ payButton.addEventListener("click", async () => {
 
     // 7. Success!
     showMessage(
-      "Registration complete! Payment received and your team has been registered.",
-      "success"
+      "Registration complete! Payment received and your team has been registered. You will receive a welcome pack via email once registration closes.",
+  "success"
     );
 
     form.reset();
