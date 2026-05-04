@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
     <link rel="canonical" href="https://fchanley.com/gallery.html" />
 
-  <!-- Animated burger styles -->
+<!-- Burger menu styles -->
   <style>
+    /* Burger toggle button */
     #burger-toggle {
       position: fixed;
       top: 1rem;
@@ -26,6 +27,7 @@
       padding: 0;
       z-index: 2000;
     }
+
     #burger-toggle span {
       display: block;
       height: 3px;
@@ -34,34 +36,48 @@
       border-radius: 2px;
       transition: all 0.3s ease;
     }
-    #burger-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-    #burger-toggle.open span:nth-child(2) { opacity: 0; }
-    #burger-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    /* Animate to X when open */
+    #burger-toggle.open span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+    #burger-toggle.open span:nth-child(2) {
+      opacity: 0;
+    }
+    #burger-toggle.open span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -5px);
+    }
+
+    /* Dropdown — starts from top of page, slides in from left */
     .burger-dropdown {
       position: fixed !important;
-      top: var(--header-height, 90px) !important;
+      top: 0 !important;
       left: 0 !important;
       z-index: 1900 !important;
       transform: translateX(-100%) !important;
-      transition: transform 0.3s ease !important;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
-    .burger-dropdown.open { transform: translateX(0) !important; }
+
+    .burger-dropdown.open {
+      transform: translateX(0) !important;
+    }
   </style>
+
 </head>
 <body class="page-about">
   <!-- FC Hanley Scroll Progress Bar -->
 <div id="scroll-progress-bar"></div>
 
 
-<!-- Burger Menu Overlay -->
-<div class="burger-overlay" id="burger-overlay"></div>
+  <!-- Burger Menu Overlay -->
+  <div class="burger-overlay" id="burger-overlay"></div>
 
-<!-- Burger toggle: fixed top-left, sits over the header -->
-<button id="burger-toggle" aria-label="Toggle menu">
-  <span></span>
-  <span></span>
-  <span></span>
-</button>
+  <!-- Burger toggle -->
+  <button id="burger-toggle" aria-label="Toggle menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 
 <!--Header-->
 <header class="club-header">
@@ -214,49 +230,40 @@
 </script>
 
 
-<!-- Burger Menu JS -->
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const burgerToggle = document.getElementById("burger-toggle");
-    const burgerDropdown = document.getElementById("burger-dropdown");
-    const overlay = document.getElementById("burger-overlay");
-    const header = document.querySelector(".club-header");
+  <!-- Burger Menu JS -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const burgerToggle = document.getElementById("burger-toggle");
+      const burgerDropdown = document.getElementById("burger-dropdown");
+      const overlay = document.getElementById("burger-overlay");
 
-    function setHeaderHeight() {
-      const textBlock = document.querySelector(".header-text");
-      const bottom = (textBlock || header).getBoundingClientRect().bottom;
-      document.documentElement.style.setProperty("--header-height", bottom + "px");
-    }
-    setHeaderHeight();
-    window.addEventListener("resize", setHeaderHeight);
-
-    function openMenu() {
-      burgerDropdown.classList.add("open");
-      overlay.classList.add("show");
-      burgerToggle.classList.add("open");
-    }
-
-    function closeMenu() {
-      burgerDropdown.classList.remove("open");
-      overlay.classList.remove("show");
-      burgerToggle.classList.remove("open");
-    }
-
-    burgerToggle.addEventListener("click", () => {
-      if (burgerDropdown.classList.contains("open")) {
-        closeMenu();
-      } else {
-        openMenu();
+      function openMenu() {
+        burgerDropdown.classList.add("open");
+        overlay.classList.add("show");
+        burgerToggle.classList.add("open");
       }
-    });
 
-    overlay.addEventListener("click", closeMenu);
+      function closeMenu() {
+        burgerDropdown.classList.remove("open");
+        overlay.classList.remove("show");
+        burgerToggle.classList.remove("open");
+      }
 
-    burgerDropdown.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", closeMenu);
+      burgerToggle.addEventListener("click", () => {
+        if (burgerDropdown.classList.contains("open")) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      });
+
+      overlay.addEventListener("click", closeMenu);
+
+      burgerDropdown.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", closeMenu);
+      });
     });
-  });
-</script>
+  </script>
 
 <script>
   let timeoutId;
