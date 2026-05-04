@@ -148,8 +148,8 @@ async function initSquare() {
   try {
     const payments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
     card = await payments.card();
-    await card.configure({ postalCode: false });
     await card.attach("#card-container");
+    await card.configure({ postalCode: false });
   } catch (err) {
     console.error("Square init error:", err);
     showMessage("Payment system could not be initialised. Please refresh.", "error");
