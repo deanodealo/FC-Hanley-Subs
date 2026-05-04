@@ -9,8 +9,11 @@
   <link rel="stylesheet" href="styles/tournament-registration.css" />
   <link rel="icon" href="images/hanleybadge2.png" type="image/png" sizes="48x48" />
 
-  <script src="https://www.paypal.com/sdk/js?client-id=ATo-jYYz-hIvPEw9oZazyfSwrM-kegXEdWXAs8gKufKbw65T1QehgjRDImeVCMvn9Hu2UkFlp00vlM9P&currency=GBP"></script>
+  <!-- Square Web Payments SDK (Sandbox) -->
+  <!-- TODO: Change to https://web.squarecdn.com/v1/square.js for production -->
+  <script src="https://sandbox.web.squarecdn.com/v1/square.js"></script>
 
+  <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
 </head>
@@ -63,22 +66,24 @@
           <option value="U13">U13 - Saturday 4th July PM - 11v11</option>
         </select>
 
-<p class="intro">
-        FCHanley reserves the right to remove any team deemed not to be grass roots
-      </p>
-
+        <p class="intro">
+          FC Hanley reserves the right to remove any team deemed not to be grass roots
+        </p>
 
         <div id="ageGroupDetails" class="age-details hidden"></div>
-
 
         <div class="cost-box">
           <strong>Total to pay: £30</strong>
         </div>
+
+        <!-- Square card input -->
+        <label>Card Details</label>
+        <div id="card-container"></div>
+
+        <button type="button" id="pay-button">Pay £30 &amp; Register</button>
       </form>
 
       <div id="formMessage" class="form-message"></div>
-
-      <div id="paypal-button-container"></div>
 
       <a href="index.html" class="back-link">Back to FC Hanley</a>
     </section>

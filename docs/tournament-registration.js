@@ -1,4 +1,6 @@
+// -----------------------------------------------
 // Firebase config
+// -----------------------------------------------
 const firebaseConfig = {
   apiKey: "AIzaSyDXXX-LMkY4Q0oN0M9e5wLdVhANzL8ifHs",
   authDomain: "fchanley-8d910.firebaseapp.com",
@@ -13,8 +15,81 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-const PRICE = "30.00";
+// -----------------------------------------------
+// Square config
+// TODO: swap to production App ID & Location ID when going live
+// -----------------------------------------------
+const SQUARE_APP_ID      = "sandbox-sq0idb-UYZ4vS_qriKXRXKP5uNkEQ";    // replace with your sandbox App ID
+const SQUARE_LOCATION_ID = "LMMEC838AX8QP";                 // your sandbox Location ID
+
+// Cloud Function URL
+// TODO: confirm this matches your deployed function URL
+const CHARGE_FUNCTION_URL =
+  "https://europe-west1-fchanley-8d910.cloudfunctions.net/createSquarePayment";
+
+// -----------------------------------------------
+// Constants
+// -----------------------------------------------
+const PRICE             = 30;
 const MAX_TEAMS_PER_GROUP = 12;
+
+// -----------------------------------------------
+// DOM refs
+// -----------------------------------------------
+const form           = document.getElementById("tournamentForm");
+const messageBox     = document.getElementById("formMessage");
+const ageGroupSelect = document.getElementById("ageGroup");
+const ageGroupDetails = document.getElementById("ageGroupDetails");
+const payButton      = document.getElementById("pay-button");
+
+// -----------------------------------------------
+// Age group info
+// -----------------------------------------------
+const ageGroupInfo = {
+  U7:  { date: "Saturday 4th July 2026",  session: "PM", format: "5v5"   },
+  U8:  { date: "Sunday 5th July 2026",    session: "AM", format: "5v5"   },
+  U9:  { date: "Saturday 4th July 2026",  session: "AM", format: "7v7"   },
+  U10: { date: "Sunday 5th July 2026",    session: "PM", format: "7v7"   },
+  U11: { date: "Sunday 5th July 2026",    session: "AM", format: "9v9"   },
+  U12: { date: "Saturday 4th July 2026",  session: "AM", format: "9v9"   },
+  U13: { date: "Saturday 4th July 2026",  session: "PM", format: "11v11" }
+};
+
+// -----------------------------------------------
+// Helpers
+// -----------------------------------------------
+function showMessage(text, type) {
+  messageBox.textContent = text;
+  messageBox.className = `form-message ${type}`;
+  messageBox.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function getFormData() {
+  const ageGroup    = ageGroupSelect.value;
+  const selectedInfo = ageGroupInfo[ageGroup];
+
+  return {
+    managerName:    document.getElementById("managerName").value.trim(),
+    email:          document.getElementById("email").value.trim(),
+    phone:          document.getElementById("phone").value.trim(),
+    teamName:       document.getElementById("teamName").value.trim(),
+    ageGroup,
+    tournamentDate: selectedInfo ? selectedInfo.date    : "",
+    session:        selectedInfo ? selectedInfo.session : "",
+    format:         selectedInfo ? selectedInfo.format  : ""
+  };
+}
+
+function validateForm() {
+  const data = getFormData();
+
+  if (!data.managerName || !data.email || !data.phone || !data.teamName || !data.ageGroup) {
+    showMessage("Please complete all required fields before paying.", "error");
+    return false;
+  }
+
+  return true;
+}
 
 async function isAgeGroupFull(ageGroup) {
   const snapshot = await db
@@ -25,90 +100,16 @@ async function isAgeGroupFull(ageGroup) {
   return snapshot.size >= MAX_TEAMS_PER_GROUP;
 }
 
-const ageGroupInfo = {
-  U7: {
-    date: "Saturday 4th July 2026",
-    session: "PM",
-    format: "5v5"
-  },
-  U8: {
-    date: "Sunday 5th July 2026",
-    session: "AM",
-    format: "5v5"
-  },
-  U9: {
-    date: "Saturday 4th July 2026",
-    session: "AM",
-    format: "7v7"
-  },
-  U10: {
-    date: "Sunday 5th July 2026",
-    session: "PM",
-    format: "7v7"
-  },
-  U11: {
-    date: "Sunday 5th July 2026",
-    session: "AM",
-    format: "9v9"
-  },
-  U12: {
-    date: "Saturday 4th July 2026",
-    session: "AM",
-    format: "9v9"
-  },
-  U13: {
-    date: "Saturday 4th July 2026",
-    session: "PM",
-    format: "11v11"
-  }
-};
-
-const form = document.getElementById("tournamentForm");
-const messageBox = document.getElementById("formMessage");
-const ageGroupSelect = document.getElementById("ageGroup");
-const ageGroupDetails = document.getElementById("ageGroupDetails");
-
-function showMessage(text, type) {
-  messageBox.textContent = text;
-  messageBox.className = `form-message ${type}`;
+function generateIdempotencyKey() {
+  return `${Date.now()}-${Math.random().toString(36).substring(2, 10)}`;
 }
 
-function getFormData() {
-  const ageGroup = document.getElementById("ageGroup").value;
-  const selectedInfo = ageGroupInfo[ageGroup];
-
-  return {
-    managerName: document.getElementById("managerName").value.trim(),
-    email: document.getElementById("email").value.trim(),
-    phone: document.getElementById("phone").value.trim(),
-    teamName: document.getElementById("teamName").value.trim(),
-    ageGroup,
-    tournamentDate: selectedInfo ? selectedInfo.date : "",
-    session: selectedInfo ? selectedInfo.session : "",
-    format: selectedInfo ? selectedInfo.format : ""
-  };
-}
-
-function validateForm() {
-  const data = getFormData();
-
-  if (
-    !data.managerName ||
-    !data.email ||
-    !data.phone ||
-    !data.teamName ||
-    !data.ageGroup
-  ) {
-    showMessage("Please complete all required fields before paying.", "error");
-    return false;
-  }
-
-  return true;
-}
-
+// -----------------------------------------------
+// Age group change — show details + availability
+// -----------------------------------------------
 ageGroupSelect.addEventListener("change", async () => {
   const selected = ageGroupSelect.value;
-  const info = ageGroupInfo[selected];
+  const info     = ageGroupInfo[selected];
 
   if (!info) {
     ageGroupDetails.classList.add("hidden");
@@ -121,11 +122,10 @@ ageGroupSelect.addEventListener("change", async () => {
     .where("ageGroup", "==", selected)
     .get();
 
-  const count = snapshot.size;
+  const count  = snapshot.size;
   const isFull = count >= MAX_TEAMS_PER_GROUP;
 
   ageGroupDetails.classList.remove("hidden");
-
   ageGroupDetails.innerHTML = `
     <p><strong>Date:</strong> ${info.date}</p>
     <p><strong>Session:</strong> ${info.session}</p>
@@ -135,87 +135,120 @@ ageGroupSelect.addEventListener("change", async () => {
   `;
 });
 
-paypal.Buttons({
-  style: {
-    layout: "vertical",
-    color: "gold",
-    shape: "rect",
-    label: "paypal"
-  },
+// -----------------------------------------------
+// Square — initialise card widget
+// -----------------------------------------------
+let card;
 
- onClick: async function () {
-  if (!validateForm()) return false;
+async function initSquare() {
+  if (!window.Square) {
+    showMessage("Payment system failed to load. Please refresh the page.", "error");
+    return;
+  }
 
-  const ageGroup = document.getElementById("ageGroup").value;
+  try {
+    const payments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
+    card = await payments.card();
+    await card.attach("#card-container");
+  } catch (err) {
+    console.error("Square init error:", err);
+    showMessage("Payment system could not be initialised. Please refresh.", "error");
+  }
+}
 
-  const isFull = await isAgeGroupFull(ageGroup);
+// -----------------------------------------------
+// Pay button — tokenise + charge + save
+// -----------------------------------------------
+payButton.addEventListener("click", async () => {
+
+  // 1. Validate form fields
+  if (!validateForm()) return;
+
+  // 2. Check age group availability
+  const formData = getFormData();
+  const isFull   = await isAgeGroupFull(formData.ageGroup);
 
   if (isFull) {
     showMessage("This age group is now FULL. Please choose another.", "error");
-    return false;
+    return;
   }
 
-  return true;
-},
+  // 3. Disable button while processing
+  payButton.disabled    = true;
+  payButton.textContent = "Processing...";
+  showMessage("", "");
 
-  createOrder: function (data, actions) {
-    return actions.order.create({
-      purchase_units: [
-        {
-          description: "FC Hanley Tournament Registration",
-          amount: {
-            currency_code: "GBP",
-            value: PRICE
-          }
-        }
-      ]
+  try {
+    // 4. Tokenise card details via Square SDK
+    const result = await card.tokenize();
+
+    if (result.status !== "OK") {
+      const errorMessages = result.errors
+        ? result.errors.map(e => e.message).join(", ")
+        : "Invalid card details. Please check and try again.";
+      showMessage(errorMessages, "error");
+      return;
+    }
+
+    // 5. Call Firebase Cloud Function to charge the card
+    const registrationId  = generateIdempotencyKey();
+    const idempotencyKey  = generateIdempotencyKey();
+
+    const response = await fetch(CHARGE_FUNCTION_URL, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sourceId:       result.token,
+        registrationId,
+        idempotencyKey,
+        amountMoney: {
+          amount:   PRICE * 100,  // £30 → 3000 pence
+          currency: "GBP"
+        },
+        teamName:  formData.teamName,
+        ageGroup:  formData.ageGroup,
+        buyerEmail: formData.email
+      })
     });
-  },
 
-  onApprove: function (data, actions) {
-    return actions.order.capture().then(async function (details) {
-      const registrationData = getFormData();
+    const chargeResult = await response.json();
 
-      const saveData = {
-        ...registrationData,
-        amountPaid: 30,
-        paymentStatus: "paid",
-        paypalOrderId: data.orderID,
-        paypalPayerId: data.payerID || "",
-        paypalPayerEmail: details?.payer?.email_address || "",
-        paypalName: details?.payer?.name
-          ? `${details.payer.name.given_name || ""} ${details.payer.name.surname || ""}`.trim()
-          : "",
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
+    if (!response.ok || !chargeResult.success) {
+      showMessage(chargeResult.error || "Payment failed. Please try again.", "error");
+      return;
+    }
 
-      try {
-        await db.collection("tournamentRegistrations").add(saveData);
-
-        showMessage(
-          "Registration complete. Payment received and team has been registered.",
-          "success"
-        );
-
-        form.reset();
-        ageGroupDetails.classList.add("hidden");
-        ageGroupDetails.innerHTML = "";
-      } catch (error) {
-        console.error("Firebase save error:", error);
-        showMessage(
-          "Payment was successful, but there was a problem saving the registration. Please contact FC Hanley.",
-          "error"
-        );
-      }
+    // 6. Payment successful — save registration to Firestore
+    await db.collection("tournamentRegistrations").add({
+      ...formData,
+      amountPaid:      PRICE,
+      paymentStatus:   "paid",
+      squarePaymentId: chargeResult.paymentId,
+      registrationId,
+      createdAt:       firebase.firestore.FieldValue.serverTimestamp()
     });
-  },
 
-  onError: function (err) {
-    console.error("PayPal error:", err);
-    showMessage("There was a PayPal payment error. Please try again.", "error");
-  },
+    // 7. Success!
+    showMessage(
+      "Registration complete! Payment received and your team has been registered.",
+      "success"
+    );
 
-  onCancel: function () {
-    showMessage("Payment cancelled. Registration has not been saved.", "error");
+    form.reset();
+    ageGroupDetails.classList.add("hidden");
+    ageGroupDetails.innerHTML = "";
+
+  } catch (err) {
+    console.error("Payment error:", err);
+    showMessage("An unexpected error occurred. Please try again or contact FC Hanley.", "error");
+
+  } finally {
+    payButton.disabled    = false;
+    payButton.textContent = "Pay £30 & Register";
   }
-}).render("#paypal-button-container");
+});
+
+// -----------------------------------------------
+// Init
+// -----------------------------------------------
+initSquare();

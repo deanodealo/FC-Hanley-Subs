@@ -10,14 +10,13 @@ exports.createSquarePayment = onRequest(
     region: "europe-west1",
     secrets: [squareAccessToken],
     cors: {
-      origin: "*", // Allow all origins (use your domain in production for security)
-      methods: ["GET", "POST", "OPTIONS"],
-      allowedHeaders: ["Content-Type", "Authorization"],
+      origin: "*", // TODO: change to your GitHub Pages URL before going live
+      methods: ["POST", "OPTIONS"],
+      allowedHeaders: ["Content-Type"],
       maxAgeSeconds: 3600
     }
   },
   async (req, res) => {
-    // Basic method guard
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Method not allowed" });
     }
@@ -25,23 +24,17 @@ exports.createSquarePayment = onRequest(
     try {
       const {
         sourceId,
-        bookingId,
+        registrationId,
         idempotencyKey,
         amountMoney,
-        buyer
+        teamName,
+        ageGroup,
+        buyerEmail
       } = req.body || {};
 
-      if (!sourceId) {
-        return res.status(400).json({ error: "Missing sourceId" });
-      }
-
-      if (!bookingId) {
-        return res.status(400).json({ error: "Missing bookingId" });
-      }
-
-      if (!idempotencyKey) {
-        return res.status(400).json({ error: "Missing idempotencyKey" });
-      }
+      if (!sourceId)        return res.status(400).json({ error: "Missing sourceId" });
+      if (!registrationId)  return res.status(400).json({ error: "Missing registrationId" });
+      if (!idempotencyKey)  return res.status(400).json({ error: "Missing idempotencyKey" });
 
       if (
         !amountMoney ||
@@ -54,7 +47,9 @@ exports.createSquarePayment = onRequest(
 
       const client = new SquareClient({
         token: squareAccessToken.value(),
-        environment: SquareEnvironment.Sandbox
+        environment: process.env.NODE_ENV === "production"
+          ? SquareEnvironment.Production
+          : SquareEnvironment.Sandbox
       });
 
       const paymentResponse = await client.payments.create({
@@ -65,10 +60,9 @@ exports.createSquarePayment = onRequest(
           currency: amountMoney.currency
         },
         locationId: "LMMEC838AX8QP",
-        referenceId: bookingId,
-        note: `FC Hanley camp booking ${bookingId}`,
-        buyerEmailAddress: buyer?.emailAddress || undefined,
-        buyerPhoneNumber: buyer?.phoneNumber || undefined
+        referenceId: registrationId,
+        note: `FC Hanley Tournament - ${teamName || ""} (${ageGroup || ""})`,
+        buyerEmailAddress: buyerEmail || undefined
       });
 
       const payment = paymentResponse.payment;
@@ -76,9 +70,9 @@ exports.createSquarePayment = onRequest(
       return res.status(200).json({
         success: true,
         paymentId: payment?.id || "",
-        orderId: payment?.orderId || "",
         status: payment?.status || ""
       });
+
     } catch (error) {
       logger.error("Square payment error", error);
 
@@ -86,15 +80,10 @@ exports.createSquarePayment = onRequest(
         const detail =
           error.errors?.map(e => e.detail).filter(Boolean).join(" | ") ||
           "Square payment failed";
-
-        return res.status(400).json({
-          error: detail
-        });
+        return res.status(400).json({ error: detail });
       }
 
-      return res.status(500).json({
-        error: "Internal payment error"
-      });
+      return res.status(500).json({ error: "Internal payment error" });
     }
   }
 );
