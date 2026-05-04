@@ -139,6 +139,8 @@ ageGroupSelect.addEventListener("change", async () => {
 // -----------------------------------------------
 let card;
 
+let cardNumber, expirationDate, cvv;
+
 async function initSquare() {
   if (!window.Square) {
     showMessage("Payment system failed to load. Please refresh the page.", "error");
@@ -147,8 +149,15 @@ async function initSquare() {
 
   try {
     const payments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
-    card = await payments.card();
-    await card.attach("#card-container");
+
+    cardNumber     = await payments.cardNumber();
+    expirationDate = await payments.expirationDate();
+    cvv            = await payments.cvv();
+
+    await cardNumber.attach("#card-number-container");
+    await expirationDate.attach("#expiration-date-container");
+    await cvv.attach("#cvv-container");
+
   } catch (err) {
     console.error("Square init error:", err);
     showMessage("Payment system could not be initialised. Please refresh.", "error");

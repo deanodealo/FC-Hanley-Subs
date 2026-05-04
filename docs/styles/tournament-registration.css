@@ -142,3 +142,13 @@
 .sq-card-component .sq-postal-code-container {
   display: none !important;
 }
+#card-number-container,
+#expiration-date-container,
+#cvv-container {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: #fff;
+  min-height: 44px;
+}
