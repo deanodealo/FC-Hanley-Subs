@@ -56,7 +56,7 @@ const client = new SquareClient({
             amount: BigInt(amountMoney.amount),
             currency: amountMoney.currency
           },
-          locationId: "LMMEC838AX8QP",
+          locationId: "LH6SFF775591G",
           referenceId: registrationId,
           note: `FC Hanley Tournament - ${teamName || ""} (${ageGroup || ""})`,
           buyerEmailAddress: buyerEmail || undefined

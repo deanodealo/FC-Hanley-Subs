@@ -157,7 +157,7 @@ async function initSquare() {
   }
 }
 
-// -----------------------------------------------
+/// -----------------------------------------------
 // Pay button — tokenise + charge + save
 // -----------------------------------------------
 payButton.addEventListener("click", async () => {
@@ -191,6 +191,27 @@ payButton.addEventListener("click", async () => {
       return;
     }
 
+    // 4b. Verify buyer (required for UK/EU cards under PSD2)
+    const payments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
+    const verificationDetails = {
+      amount: "30.00",
+      currencyCode: "GBP",
+      intent: "CHARGE",
+      billingContact: {
+        email: formData.email
+      }
+    };
+
+    const verificationResult = await payments.verifyBuyer(
+      result.token,
+      verificationDetails
+    );
+
+    if (!verificationResult || !verificationResult.token) {
+      showMessage("Payment verification failed. Please try again.", "error");
+      return;
+    }
+
     // 5. Call Firebase Cloud Function to charge the card
     const registrationId  = generateIdempotencyKey();
     const idempotencyKey  = generateIdempotencyKey();
@@ -199,7 +220,7 @@ payButton.addEventListener("click", async () => {
       method:  "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        sourceId:       result.token,
+        sourceId:       verificationResult.token,
         registrationId,
         idempotencyKey,
         amountMoney: {
@@ -231,8 +252,8 @@ payButton.addEventListener("click", async () => {
 
     // 7. Success!
     showMessage(
-      "Registration complete! Payment received and your team has been registered. You will receive a welcome pack via email once registration closes.",
-  "success"
+      "🎉 Registration complete! Payment received and your team has been registered. You will receive a welcome pack via email once registration closes.",
+      "success"
     );
 
     form.reset();
