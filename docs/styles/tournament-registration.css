@@ -138,3 +138,7 @@
   color: #666;
   cursor: not-allowed;
 }
+
+.sq-card-component .sq-postal-code-container {
+  display: none !important;
+}
