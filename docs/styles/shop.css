@@ -1,75 +1,193 @@
-.product-gallery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: center;
-  padding: 20px;
-}
+/* ================================================
+   FC HANLEY — Shop Page Styles (shop.css)
+   Matches site palette:
+     Blues:  #004080 (dark)  #0055a4  #0f76dd (mid)
+     Gold:   #ffcc00
+     Font:   Poppins
+   ================================================ */
 
-.product-card {
-  width: 150px;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  overflow: hidden;
-  text-align: center;
-}
 
-.product-card img {
-  width: 100%;
-  height: auto;
-  display: block;
-}
-
-.product-info {
-  padding: 10px;
-}
-
-.description {
-  font-size: 14px;
-  margin: 5px 0;
-}
-
-.price {
-  font-weight: bold;
-  color: #007bff;
-}
+/* ── CTA BANNER ─────────────────────────────────*/
 
 .ctashop {
-    background-color: #004080; /* Dark blue background */
-    color: white;
-    text-align: center;
-    padding: 70px 10px;
-    margin: 30px auto; /* Center it horizontally */
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 96%; /* Reduce width slightly */
+  background: linear-gradient(160deg, #0d6ecf 0%, #004080 100%);
+  color: white;
+  text-align: center;
+  padding: 60px 24px;
+  margin: 140px auto 28px;
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0, 40, 100, 0.35);
+  max-width: 96%;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Gold shimmer line along top */
+.ctashop::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ffcc00, transparent);
+}
+
+/* "Coming Soon" pill badge */
+.ctashop::after {
+  content: '⚽ Coming Soon';
+  display: inline-block;
+  background: #ffcc00;
+  color: #003366;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 5px 16px;
+  border-radius: 20px;
+  position: absolute;
+  top: 20px;
+  right: 24px;
 }
 
 .ctashop h2 {
-    font-size: 36px;
-    font-weight: bold;
-    margin-bottom: 20px;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: #fff;
 }
 
 .ctashop p {
-    font-size: 16px;
-    margin-bottom: 30px;
-    line-height: 1.6;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.7;
+  margin-bottom: 0;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .ctashop .btn {
-    font-size: 18px;
-    background-color: #ffcc00; /* Gold color for the button */
-    color: #003366; /* Dark blue text */
-    padding: 15px 15px;
-    text-decoration: none;
-    font-weight: bold;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+  display: inline-block;
+  margin-top: 24px;
+  font-size: 1rem;
+  background-color: #ffcc00;
+  color: #003366;
+  padding: 13px 28px;
+  text-decoration: none;
+  font-weight: 700;
+  border-radius: 8px;
+  transition: background-color 0.25s ease, transform 0.2s ease, box-shadow 0.25s ease;
+  box-shadow: 0 4px 14px rgba(255, 204, 0, 0.35);
 }
 
 .ctashop .btn:hover {
-    background-color: #e6b800; /* Slightly darker gold on hover */
+  background-color: #e6b800;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(255, 204, 0, 0.45);
 }
 
+
+/* ── PRODUCT GALLERY GRID ───────────────────────*/
+
+.product-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  justify-content: center;
+  padding: 10px 24px 40px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+
+/* ── PRODUCT CARDS ──────────────────────────────*/
+
+.product-card {
+  background: linear-gradient(160deg, #0d6ecf 0%, #004080 100%);
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0, 40, 100, 0.3);
+  overflow: hidden;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Gold shimmer on top of each card */
+.product-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ffcc00, transparent);
+  z-index: 1;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 32px rgba(0, 40, 100, 0.45);
+}
+
+/* Image area — fixed height so cards align neatly */
+.product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  transition: transform 0.4s ease;
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+.product-info {
+  padding: 14px 12px 18px;
+}
+
+.description {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 8px 0;
+}
+
+/* Price shown as a gold "TBC" badge */
+.price {
+  display: inline-block;
+  background: rgba(255, 204, 0, 0.15);
+  border: 1px solid rgba(255, 204, 0, 0.4);
+  color: #ffcc00;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 3px 12px;
+  border-radius: 20px;
+}
+
+
+/* ── RESPONSIVE ─────────────────────────────────*/
+
+@media (max-width: 600px) {
+  .product-gallery {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    padding: 10px 16px 30px;
+  }
+
+  .ctashop {
+    padding: 48px 18px 40px;
+    margin: 90px auto 20px;
+  }
+
+  .ctashop::after {
+    font-size: 0.6rem;
+    top: 14px;
+    right: 14px;
+    padding: 4px 10px;
+  }
+}
