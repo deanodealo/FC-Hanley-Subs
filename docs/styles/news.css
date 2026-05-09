@@ -1,141 +1,165 @@
-/* Reset body and font styles */
-body {
-    margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-}
+/* ================================================
+   FC HANLEY — News Page Styles (news.css)
+   Matches site palette:
+     Blues:  #004080 (dark)  #0055a4  #0f76dd (mid)
+     Gold:   #ffcc00
+     Font:   Poppins / Barlow
+   ================================================ */
 
-.club-header {
+
+/* ── HERO IMAGE (first section) ─────────────────
+   Left as original — uses default styles.css card */
+
+
+/* ── NEWS CONTAINER (Firebase block) ────────────
+   Was: grey/white box. Now: on-brand blue card   */
+
+#newsContainer {
+  background: linear-gradient(160deg, #0d6ecf 0%, #004080 100%) !important;
+  color: #fff !important;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 28px rgba(0, 40, 100, 0.35) !important;
+  max-width: 680px !important;
+  margin: 20px auto 28px !important;
+  padding: 30px 32px !important;
   position: relative;
-  height: 200px;
-  background-image: url('../images/footy.jpg');
-  background-size: cover;
-  background-position: center;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 10px 20px;
-  color: white;
-  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
-  gap: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.club-header a {
-  flex: 0 0 auto;
-  position: relative;
-  top: 50px;        /* keeps logo overlapping header/hero */
-  margin-left: 250px; /* adjust to move logo further left */
-  height: 180px;    /* logo size */
+/* Gold shimmer accent line along top */
+#newsContainer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ffcc00, transparent);
+  border-radius: 14px 14px 0 0;
 }
 
-.header-text {
-  flex-grow: 1;
-  text-align: right;
-  padding-right: 150px;
+#newsContainer > h2 {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 1.35rem !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+  margin: 0 0 16px 0 !important;
+  letter-spacing: 0.01em;
 }
 
-/* FONT SIZE for desktop */
-.header-text h1 {
-  font-size: 3.1rem;
-  margin: 0;
-}
-
-.header-text p {
-  font-size: 1.2rem;
-  margin: 5px 0 0;
-}
-
-
-.news-article {
-    background-color: #0f76dd;
-    border-radius: 8px;
-    padding: 55px 20px 20px 20px; /* top right bottom left */
-    margin: 0 auto 20px;
-    max-width: 390px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.news-article img.news-image {
-    display: block;
-    margin: 0 auto;
-    max-width: 100%;
-    height: auto;
-}
-
-.news-article h2 {
-    color: #004080;
-    margin-bottom: 10px;
-}
-
-.news-article p {
-    font-size: 16px;
-    line-height: 1.6;
-}
-
-.news-article2 {
-    background-color: #ffffff;
-    border-radius: 8px;
-    padding: 20px 20px 20px 20px; /* top right bottom left */
-    margin: 0 auto 20px;
-    max-width: 390px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.news-article {
-    margin-bottom: 30px;
-}
-
-.news-content {
-    display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    flex-wrap: wrap;
-}
-
-.news-text {
-    flex: 1;
-    min-width: 250px;
-}
-
-.news-image {
-    width: 300px;
-    height: auto;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
-@media (max-width: 768px) {
-    .news-content {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .news-image {
-        width: 90%;
-    }
-}
-
-.news-article2 div {
-  text-align: center;  /* centers inline elements inside this div */
-}
-
-.news-article2 img.news-image {
-  max-width: 100%;    /* keeps image responsive */
-  height: auto;
-  display: inline-block; /* so it respects text-align */
-}
-
+#newsList p,
 .news-item {
-  font-family: 'Arial', sans-serif;
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: #333;
-  padding: 10px 15px;
-  background-color: #f9f9f9;
-  border-left: 4px solid #007bff;
-  margin: 10px 0;
-  border-radius: 5px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.7;
+  margin: 0;
+  white-space: pre-line;
 }
 
+
+/* ── NEWS IMAGE CARDS (static sections) ─────────
+   Was: plain/inconsistent. Now: polished cards   */
+
+.content-section:not(.news-background) .news-article {
+  background: linear-gradient(160deg, #0d6ecf 0%, #004080 100%);
+  border-radius: 14px;
+  padding: 20px;
+  margin: 18px auto 28px;
+  max-width: 680px;
+  box-shadow: 0 8px 28px rgba(0, 40, 100, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+/* Gold shimmer on all cards */
+.content-section:not(.news-background) .news-article::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #ffcc00, transparent);
+}
+
+.content-section:not(.news-background) .news-article h2 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 16px 0;
+}
+
+/* News images fill the card width */
+.content-section:not(.news-background) .news-image {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.content-section:not(.news-background) .news-image:hover {
+  transform: scale(1.02);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+}
+
+
+/* ── FACEBOOK SECTION ───────────────────────────*/
+
+#facebook.content-section .news-article {
+  background: linear-gradient(160deg, #003a70 0%, #002244 100%);
+  border: 1px solid rgba(255, 204, 0, 0.2);
+}
+
+#facebook.content-section .news-article h2 {
+  font-size: 1.4rem;
+  color: #ffcc00;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Add Facebook icon before the heading */
+#facebook.content-section .news-article h2::before {
+  content: 'f';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #1877F2;
+  color: #fff;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+/* Centre the Facebook embed widget */
+.fb-page {
+  display: block;
+  margin: 0 auto;
+}
+
+
+/* ── RESPONSIVE ─────────────────────────────────*/
+
+@media (max-width: 720px) {
+  .content-section:not(.news-background) .news-article {
+    max-width: 94%;
+    padding: 16px;
+    margin: 12px auto 20px;
+  }
+
+  #newsContainer {
+    max-width: 94% !important;
+    padding: 22px 18px !important;
+    margin: 14px auto 20px !important;
+  }
+}
