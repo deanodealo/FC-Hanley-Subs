@@ -26,6 +26,10 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.content-section article {
+  margin: 50px auto 28px !important;
+}
+
 /* Gold shimmer accent line along top */
 #newsContainer::before {
   content: '';
@@ -59,11 +63,12 @@
 /* ── NEWS IMAGE CARDS (static sections) ─────────
    Was: plain/inconsistent. Now: polished cards   */
 
-.content-section:not(.news-background) .news-article {
+.content-section:not(.news-background) .news-article,
+.content-section:not(.news-background) article {
   background: linear-gradient(160deg, #0d6ecf 0%, #004080 100%);
   border-radius: 14px;
   padding: 20px;
-  margin: 18px auto 28px;
+  margin: 50px auto 28px;
   max-width: 680px;
   box-shadow: 0 8px 28px rgba(0, 40, 100, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.08);
