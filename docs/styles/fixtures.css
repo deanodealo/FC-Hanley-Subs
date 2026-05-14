@@ -125,12 +125,23 @@
   font-size: 0.85rem !important;
 }
 
+.fixtures .site-footer {
+  margin-left: -16px;
+  margin-right: -16px;
+  width: calc(100% + 32px);
+}
+
+.fixtures .site-footer {
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
 
 /* ── RESPONSIVE ─────────────────────────────────*/
 
 @media (max-width: 600px) {
   .fixtures {
-    padding: 70px 12px 36px;
+    padding: 70px 12px 0px;
   }
 
   .fixtures .content-section {
