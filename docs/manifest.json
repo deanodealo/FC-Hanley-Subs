@@ -9,13 +9,13 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "images/HanleyBadge2.png",
+      "src": "images/hanleybadge2.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "images/HanleyBadge2.png",
+      "src": "images/hanleybadge2.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
