@@ -195,7 +195,7 @@
     card.innerHTML = `
       <button id="aths-close" aria-label="Close">&times;</button>
       <div id="aths-header">
-        <img id="aths-logo" src="./images/HanleyBadge2.png" alt="FC Hanley">
+        <img id="aths-logo" src="./images/HanleyBadge.png" alt="FC Hanley">
         <p id="aths-title">Add FC Hanley to your home screen</p>
       </div>
       <p id="aths-body">${bodyText}</p>
