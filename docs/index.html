@@ -50,6 +50,59 @@
       transition: all 0.3s ease;
     }
 
+    /* ── Scrolling sponsors strip ───────────────── */
+    .sponsors {
+      background: #F4F6FA;
+      padding: 2.5rem 1.5rem;
+      border-top: 1px solid rgba(0,0,0,0.07);
+    }
+    .sponsors-lbl {
+      text-align: center;
+      font-size: 0.65rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #A0AEC0;
+      margin-bottom: 2rem;
+      font-weight: 500;
+    }
+    .sponsors-wrap {
+      overflow: hidden;
+      position: relative;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .sponsors-wrap::before,
+    .sponsors-wrap::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 80px;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .sponsors-wrap::before { left: 0;  background: linear-gradient(to right, #F4F6FA, transparent); }
+    .sponsors-wrap::after  { right: 0; background: linear-gradient(to left,  #F4F6FA, transparent); }
+    .sponsors-track {
+      display: flex;
+      gap: 3rem;
+      align-items: center;
+      animation: sponsorScroll 22s linear infinite;
+      width: max-content;
+    }
+    .sponsors-track:hover { animation-play-state: paused; }
+    @keyframes sponsorScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .sponsors-track img {
+      height: 46px;
+      width: auto;
+      object-fit: contain;
+      flex-shrink: 0;
+      transition: transform 0.3s;
+    }
+    .sponsors-track img:hover { transform: scale(1.08); }
+
     /* Animate to X when open */
     #burger-toggle.open span:nth-child(1) {
       transform: rotate(45deg) translate(5px, 5px);
@@ -230,15 +283,25 @@
        data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
 
   <!-- Sponsor Section -->
-  <div class="sponsor-wrapper">
-    <section class="sponsor-logos">
-      <img src="images/PCT.jpg" alt="PCT Coaching - FC Hanley Sponsor">
-      <img src="images/withey.jpeg" alt="Withey Grounds Maintenance- FC Hanley Sponsor">
-      <img src="images/Northwood.jpeg" alt="Northwood Community Sports - FC Hanley Sponsor">
-      <img src="images/futureplast.jpeg" alt="Future plastering - FC Hanley Sponsor">
-      <img src="images/colclough.jpeg" alt="Colclough Jones Flooring - FC Hanley Sponsor">
-      <img src="images/toptier.jpg" alt="Top Tier Trophies - FC Hanley Sponsor">
-    </section>
+  <div class="sponsors">
+    <p class="sponsors-lbl">Our proud sponsors</p>
+    <div class="sponsors-wrap">
+      <div class="sponsors-track">
+        <img src="images/PCT.jpg"          alt="PCT Coaching - FC Hanley Sponsor">
+        <img src="images/withey.jpeg"      alt="Withey Grounds Maintenance - FC Hanley Sponsor">
+        <img src="images/Northwood.jpeg"   alt="Northwood Community Sports - FC Hanley Sponsor">
+        <img src="images/futureplast.jpeg" alt="Future Plastering - FC Hanley Sponsor">
+        <img src="images/colclough.jpeg"   alt="Colclough Jones Flooring - FC Hanley Sponsor">
+        <img src="images/toptier.jpg"      alt="Top Tier Trophies - FC Hanley Sponsor">
+        <!-- Duplicated for seamless loop -->
+        <img src="images/PCT.jpg"          alt="PCT Coaching - FC Hanley Sponsor">
+        <img src="images/withey.jpeg"      alt="Withey Grounds Maintenance - FC Hanley Sponsor">
+        <img src="images/Northwood.jpeg"   alt="Northwood Community Sports - FC Hanley Sponsor">
+        <img src="images/futureplast.jpeg" alt="Future Plastering - FC Hanley Sponsor">
+        <img src="images/colclough.jpeg"   alt="Colclough Jones Flooring - FC Hanley Sponsor">
+        <img src="images/toptier.jpg"      alt="Top Tier Trophies - FC Hanley Sponsor">
+      </div>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
