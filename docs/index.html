@@ -95,13 +95,17 @@
       to   { transform: translateX(-50%); }
     }
     .sponsors-track img {
-      height: 46px;
+      height: 60px;
       width: auto;
       object-fit: contain;
       flex-shrink: 0;
       transition: transform 0.3s;
     }
     .sponsors-track img:hover { transform: scale(1.08); }
+    @media (max-width: 600px) {
+      .sponsors-track img { height: 50px; }
+      .sponsors-track { gap: 2rem; }
+    }
 
     /* Animate to X when open */
     #burger-toggle.open span:nth-child(1) {
