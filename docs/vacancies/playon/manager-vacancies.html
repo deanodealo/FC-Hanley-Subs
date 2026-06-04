@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/styles.css">
+  <link rel="stylesheet" href="playon.css">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Manage Vacancies - PlayOn</title>
-  <link rel="stylesheet" href="index.css" />
-<style>
+  <title>Manage Vacancies | FC Hanley</title>
+  <style>
   .vacancy-tabs {
     display: flex;
     gap: 10px;
@@ -243,32 +245,51 @@
 </head>
 <body>
 
-<header>
-  <button class="burger" aria-label="Menu" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </button>
-  <div class="logo-container">
-    <img src="images/logo.png" alt="PlayOn Logo" />
-  </div>
-</header>
+<!-- DRAWER OVERLAY -->
+<div class="nav-overlay" id="navOverlay" onclick="closeDrawer()"></div>
 
-<div id="menuOverlay" class="overlay" onclick="closeMenu()"></div>
-
-<!-- Side Menu -->
-<nav id="sideMenu" class="side-menu">
-  <a href="index.html">Home</a>
-  <a href="about.html">About</a>
-  <a href="vacancies.html">Vacancies</a>
-  <!--<a href="referees.html">Find a Ref</a>-->
-  <a href="#" onclick="showLogin(event)">Login</a>
-  <a href="register.html">Register</a>
-  <div class="menu-logo">
-    <div class="logo-wrapper">
-      <img src="images/logo.png" alt="PlayOn Logo">
-    </div>
+<!-- DRAWER NAV -->
+<nav class="drawer" id="sideMenu">
+  <div class="drawer-header">
+    <img src="images/logo.png" alt="PlayOn">
+    <button class="drawer-close" onclick="closeDrawer()">&#x2715;</button>
   </div>
+<div class="drawer-links">
+    <a href="index.html"><span class="d-icon">🔍</span> Find a Team</a>
+    <a href="vacancies.html"><span class="d-icon">📋</span> All Vacancies</a>
+    <a href="about.html"><span class="d-icon">ℹ️</span> How It Works</a>
+    <div class="drawer-divider"></div>
+    <a href="#" class="auth-logged-out" onclick="showLogin(event)"><span class="d-icon">🔐</span> Login</a>
+    <a href="register.html" class="auth-logged-out"><span class="d-icon">📝</span> Register</a>
+    <a href="manager-vacancies.html" class="auth-logged-in" style="display:none"><span class="d-icon">⚙️</span> Manage Vacancies</a>
+    <a href="#" class="auth-logged-in" style="display:none" onclick="logout()"><span class="d-icon">🚪</span> Logout</a>
+    <div class="drawer-divider"></div>
+    <a href="../../index.html"><span class="d-icon">🏠</span> Back to FC Hanley</a>
+</div>
 </nav>
 
+<!-- HEADER -->
+<header id="site-header">
+  <button class="burger-btn" onclick="openDrawer()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+  <a href="../../index.html" class="header-logo">
+    <img src="../../images/HanleyBadge.png" alt="FC Hanley Badge">
+    <span class="header-logo-name">FC Hanley</span>
+  </a>
+  <nav class="site-nav">
+    <a href="../../coaching-school.html">Coaching</a>
+    <a href="../../holidaycamps.html">Camps</a>
+    <a href="../../fixtures.html">Fixtures</a>
+    <a href="../../toptier.html">Trophies</a>
+    <a href="../../shop.html">Shop</a>
+    <a href="vacancies.html" class="nav-cta">Find a Team</a>
+  </nav>
+  <div class="header-spacer"></div>
+</header>
+
+
+<!-- Side Menu -->
 <!-- Login Popup Overlay -->
 <div id="loginOverlay" class="login-overlay" onclick="closeLogin(event)">
   <div class="login-form-container" onclick="event.stopPropagation()">
@@ -310,9 +331,16 @@
   <a href="#" onclick="event.preventDefault(); showLogin(event);">Click here to login</a>
 </div>
 
-<section class="hero vacancy-hero">
-  <h1>Manage Your Vacancies</h1>
-  <p>Add and remove your player or coach/manager vacancies. All vacancies display on the Vacancies page.</p>
+<section class="playon-hero" style="padding-bottom:2rem;">
+  <div class="playon-hero-content">
+    <div class="playon-hero-eyebrow">Managers &amp; Coaches</div>
+    <h1>Manage Your<span>Vacancies</span></h1>
+    <p>Add and manage your player or coach/manager vacancies. All listings appear instantly on the Vacancies page.</p>
+  </div>
+</section>
+
+<section class="playon-section" style="padding:2rem 1.5rem 4rem;">
+  <div class="playon-inner">
 
   <!-- Tabs -->
   <div class="vacancy-tabs">
@@ -325,8 +353,8 @@
   </div>
 
   <!-- Player Vacancy Form -->
-  <div id="playerVacancyContent" class="tab-content active" style="max-width: 800px; margin: 2rem auto;">
-    <div class="vacancy-form-container" id="playerFormContainer">
+  <div id="playerVacancyContent" class="tab-content active" >
+    <div class="playon-form-wrap" id="playerFormContainer" style="margin-bottom:2rem;">
       <form id="playerVacancyForm">
         <label for="playerTeamName">Team</label>
         <select id="playerTeamName" required>
@@ -393,8 +421,8 @@
   </div>
 
   <!-- Coach Vacancy Form -->
-  <div id="coachVacancyContent" class="tab-content" style="max-width: 800px; margin: 2rem auto;">
-    <div class="vacancy-form-container" id="coachFormContainer">
+  <div id="coachVacancyContent" class="tab-content" >
+    <div class="playon-form-wrap" id="coachFormContainer" style="margin-bottom:2rem;">
       <form id="coachVacancyForm">
         <label for="coachTeamName">Team/Club</label>
         <select id="coachTeamName" required>
@@ -460,42 +488,9 @@
   </div>
 </section>
 
-<footer>
-  <p>&copy; 2025 PlayOn. All rights reserved.</p>
-  <p>
-    <a href="index.html">Home</a> |
-    <a href="about.html">About</a> |
-    <a href="privacy.html">Privacy</a>
-  </p>
-</footer>
-
 <!-- Menu Toggle Script -->
 <script>
-  const burger = document.querySelector('.burger');
-  const sideMenu = document.getElementById('sideMenu');
-  const overlay = document.getElementById('menuOverlay');
-
-  function toggleMenu() {
-    const isOpening = !sideMenu.classList.contains('open');
-    sideMenu.classList.toggle('open', isOpening);
-    overlay.classList.toggle('active', isOpening);
-    burger.classList.toggle('open', isOpening);
-    document.body.classList.toggle('menu-open', isOpening);
-  }
-
-  function closeMenu() {
-    sideMenu.classList.remove('open');
-    overlay.classList.remove('active');
-    burger.classList.remove('open');
-    document.body.classList.remove('menu-open');
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
-    const links = sideMenu.querySelectorAll('a');
-    links.forEach(link => link.addEventListener('click', closeMenu));
-  });
-
-  // Tab switching
+    // Tab switching
   function switchVacancyTab(tab) {
     // Update tab buttons
     document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
@@ -851,6 +846,64 @@ const data = {
       document.getElementById('coachMessage').textContent = 'Error adding vacancy';
       document.getElementById('coachMessage').style.color = 'red';
     }
+  });
+</script>
+
+
+<footer class="site-footer">
+  <div class="footer-inner-grid">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="../../images/HanleyBadge.png" alt="FC Hanley">
+        <p>Grassroots football club based in Stoke-on-Trent. Passion. Pride. Community.</p>
+        <div class="footer-socials">
+          <a href="https://www.facebook.com/FCHanley" class="footer-social" target="_blank" rel="noopener">f</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Club</h4>
+        <a href="../../coaching-school.html">Coaching School</a>
+        <a href="../../holidaycamps.html">Holiday Camps</a>
+        <a href="../../fixtures.html">Fixtures</a>
+        <a href="../../shop.html">Shop</a>
+      </div>
+      <div class="footer-col">
+        <h4>Find a Team</h4>
+        <a href="vacancies.html">All Vacancies</a>
+        <a href="about.html">How It Works</a>
+        <a href="register.html">Register</a>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <a href="mailto:contact@fchanley.club">contact@fchanley.club</a>
+        <a href="https://www.staffordshirefa.com/" target="_blank" rel="noopener">Staffordshire FA</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 FC Hanley Ltd (09565826). All rights reserved.</span>
+    </div>
+    <div class="playon-footer-credit">
+      <img src="images/logo.png" alt="PlayOn">
+      Vacancy system powered by PlayOn
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  function openDrawer() {
+    document.getElementById('sideMenu').classList.add('open');
+    document.getElementById('navOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    document.getElementById('sideMenu').classList.remove('open');
+    document.getElementById('navOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  window.addEventListener('scroll', () => {
+    const h = document.getElementById('site-header');
+    if (h) h.style.boxShadow = window.scrollY > 40 ? '0 4px 24px rgba(0,0,0,0.35)' : 'none';
   });
 </script>
 
