@@ -699,3 +699,10 @@ body > a {
   .vacancies-grid { padding: 0 1rem; }
   .current-vacancies { padding: 0 1rem; }
 }
+
+.drawer-header img {
+  height: 36px;
+  background: white;
+  border-radius: 6px;
+  padding: 4px 8px;
+}
