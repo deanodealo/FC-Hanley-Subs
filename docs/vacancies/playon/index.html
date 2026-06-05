@@ -20,18 +20,17 @@
     <img src="images/logo.png" alt="PlayOn">
     <button class="drawer-close" onclick="closeDrawer()">✕</button>
   </div>
-<div class="drawer-links">
+  <div class="drawer-links">
     <a href="index.html"><span class="d-icon">🔍</span> Find a Team</a>
     <a href="vacancies.html"><span class="d-icon">📋</span> All Vacancies</a>
     <a href="about.html"><span class="d-icon">ℹ️</span> How It Works</a>
-    <div class="drawer-divider"></div>
-    <a href="#" class="auth-logged-out" onclick="showLogin(event)"><span class="d-icon">🔐</span> Login</a>
-    <a href="register.html" class="auth-logged-out"><span class="d-icon">📝</span> Register</a>
-    <a href="manager-vacancies.html" class="auth-logged-in" style="display:none"><span class="d-icon">⚙️</span> Manage Vacancies</a>
-    <a href="#" class="auth-logged-in" style="display:none" onclick="logout()"><span class="d-icon">🚪</span> Logout</a>
+    <a href="manager-vacancies.html" id="manageVacanciesLink" style="display:none"><span class="d-icon">⚙️</span> Manage Vacancies</a>
+    <a href="#" id="loginLink" onclick="showLogin(event)"><span class="d-icon">🔐</span> Login</a>
+    <a href="register.html" id="registerLink"><span class="d-icon">📝</span> Register</a>
+    <a href="#" id="logoutLink" style="display:none" onclick="logout()"><span class="d-icon">🚪</span> Logout</a>
     <div class="drawer-divider"></div>
     <a href="../../index.html"><span class="d-icon">🏠</span> Back to FC Hanley</a>
-</div>
+  </div>
   <div class="drawer-footer">Powered by PlayOn</div>
 </nav>
 
@@ -99,18 +98,21 @@
       <div class="playon-feature-icon">🏆</div>
       <h3>Find a Team</h3>
       <p>Players — browse vacancies by age group, position, experience and day. Find the right team for you and contact the manager directly.</p>
+      <div class="playon-card-cta">View all vacancies →</div>
     </a>
 
     <div class="playon-feature-card" onclick="handleAddVacanciesClick()" style="cursor:pointer;">
       <div class="playon-feature-icon">🔍</div>
       <h3>Add Vacancies</h3>
       <p>Managers — register and add your team vacancies by position, age group and experience level. Your listing appears instantly.</p>
+      <div class="playon-card-cta">Login or register to manage your vacancies →</div>
     </div>
 
     <a href="vacancies.html" class="playon-feature-card">
       <div class="playon-feature-icon">🎓</div>
       <h3>Find a Coach</h3>
       <p>Coaches looking for teams, or teams seeking the right coach — browse all available coaching and management vacancies.</p>
+      <div class="playon-card-cta">View all vacancies →</div>
     </a>
 
   </div>

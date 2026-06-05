@@ -313,16 +313,13 @@ body {
 
 /* ── Login popup ─────────────────────────────────────────── */
 .login-overlay {
-  display: none;
   position: fixed; inset: 0;
-  background: rgba(0,0,0,0.6);
-  z-index: 3000;
-  align-items: center; justify-content: center; padding: 1rem;
+  background: rgba(0,0,0,0.6); opacity: 0; visibility: hidden;
+  transition: opacity 0.3s; z-index: 3000;
+  display: flex; align-items: center; justify-content: center; padding: 1rem;
 }
 
-.login-overlay.active {
-  display: flex;
-}
+.login-overlay.active { opacity: 1; visibility: visible; }
 
 .login-form-container {
   background: white; border-radius: 16px; padding: 2rem;
@@ -539,7 +536,7 @@ body {
 
 .current-vacancies h2 {
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 1.5rem; font-weight: 800; color: white;
+  font-size: 1.5rem; font-weight: 800; color: var(--navy);
   text-transform: uppercase; text-align: center; margin-bottom: 1.25rem;
 }
 
@@ -557,8 +554,17 @@ body {
 
 .delete-btn:hover { background: #c82333; }
 
-.no-vacancies, .loading {
-  text-align: center; padding: 2rem; color: rgba(255,255,255,0.5); font-style: italic;
+.no-vacancies {
+  text-align: center;
+  padding: 40px;
+  color: #7A8EA8;
+  font-style: italic;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #7A8EA8;
 }
 
 /* ── Contact page ────────────────────────────────────────── */
@@ -670,10 +676,6 @@ body {
   background: white; border-radius: 4px; padding: 2px 6px; opacity: 0.6;
 }
 
-body > a {
-  display: none !important;
-}
-
 /* ── Responsive ──────────────────────────────────────────── */
 @media (max-width: 960px) {
   .vacancy-tabs { padding: 0 1.5rem; }
@@ -700,9 +702,15 @@ body > a {
   .current-vacancies { padding: 0 1rem; }
 }
 
-.drawer-header img {
-  height: 36px;
-  background: white;
-  border-radius: 6px;
-  padding: 4px 8px;
+/* ── Feature card CTA link ───────────────────────────────── */
+.playon-card-cta {
+  margin-top: 1rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--blue-light);
+  transition: color 0.2s;
+}
+
+.playon-feature-card:hover .playon-card-cta {
+  color: var(--accent);
 }
