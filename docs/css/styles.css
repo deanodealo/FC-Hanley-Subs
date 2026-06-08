@@ -2405,7 +2405,7 @@ header {
 }
 
 .homepage-facebook-inner {
-  max-width: 600px;
+  max-width: 750px;
   margin: 0 auto;
   text-align: center;
 }
@@ -2421,6 +2421,15 @@ header {
 
 .facebook-follow-cta {
   margin-top: 1.5rem;
+}
+
+.facebook-embed-wrap {
+  margin: 0 auto 2rem;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  display: block;
+  width: 100%;
 }
 
 /* ============================================================
