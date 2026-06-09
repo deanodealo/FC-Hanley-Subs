@@ -2409,7 +2409,7 @@ header {
 }
 
 .homepage-facebook-inner {
-  max-width: 560px;
+  max-width: 900px;
   margin: 0 auto;
   text-align: center;
 }
@@ -2420,6 +2420,14 @@ header {
   overflow: visible;
   box-shadow: 0 8px 32px rgba(0,0,0,0.1);
   width: 100%;
+  min-height: 600px;
+}
+
+.facebook-embed-wrap .fb-page,
+.facebook-embed-wrap .fb-page span,
+.facebook-embed-wrap .fb-page iframe {
+  width: 100% !important;
+  max-width: 100% !important;
 }
 
 .facebook-follow-cta {
