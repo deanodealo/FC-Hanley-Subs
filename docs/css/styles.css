@@ -2419,6 +2419,11 @@ header {
   max-width: 100%;
 }
 
+.homepage-facebook iframe {
+  max-width: 100%;
+  display: block;
+}
+
 .facebook-follow-cta {
   margin-top: 1.5rem;
 }
