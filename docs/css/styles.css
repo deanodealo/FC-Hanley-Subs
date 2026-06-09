@@ -2409,36 +2409,21 @@ header {
 }
 
 .homepage-facebook-inner {
-  max-width: 500px;
+  max-width: 560px;
   margin: 0 auto;
   text-align: center;
-}
-
-.homepage-facebook .facebook-embed-wrap {
-  margin: 0 auto 2rem;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-  width: 500px;
-  max-width: 100%;
-}
-
-.homepage-facebook iframe {
-  max-width: 100%;
-  display: block;
-}
-
-.facebook-follow-cta {
-  margin-top: 1.5rem;
 }
 
 .facebook-embed-wrap {
   margin: 0 auto 2rem;
   border-radius: 16px;
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-  display: block;
   width: 100%;
+}
+
+.facebook-follow-cta {
+  margin-top: 1.5rem;
 }
 
 /* ============================================================
