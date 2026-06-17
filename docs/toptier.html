@@ -1,284 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Top Tier Trophies | FC Hanley</title>
-
-  <!-- Site‑wide styles (header, nav, background, typography) -->
-    <link rel="stylesheet" href="styles/styles.css">
-    <link rel="stylesheet" href="styles/toptier.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
-    <link rel="canonical" href="https://fchanley.com/toptier.html" />
-
-  <!-- Burger menu styles -->
-  <style>
-    /* Burger toggle button */
-    #burger-toggle {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      width: 30px;
-      height: 22px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: none;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      padding: 0;
-      z-index: 2000;
-    }
-
-    #burger-toggle span {
-      display: block;
-      height: 3px;
-      width: 100%;
-      background: #fff;
-      border-radius: 2px;
-      transition: all 0.3s ease;
-    }
-
-    /* Animate to X when open */
-    #burger-toggle.open span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-    #burger-toggle.open span:nth-child(2) {
-      opacity: 0;
-    }
-    #burger-toggle.open span:nth-child(3) {
-      transform: rotate(-45deg) translate(5px, -5px);
-    }
-
-    /* Dropdown — starts from top of page, slides in from left */
-    .burger-dropdown {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      z-index: 1900 !important;
-      transform: translateX(-100%) !important;
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    }
-
-    .burger-dropdown.open {
-      transform: translateX(0) !important;
-    }
-  </style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Top Tier Trophies | FC Hanley</title>
+    <meta name="description" content="Top Tier Trophies — quality trophies, medals and engraving for all sports. FC Hanley's official trophy partner. Free engraving on all orders.">
+    <meta name="theme-color" content="#0A1628">
+    <link rel="canonical" href="https://fchanley.com/toptier.html">
+    <link rel="icon" href="images/hanleybadge2.png" type="image/png">
+    <link rel="apple-touch-icon" href="images/hanleybadge2.png">
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="add-to-home.js" defer></script>
 </head>
-<!-- FC Hanley Scroll Progress Bar -->
-<div id="scroll-progress-bar"></div>
+<body>
 
+<!-- DRAWER OVERLAY -->
+<div class="nav-overlay" id="navOverlay" onclick="closeDrawer()"></div>
 
-<!-- Burger Menu Overlay -->
-<div class="burger-overlay" id="burger-overlay"></div>
+<!-- SLIDE-IN DRAWER -->
+<nav class="drawer" id="drawer">
+    <div class="drawer-header">
+        <img src="images/HanleyBadge.png" alt="FC Hanley">
+        <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="drawer-links">
+        <a href="index.html"><span class="d-icon">🏠</span> Home</a>
+        <a href="coaching-school.html"><span class="d-icon">⚽</span> Coaching School</a>
+        <a href="holidaycamps.html"><span class="d-icon">🏕️</span> Holiday Camps</a>
+        <a href="fixtures.html"><span class="d-icon">📅</span> Fixtures</a>
+        <a href="toptier.html"><span class="d-icon">🎖️</span> Top Tier Trophies</a>
+        <a href="shop.html"><span class="d-icon">🛒</span> Shop</a>
+        <a href="vacancies/playon/index.html"><span class="d-icon">🔍</span> Find a Team</a>
+        <div class="drawer-divider"></div>
+        <a href="tournament-registration.html" class="drawer-highlight"><span class="d-icon">🏆</span> Tournament 2026</a>
+    </div>
+    <div class="drawer-footer">© 2026 FC Hanley Ltd</div>
+</nav>
 
-<!-- Burger toggle: fixed top-left, sits over the header -->
-<button id="burger-toggle" aria-label="Toggle menu">
-  <span></span>
-  <span></span>
-  <span></span>
-</button>
-
-<!--Header-->
-<header class="club-header">
-  <a href="index.html">
-    <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge overlapping-logo">
-  </a>
-  <div class="header-text">
-    <h1>FC Hanley Football Club</h1>
-    <p>Passion. Pride. Community.</p>
-  </div>
+<!-- HEADER -->
+<header id="site-header">
+    <button class="burger-btn" onclick="openDrawer()" aria-label="Open menu">
+        <span></span><span></span><span></span>
+    </button>
+    <a href="index.html" class="header-logo">
+        <img src="images/HanleyBadge.png" alt="FC Hanley Badge">
+        <span class="header-logo-name">FC Hanley</span>
+    </a>
+    <nav class="site-nav">
+        <a href="coaching-school.html">Coaching</a>
+        <a href="holidaycamps.html">Camps</a>
+        <a href="fixtures.html">Fixtures</a>
+        <a href="toptier.html">Trophies</a>
+        <a href="shop.html">Shop</a>
+        <a href="vacancies/playon/index.html" class="nav-cta">Find a Team</a>
+    </nav>
+    <div class="header-spacer"></div>
 </header>
 
-<!-- Dropdown: slides in from left, below the header -->
-<div id="burger-dropdown" class="burger-dropdown">
-  <a href="index.html">Home</a>
-  <a href="gallery.html">Coaching School</a>
-  <a href="news.html">News & Events</a>
-  <a href="holidaycamps.html">Holiday Camps</a>
-  <a href="fixtures.html">Fixtures</a>
-  <a href="toptier.html">Top Tier Trophies</a>
-  <a href="guestbook.html">Feedback</a>
-  <a href="shop.html">Shop</a>
-  <!-- <a href="subz.html">Subz</a> -->
-  <a href="vacancies/playon/index.html">Find a Team</a>
-  <!--<a href="https://deanodealo.github.io/FCHanleytournament/" target="_blank">🏆 Will Brazier Tournament</a>-->
-  <!--<a href="tournament-registration.html">🏆Tournament Registration</a>-->
-</div>
-
-    <!-- toptier Section -->
-    <section class="content-section">
-        <article class="toptier-article">
-        <img src="images/toptiertrophies.jpg" alt="toptier Poster" class="toptier-image">
-        </article>
-    </section>
-
-
-<section class="content-section">
-  <article class="larger-article">
-    <h2>Celebrate victory with excellence with Top Tier Trophies</h2>
-        <p>Get in touch for all your trophy, medals and engraving needs</p>
-        <p>Call: <a href="tel:07495051135">07495 051135</a></p>
-        <p>Email: <a href="mailto:sales@toptiertrophies.co.uk">sales@toptiertrophies.co.uk</a></p>
-        <p>Or message us on <a href="https://www.facebook.com/profile.php?id=61573542294448"> Facebook</a></p>
-        <h2><a href="https://sportinggreatsonline.com" target="_blank" rel="noopener noreferrer">
-    Click to Check out our Online Catalogue!
-  </a></h2>
-  </article>
-</section>
-
-
-<section class="content-section" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="40">
-  <article class="larger-article">
-    <h2>Because Champions deserve more than applause</h2>
-    <img src="images/toptier3.jpg" alt="Another Poster" class="larger-image">
-  </article>
-</section>
-
-<section class="content-section" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
-  <article class="larger-article">
-    <h2>Honouring every achievement, one medal at a time</h2>
-    <img src="images/toptier10.JPG" alt="Another Poster" class="larger-image">
-  </article>
-</section>
-
-<section class="content-section" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
-  <article class="larger-article">
-    <h2>FREE Engraving on ALL Trophies & Medals - Celebrate Victory! Customise the Glory!</h2>
-    <img src="images/toptier11.JPG" alt="Another Poster" class="larger-image">
-  </article>
-</section>
-
-<section class="content-section" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
-  <article class="larger-article">
-    <h2>All Sports catered for.  Check out the latest catalogue!</h2>
-    <img src="images/toptier5.jpg" alt="Another Poster" class="larger-image">
-  </article>
-</section>
-
-<section class="content-section" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
-  <article class="larger-article">
-    <h2>Call, Message or Email us for all your trophy, medal and engraving needs!</h2>
-    <img src="images/toptier6.jpg" alt="Another Poster" class="larger-image">
-  </article>
-</section>
-
-
-<section class="content-section">
-  <article class="larger-article">
-    <h2>Customisable, Professional & Competitive Service</h2>
-    <p>From Kick Off to Podium – We’ve got you covered!</p>
-  </article>
-</section>
-
-
-
-  <!-- Facebook Link (only on this page) -->
-  <div class="social-container">
-    <a
-      href="https://www.facebook.com/profile.php?id=61573542294448"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="social-link"
-    >
-      <img
-        src="images/FBook.png"
-        alt="Follow us on Facebook"
-        class="social-icon"
-      />
-    </a>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-<script>
-  AOS.init();
-</script>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <a href="https://www.staffordshirefa.com/" target="_blank">
-        <img src="images/staffsfa.png" alt="Staffordshire FA" class="footer-img">
-      </a>
-      <a href="https://www.facebook.com/FCHanley" target="_blank" rel="noopener noreferrer">
-        <img src="images/FBook.png" alt="Follow us on Facebook" class="footer-img footer-social">
-      </a>
-      <a href="mailto:deancolclough05@gmail.com" class="designer-logo">
-        <img src="images/dealo (3).PNG" alt="Site Designer" class="footer-img footer-designer">
-      </a>
-      <div class="footer-info">
-        <a href="https://find-and-update.company-information.service.gov.uk/company/09565826" target="_blank">FC Hanley Ltd (09565826)</a>
-        <a href="mailto:contact@fchanley.club">contact@fchanley.club</a>
-        <p>&copy; 2026 FC Hanley. All rights reserved.</p>
-      </div>
+<!-- PAGE HERO -->
+<section class="page-hero">
+    <div class="page-hero-content fade-up">
+        <div class="page-hero-eyebrow">FC Hanley Partner</div>
+        <h1 class="page-hero-title">Top Tier<span>Trophies</span></h1>
+        <p class="page-hero-sub">Quality trophies, medals and engraving for every occasion. Because champions deserve more than applause.</p>
     </div>
-  </footer>
+</section>
 
-<!-- Burger Menu JS -->
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const burgerToggle = document.getElementById("burger-toggle");
-    const burgerDropdown = document.getElementById("burger-dropdown");
-    const overlay = document.getElementById("burger-overlay");
-    const header = document.querySelector(".club-header");
+<!-- CONTACT / CTA STRIP -->
+<section class="toptier-contact">
+    <div class="toptier-contact-inner">
+        <div class="toptier-contact-text fade-up">
+            <div class="section-eyebrow">Get in Touch</div>
+            <h2 class="section-title">Order Your Trophies</h2>
+            <p>Call, email or message on Facebook for all your trophy, medal and engraving needs. Free engraving on all trophies and medals.</p>
+            <div class="toptier-contact-details">
+                <a href="tel:07495051135" class="toptier-contact-item">
+                    <span class="toptier-contact-icon">📞</span>
+                    <div>
+                        <span class="toptier-contact-label">Call Us</span>
+                        <span class="toptier-contact-val">07495 051135</span>
+                    </div>
+                </a>
+                <a href="mailto:sales@toptiertrophies.co.uk" class="toptier-contact-item">
+                    <span class="toptier-contact-icon">✉️</span>
+                    <div>
+                        <span class="toptier-contact-label">Email Us</span>
+                        <span class="toptier-contact-val">sales@toptiertrophies.co.uk</span>
+                    </div>
+                </a>
+                <a href="https://www.facebook.com/profile.php?id=61573542294448" target="_blank" rel="noopener" class="toptier-contact-item">
+                    <span class="toptier-contact-icon">💬</span>
+                    <div>
+                        <span class="toptier-contact-label">Message on Facebook</span>
+                        <span class="toptier-contact-val">Top Tier Trophies</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="toptier-contact-cta fade-up">
+            <div class="toptier-cta-card">
+                <div class="toptier-cta-icon">🏆</div>
+                <h3>View Our Full Catalogue</h3>
+                <p>Browse our complete range of trophies, medals and awards online.</p>
+                <a href="https://sportinggreatsonline.com" target="_blank" rel="noopener" class="btn-primary">Browse Catalogue →</a>
+                <div class="toptier-free-badge">✅ Free Engraving on All Orders</div>
+            </div>
+        </div>
+    </div>
+</section>
 
-    function setHeaderHeight() {
-      const textBlock = document.querySelector(".header-text");
-      const bottom = (textBlock || header).getBoundingClientRect().bottom;
-      document.documentElement.style.setProperty("--header-height", bottom + "px");
-    }
-    setHeaderHeight();
-    window.addEventListener("resize", setHeaderHeight);
+<!-- FEATURES STRIP -->
+<section class="toptier-features">
+    <div class="toptier-features-inner fade-up">
+        <div class="toptier-feature">
+            <div class="toptier-feature-icon">🎖️</div>
+            <div class="toptier-feature-title">All Sports</div>
+            <div class="toptier-feature-text">Trophies and medals for every sport</div>
+        </div>
+        <div class="toptier-feature">
+            <div class="toptier-feature-icon">✍️</div>
+            <div class="toptier-feature-title">Free Engraving</div>
+            <div class="toptier-feature-text">Free engraving on all trophies &amp; medals</div>
+        </div>
+        <div class="toptier-feature">
+            <div class="toptier-feature-icon">🎨</div>
+            <div class="toptier-feature-title">Customisable</div>
+            <div class="toptier-feature-text">Personalised to your club or event</div>
+        </div>
+        <div class="toptier-feature">
+            <div class="toptier-feature-icon">💷</div>
+            <div class="toptier-feature-title">Competitive Prices</div>
+            <div class="toptier-feature-text">Professional service at great value</div>
+        </div>
+    </div>
+</section>
 
-    function openMenu() {
-      burgerDropdown.classList.add("open");
-      overlay.classList.add("show");
-      burgerToggle.classList.add("open");
-    }
+<!-- TROPHY GALLERY -->
+<section class="toptier-gallery">
+    <div class="section-header fade-up">
+        <div class="section-eyebrow">Our Range</div>
+        <h2 class="section-title">Trophy Gallery</h2>
+    </div>
+    <div class="toptier-gallery-grid">
 
-    function closeMenu() {
-      burgerDropdown.classList.remove("open");
-      overlay.classList.remove("show");
-      burgerToggle.classList.remove("open");
-    }
+        <div class="toptier-gallery-item fade-up toptier-featured">
+            <img src="images/toptiertrophies.jpg" alt="Top Tier Trophies Range">
+            <div class="toptier-gallery-caption"></div>
+        </div>
 
-    burgerToggle.addEventListener("click", () => {
-      if (burgerDropdown.classList.contains("open")) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
-    });
+        <div class="toptier-gallery-item fade-up">
+            <img src="images/toptier3.jpg" alt="Trophy Range">
+            <div class="toptier-gallery-caption">Because Champions Deserve More Than Applause</div>
+        </div>
 
-    overlay.addEventListener("click", closeMenu);
+        <div class="toptier-gallery-item fade-up">
+            <img src="images/toptier10.JPG" alt="Medals">
+            <div class="toptier-gallery-caption">Honouring Every Achievement</div>
+        </div>
 
-    burgerDropdown.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", closeMenu);
-    });
-  });
-</script>
+        <div class="toptier-gallery-item fade-up">
+            <img src="images/toptier11.JPG" alt="Free Engraving">
+            <div class="toptier-gallery-caption">Free Engraving on All Trophies &amp; Medals</div>
+        </div>
 
-<script>
-  let timeoutId;
+        <div class="toptier-gallery-item fade-up">
+            <img src="images/toptier5.jpg" alt="All Sports">
+            <div class="toptier-gallery-caption">All Sports Catered For</div>
+        </div>
 
-  window.addEventListener('scroll', () => {
-    const progressBar = document.getElementById('scroll-progress-bar');
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const scrolled = (scrollTop / docHeight) * 100;
+        <div class="toptier-gallery-item fade-up">
+            <img src="images/toptier6.jpg" alt="Contact Us">
+            <div class="toptier-gallery-caption">From Kick Off to Podium — We've Got You Covered</div>
+        </div>
 
-    progressBar.style.width = `${scrolled}%`;
-    progressBar.style.opacity = '1';
+        <div class="toptier-gallery-item fade-up">
+            <img src="images/toptier12.jpg" alt="Contact Us">
+            <div class="toptier-gallery-caption">Browse the latest catalogue</div>
+        </div>
 
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      progressBar.style.opacity = '0';
-    }, 1500); // fade out 1.5s after user stops scrolling
-  });
-</script>
+    </div>
+</section>
 
+<!-- BOTTOM CTA -->
+<section class="toptier-bottom-cta">
+    <div class="toptier-bottom-cta-inner fade-up">
+        <h2>Ready to Order?</h2>
+        <p>Get in touch today for all your trophy, medal and engraving needs</p>
+        <div class="toptier-bottom-buttons">
+            <a href="tel:07495051135" class="btn-primary">📞 Call Now</a>
+            <a href="mailto:sales@toptiertrophies.co.uk" class="btn-outline">✉️ Email Us</a>
+            <a href="https://sportinggreatsonline.com" target="_blank" rel="noopener" class="btn-outline">🏆 View Catalogue</a>
+        </div>
+    </div>
+</section>
 
+<!-- SPONSORS -->
+<section class="sponsors">
+    <div class="sponsors-lbl">Our proud sponsors</div>
+    <div class="sponsors-wrap">
+        <div class="sponsors-track">
+            <img src="images/PCT.jpg"          alt="PCT Coaching">
+            <img src="images/withey.jpeg"       alt="Withey Grounds Maintenance">
+            <img src="images/Northwood.jpeg"    alt="Northwood Community Sports">
+            <img src="images/futureplast.jpeg"  alt="Future Plastering">
+            <img src="images/colclough.jpeg"    alt="Colclough Jones Flooring">
+            <img src="images/toptier.jpg"       alt="Top Tier Trophies">
+            <img src="images/PCT.jpg"           alt="PCT Coaching">
+            <img src="images/withey.jpeg"       alt="Withey Grounds Maintenance">
+            <img src="images/Northwood.jpeg"    alt="Northwood Community Sports">
+            <img src="images/futureplast.jpeg"  alt="Future Plastering">
+            <img src="images/colclough.jpeg"    alt="Colclough Jones Flooring">
+            <img src="images/toptier.jpg"       alt="Top Tier Trophies">
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+    <div class="footer-inner-grid">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <img src="images/HanleyBadge.png" alt="FC Hanley">
+                <p>Grassroots football club based in Stoke-on-Trent. Passion. Pride. Community.</p>
+                <div class="footer-socials">
+                    <a href="https://www.facebook.com/FCHanley" class="footer-social" target="_blank" rel="noopener">f</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Club</h4>
+                <a href="coaching-school.html">Coaching School</a>
+                <a href="holidaycamps.html">Holiday Camps</a>
+                <a href="fixtures.html">Fixtures</a>
+                <a href="toptier.html">Trophies</a>
+                <a href="shop.html">Shop</a>
+            </div>
+            <div class="footer-col">
+                <h4>Community</h4>
+                <a href="vacancies/playon/index.html">Find a Team</a>
+                <a href="tournament-registration.html">Tournament 2026</a>
+            </div>
+            <div class="footer-col">
+                <h4>Info</h4>
+                <a href="mailto:contact@fchanley.club">contact@fchanley.club</a>
+                <a href="https://www.staffordshirefa.com/" target="_blank" rel="noopener">Staffordshire FA</a>
+                <a href="https://find-and-update.company-information.service.gov.uk/company/09565826" target="_blank" rel="noopener">Companies House</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 FC Hanley Ltd (09565826). All rights reserved.</span>
+            <a href="mailto:deancolclough05@gmail.com" style="display:flex;align-items:center;gap:0.5rem;color:rgba(255,255,255,0.25);font-size:0.78rem;">
+                Site by <img src="images/dealo.png" alt="Site Designer" style="height:48px;">
+            </a>
+        </div>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
 </body>
 </html>

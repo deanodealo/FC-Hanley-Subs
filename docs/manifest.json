@@ -4,8 +4,8 @@
   "description": "Official app of FC Hanley Football Club – Stoke-on-Trent",
   "start_url": "/index.html",
   "display": "standalone",
-  "background_color": "#002244",
-  "theme_color": "#002244",
+  "background_color": "#0A1628",
+  "theme_color": "#0A1628",
   "orientation": "portrait",
   "icons": [
     {

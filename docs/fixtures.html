@@ -3,215 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FC Hanley - Fixtures</title>
-    <link rel="stylesheet" href="styles/styles.css">
-    <link rel="stylesheet" href="styles/fixtures.css" />
-    <link rel="canonical" href="https://fchanley.com/fixtures.html" />
-
- <!-- Burger menu styles -->
-  <style>
-    /* Burger toggle button */
-    #burger-toggle {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      width: 30px;
-      height: 22px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: none;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      padding: 0;
-      z-index: 2000;
-    }
-
-    #burger-toggle span {
-      display: block;
-      height: 3px;
-      width: 100%;
-      background: #fff;
-      border-radius: 2px;
-      transition: all 0.3s ease;
-    }
-
-    /* Animate to X when open */
-    #burger-toggle.open span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-    #burger-toggle.open span:nth-child(2) {
-      opacity: 0;
-    }
-    #burger-toggle.open span:nth-child(3) {
-      transform: rotate(-45deg) translate(5px, -5px);
-    }
-
-    /* Dropdown — starts from top of page, slides in from left */
-    .burger-dropdown {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      z-index: 1900 !important;
-      transform: translateX(-100%) !important;
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    }
-
-    .burger-dropdown.open {
-      transform: translateX(0) !important;
-    }
-  </style>
-
+    <title>Fixtures | FC Hanley</title>
+    <meta name="description" content="FC Hanley fixtures, results and league tables for all youth and senior teams. View the latest schedules for the current season.">
+    <meta name="theme-color" content="#0A1628">
+    <link rel="canonical" href="https://fchanley.com/fixtures.html">
+    <link rel="icon" href="images/hanleybadge2.png" type="image/png">
+    <link rel="apple-touch-icon" href="images/hanleybadge2.png">
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="add-to-home.js" defer></script>
 </head>
-
 <body>
-  <!-- FC Hanley Scroll Progress Bar -->
-<div id="scroll-progress-bar"></div>
 
+<!-- DRAWER OVERLAY -->
+<div class="nav-overlay" id="navOverlay" onclick="closeDrawer()"></div>
 
-<!-- Burger Menu Overlay -->
-<div class="burger-overlay" id="burger-overlay"></div>
+<!-- SLIDE-IN DRAWER -->
+<nav class="drawer" id="drawer">
+    <div class="drawer-header">
+        <img src="images/HanleyBadge.png" alt="FC Hanley">
+        <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="drawer-links">
+        <a href="index.html"><span class="d-icon">🏠</span> Home</a>
+        <a href="coaching-school.html"><span class="d-icon">⚽</span> Coaching School</a>
+        <a href="holidaycamps.html"><span class="d-icon">🏕️</span> Holiday Camps</a>
+        <a href="fixtures.html"><span class="d-icon">📅</span> Fixtures</a>
+        <a href="toptier.html"><span class="d-icon">🎖️</span> Top Tier Trophies</a>
+        <a href="shop.html"><span class="d-icon">🛒</span> Shop</a>
+        <a href="vacancies/playon/index.html"><span class="d-icon">🔍</span> Find a Team</a>
+        <div class="drawer-divider"></div>
+        <a href="tournament-registration.html" class="drawer-highlight"><span class="d-icon">🏆</span> Tournament 2026</a>
+    </div>
+    <div class="drawer-footer">© 2026 FC Hanley Ltd</div>
+</nav>
 
-<!-- Burger toggle: fixed top-left, sits over the header -->
-<button id="burger-toggle" aria-label="Toggle menu">
-  <span></span>
-  <span></span>
-  <span></span>
-</button>
-
-<!--Header-->
-<header class="club-header">
-  <a href="index.html">
-    <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge overlapping-logo">
-  </a>
-  <div class="header-text">
-    <h1>FC Hanley Football Club</h1>
-    <p>Passion. Pride. Community.</p>
-  </div>
+<!-- HEADER -->
+<header id="site-header">
+    <button class="burger-btn" onclick="openDrawer()" aria-label="Open menu">
+        <span></span><span></span><span></span>
+    </button>
+    <a href="index.html" class="header-logo">
+        <img src="images/HanleyBadge.png" alt="FC Hanley Badge">
+        <span class="header-logo-name">FC Hanley</span>
+    </a>
+    <nav class="site-nav">
+        <a href="coaching-school.html">Coaching</a>
+        <a href="holidaycamps.html">Camps</a>
+        <a href="fixtures.html">Fixtures</a>
+        <a href="toptier.html">Trophies</a>
+        <a href="shop.html">Shop</a>
+        <a href="vacancies/playon/index.html" class="nav-cta">Find a Team</a>
+    </nav>
+    <div class="header-spacer"></div>
 </header>
 
-<!-- Dropdown: slides in from left, below the header -->
-<div id="burger-dropdown" class="burger-dropdown">
-  <a href="index.html">Home</a>
-  <a href="gallery.html">Coaching School</a>
-  <a href="news.html">News & Events</a>
-  <a href="holidaycamps.html">Holiday Camps</a>
-  <a href="fixtures.html">Fixtures</a>
-  <a href="toptier.html">Top Tier Trophies</a>
-  <a href="guestbook.html">Feedback</a>
-  <a href="shop.html">Shop</a>
- <!-- <a href="subz.html">Subz</a>-->
-  <a href="vacancies/playon/index.html">Find a Team</a>
-  <!--<a href="https://deanodealo.github.io/FCHanleytournament/" target="_blank">🏆 Will Brazier Tournament</a>-->
-  <!--<a href="tournament-registration.html">🏆Tournament Registration</a>-->
-</div>
-
-    <!-- Fixtures Page Content -->
-    <section class="fixtures">
-        <h1>FC Hanley Fixtures</h1>
-        <p>Click the images below to view all the upcoming fixtures for all of our teams!</p>
-
-<!-- Age Group Fixtures Sections -->
-<section id="u7" class="content-section">
-  <h2>Youth Fixtures</h2>
-  <p>Click below to view all Youth Fixtures</p>
-
-  <a href="https://fulltime.thefa.com/index.html?league=587428981&selectedSeason=109772987&selectedDivision=848990253&selectedCompetition=0&selectedFixtureGroupKey=1_266523615" class="fchanleyyouth">
-    <img src="images/FTImage.png" alt="northstaffsjunior-league" class="responsive-image" />
-  </a>
-</section>
-
-<section id="senior" class="content-section">
-  <h2>Senior Fixtures</h2>
-  <p>Click below to view all Senior Fixtures, Results and League Table</p>
-
-  <a href="https://fulltime.thefa.com/displayTeam.html?divisionseason=529675453&teamID=997982778#tab-1" class="fchanleysenior">
-    <img src="images/staffscounty.png" alt="staffscounty-senior-league"/>
-  </a>
-</section>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <a href="https://www.staffordshirefa.com/" target="_blank">
-        <img src="images/staffsfa.png" alt="Staffordshire FA" class="footer-img">
-      </a>
-      <a href="https://www.facebook.com/FCHanley" target="_blank" rel="noopener noreferrer">
-        <img src="images/FBook.png" alt="Follow us on Facebook" class="footer-img footer-social">
-      </a>
-      <a href="mailto:deancolclough05@gmail.com" class="designer-logo">
-        <img src="images/dealo (3).PNG" alt="Site Designer" class="footer-img footer-designer">
-      </a>
-      <div class="footer-info">
-        <a href="https://find-and-update.company-information.service.gov.uk/company/09565826" target="_blank">FC Hanley Ltd (09565826)</a>
-        <a href="mailto:contact@fchanley.club">contact@fchanley.club</a>
-        <p>&copy; 2026 FC Hanley. All rights reserved.</p>
-      </div>
+<!-- PAGE HERO -->
+<section class="page-hero">
+    <div class="page-hero-content fade-up">
+        <div class="page-hero-eyebrow">2026 / 2027 Season</div>
+        <h1 class="page-hero-title">Fixtures &amp;<span>Results</span></h1>
+        <p class="page-hero-sub">Click below to view fixtures, results and league tables for all FC Hanley teams</p>
     </div>
-  </footer>
+</section>
 
-<!-- Burger Menu JS -->
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const burgerToggle = document.getElementById("burger-toggle");
-    const burgerDropdown = document.getElementById("burger-dropdown");
-    const overlay = document.getElementById("burger-overlay");
-    const header = document.querySelector(".club-header");
+<!-- FIXTURES SECTIONS -->
+<section class="fixtures-page">
+    <div class="fixtures-page-inner">
 
-    function setHeaderHeight() {
-      const textBlock = document.querySelector(".header-text");
-      const bottom = (textBlock || header).getBoundingClientRect().bottom;
-      document.documentElement.style.setProperty("--header-height", bottom + "px");
-    }
-    setHeaderHeight();
-    window.addEventListener("resize", setHeaderHeight);
+        <!-- Youth -->
+        <div class="fixture-block fade-up">
+            <div class="fixture-block-header">
+                <div class="fixture-block-eyebrow">Junior Teams</div>
+                <h2 class="fixture-block-title">Youth Fixtures</h2>
+                <p class="fixture-block-desc">View all upcoming fixtures for all FC Hanley youth teams competing in the North Staffs Junior Youth League.</p>
+            </div>
+            <a href="https://fulltime.thefa.com/index.html?league=587428981&selectedSeason=109772987&selectedDivision=848990253&selectedCompetition=0&selectedFixtureGroupKey=1_266523615"
+               target="_blank" rel="noopener" class="fixture-link-card">
+                <div class="fixture-link-card-inner">
+                    <img src="images/FTImage.png" alt="North Staffs Junior Youth League" class="fixture-league-img">
+                    <div class="fixture-link-card-text">
+                        <div class="fixture-link-title">North Staffs Junior Youth League</div>
+                        <div class="fixture-link-sub">View fixtures, results &amp; tables →</div>
+                    </div>
+                </div>
+            </a>
+        </div>
 
-    function openMenu() {
-      burgerDropdown.classList.add("open");
-      overlay.classList.add("show");
-      burgerToggle.classList.add("open");
-    }
+        <!-- Senior -->
+        <div class="fixture-block fade-up">
+            <div class="fixture-block-header">
+                <div class="fixture-block-eyebrow">First Team</div>
+                <h2 class="fixture-block-title">Senior Fixtures</h2>
+                <p class="fixture-block-desc">View all fixtures, results and the league table for FC Hanley's senior men's team competing in the Staffordshire County Premier Division.</p>
+            </div>
+            <a href="https://fulltime.thefa.com/displayTeam.html?divisionseason=529675453&teamID=997982778#tab-1"
+               target="_blank" rel="noopener" class="fixture-link-card">
+                <div class="fixture-link-card-inner">
+                    <img src="images/staffscounty.png" alt="Staffordshire County Senior League" class="fixture-league-img">
+                    <div class="fixture-link-card-text">
+                        <div class="fixture-link-title">Staffordshire County Premier Division</div>
+                        <div class="fixture-link-sub">View fixtures, results &amp; table →</div>
+                    </div>
+                </div>
+            </a>
+        </div>
 
-    function closeMenu() {
-      burgerDropdown.classList.remove("open");
-      overlay.classList.remove("show");
-      burgerToggle.classList.remove("open");
-    }
+    </div>
+</section>
 
-    burgerToggle.addEventListener("click", () => {
-      if (burgerDropdown.classList.contains("open")) {
-        closeMenu();
-      } else {
-        openMenu();
-      }
-    });
+<!-- SPONSORS -->
+<section class="sponsors">
+    <div class="sponsors-lbl">Our proud sponsors</div>
+    <div class="sponsors-wrap">
+        <div class="sponsors-track">
+            <img src="images/PCT.jpg"          alt="PCT Coaching">
+            <img src="images/withey.jpeg"       alt="Withey Grounds Maintenance">
+            <img src="images/Northwood.jpeg"    alt="Northwood Community Sports">
+            <img src="images/futureplast.jpeg"  alt="Future Plastering">
+            <img src="images/colclough.jpeg"    alt="Colclough Jones Flooring">
+            <img src="images/toptier.jpg"       alt="Top Tier Trophies">
+            <img src="images/PCT.jpg"           alt="PCT Coaching">
+            <img src="images/withey.jpeg"       alt="Withey Grounds Maintenance">
+            <img src="images/Northwood.jpeg"    alt="Northwood Community Sports">
+            <img src="images/futureplast.jpeg"  alt="Future Plastering">
+            <img src="images/colclough.jpeg"    alt="Colclough Jones Flooring">
+            <img src="images/toptier.jpg"       alt="Top Tier Trophies">
+        </div>
+    </div>
+</section>
 
-    overlay.addEventListener("click", closeMenu);
+<!-- FOOTER -->
+<footer class="site-footer">
+    <div class="footer-inner-grid">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <img src="images/HanleyBadge.png" alt="FC Hanley">
+                <p>Grassroots football club based in Stoke-on-Trent. Passion. Pride. Community.</p>
+                <div class="footer-socials">
+                    <a href="https://www.facebook.com/FCHanley" class="footer-social" target="_blank" rel="noopener">f</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Club</h4>
+                <a href="coaching-school.html">Coaching School</a>
+                <a href="holidaycamps.html">Holiday Camps</a>
+                <a href="fixtures.html">Fixtures</a>
+                <a href="toptier.html">Trophies</a>
+                <a href="shop.html">Shop</a>
+            </div>
+            <div class="footer-col">
+                <h4>Community</h4>
+                <a href="vacancies/playon/index.html">Find a Team</a>
+                <a href="tournament-registration.html">Tournament 2026</a>
+            </div>
+            <div class="footer-col">
+                <h4>Info</h4>
+                <a href="mailto:contact@fchanley.club">contact@fchanley.club</a>
+                <a href="https://www.staffordshirefa.com/" target="_blank" rel="noopener">Staffordshire FA</a>
+                <a href="https://find-and-update.company-information.service.gov.uk/company/09565826" target="_blank" rel="noopener">Companies House</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 FC Hanley Ltd (09565826). All rights reserved.</span>
+            <a href="mailto:deancolclough05@gmail.com" style="display:flex;align-items:center;gap:0.5rem;color:rgba(255,255,255,0.25);font-size:0.78rem;">
+                Site by <img src="images/dealo.png" alt="Site Designer" style="height:48px;">
+            </a>
+        </div>
+    </div>
+</footer>
 
-    burgerDropdown.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", closeMenu);
-    });
-  });
-</script>
-
-<script>
-  let timeoutId;
-
-  window.addEventListener('scroll', () => {
-    const progressBar = document.getElementById('scroll-progress-bar');
-    const scrollTop = window.scrollY;
-    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    const scrolled = (scrollTop / docHeight) * 100;
-
-    progressBar.style.width = `${scrolled}%`;
-    progressBar.style.opacity = '1';
-
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => {
-      progressBar.style.opacity = '0';
-    }, 1500); // fade out 1.5s after user stops scrolling
-  });
-</script>
-
+<script src="js/main.js"></script>
 </body>
 </html>

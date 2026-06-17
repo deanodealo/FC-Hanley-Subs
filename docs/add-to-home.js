@@ -55,15 +55,15 @@
         left: 50%;
         transform: translateX(-50%);
         width: min(360px, calc(100vw - 32px));
-        background: #002244;
+        background: #0D2040;
         border-radius: 16px;
-        border-top: 4px solid #ffcc00;
-        border-bottom: 4px solid #ffcc00;
+        border-top: 4px solid #00A8FF;
+        border-bottom: 4px solid #00A8FF;
         box-shadow: 0 8px 32px rgba(0,0,0,0.5);
         z-index: 9100;
         overflow: visible;
         animation: athsSlideUp 0.35s cubic-bezier(0.34,1.56,0.64,1);
-        font-family: 'Poppins', sans-serif;
+        font-family: 'DM Sans', sans-serif;
         box-sizing: border-box;
       }
 
@@ -102,14 +102,14 @@
         border-radius: 50%;
         object-fit: cover;
         flex-shrink: 0;
-        border: 2px solid #ffcc00;
+        border: 2px solid #00A8FF;
         margin: 0;
       }
 
       #aths-title {
         font-size: 0.92rem;
         font-weight: 600;
-        color: #ffcc00;
+        color: #00A8FF;
         margin: 0;
         line-height: 1.3;
       }
@@ -149,15 +149,15 @@
         padding: 10px 14px !important;
         border-radius: 8px !important;
         border: none;
-        font-family: 'Poppins', sans-serif;
+        font-family: 'DM Sans', sans-serif;
         font-size: 0.82rem !important;
         font-weight: 600;
         cursor: pointer;
         transition: filter 0.2s, transform 0.1s;
       }
       .aths-btn:active { transform: scale(0.97); }
-      .aths-btn-primary { background: #ffcc00 !important; color: #002244 !important; }
-      .aths-btn-primary:hover { filter: brightness(1.08); background: #ffcc00 !important; }
+      .aths-btn-primary { background: #0078D7 !important; color: #ffffff !important; }
+      .aths-btn-primary:hover { background: #00A8FF !important; filter: none; }
       .aths-btn-secondary {
         background: rgba(255,255,255,0.08) !important;
         color: rgba(255,255,255,0.7) !important;
@@ -180,16 +180,16 @@
     card.id = 'aths-card';
 
     const bodyText = isIOSDevice
-      ? `Tap the <strong style="color:#ffcc00">Share</strong>
+      ? `Tap the <strong style="color:#00A8FF">Share</strong>
          <svg style="display:inline-block;vertical-align:middle;margin:0 2px" width="15" height="15"
-              viewBox="0 0 24 24" fill="none" stroke="#ffcc00" stroke-width="2.2"
+              viewBox="0 0 24 24" fill="none" stroke='#00A8FF' stroke-width="2.2"
               stroke-linecap="round" stroke-linejoin="round">
            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
            <polyline points="16 6 12 2 8 6"/>
            <line x1="12" y1="2" x2="12" y2="15"/>
          </svg>
          button in your browser bar, then choose
-         <strong style="color:#ffcc00">"Add to Home Screen"</strong>`
+         <strong style="color:#00A8FF">"Add to Home Screen"</strong>`
       : `Get quick access to fixtures, news and camps — install the FC Hanley app!`;
 
     card.innerHTML = `
@@ -202,7 +202,7 @@
       ${isIOSDevice ? `
         <div id="aths-ios-hint">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-               stroke="#ffcc00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+               stroke='#00A8FF' stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <line x1="12" y1="5" x2="12" y2="19"/>
             <polyline points="19 12 12 19 5 12"/>
           </svg>

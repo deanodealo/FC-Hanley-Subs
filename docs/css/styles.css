@@ -1,0 +1,2936 @@
+/* ============================================================
+   FC Hanley — Shared Stylesheet
+   css/styles.css
+   ============================================================
+   Sections:
+   1.  Variables & Reset
+   2.  Base / Typography
+   3.  Header
+   4.  Drawer Navigation
+   5.  Buttons
+   6.  Hero
+   7.  Featured Banner (Tournament / Camp / Welcome)
+   8.  Wendy Jones Tribute
+   9.  Senior Men's Team
+   10. Explore Grid
+   11. Features Section
+   12. Why Join
+   13. Find a Team
+   14. Location
+   15. Sponsors Strip
+   16. Footer
+   17. Scroll Animations
+   18. Responsive
+   ============================================================ */
+
+
+/* ── 1. Variables & Reset ────────────────────────────────── */
+
+:root {
+  --navy:       #0A1628;
+  --navy-mid:   #0D2040;
+  --blue:       #0057B8;
+  --blue-light: #0078D7;
+  --accent:     #00A8FF;
+  --gold:       #FFB800;
+  --white:      #FFFFFF;
+  --off-white:  #F4F6FA;
+  --grey:       #8A9BB0;
+  --text:       #1A2B40;
+}
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+iframe {
+  max-width: 100%;
+  display: block;
+}
+
+/* ── 2. Base / Typography ────────────────────────────────── */
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+/* ── 3. Header ───────────────────────────────────────────── */
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background: rgba(10, 22, 40, 0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 168, 255, 0.12);
+  padding: 0 2.5rem;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: box-shadow 0.3s;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.header-logo img {
+  height: 44px;
+}
+
+.header-logo-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 1px;
+}
+
+/* Desktop nav */
+.site-nav {
+  display: flex;
+  gap: 1.75rem;
+  align-items: center;
+}
+
+.site-nav a {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+  transition: color 0.2s;
+}
+
+.site-nav a:hover {
+  color: white;
+}
+
+.site-nav .nav-cta {
+  background: var(--blue-light);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 7px;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.site-nav .nav-cta:hover {
+  background: var(--accent);
+  transform: translateY(-1px);
+}
+
+/* Burger button — hidden on desktop */
+.burger-btn {
+  display: none;
+  order: -1;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  z-index: 1100;
+}
+
+.burger-btn span {
+  width: 24px;
+  height: 2px;
+  background: white;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+/* Spacer keeps logo centred on mobile */
+.header-spacer {
+  display: none;
+  width: 34px;
+}
+
+
+/* ── 4. Drawer Navigation ────────────────────────────────── */
+
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1050;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.nav-overlay.open {
+  display: block;
+  opacity: 1;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  background: var(--navy);
+  z-index: 1051;
+  transform: translateX(-100%);
+  transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+  overflow-y: auto;
+}
+
+.drawer.open {
+  transform: translateX(0);
+}
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.drawer-header img {
+  height: 36px;
+}
+
+.drawer-close {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.2s;
+}
+
+.drawer-close:hover {
+  color: white;
+}
+
+.drawer-links {
+  padding: 1rem 0;
+  flex: 1;
+}
+
+.drawer-links a {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.9rem 1.5rem;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-left: 3px solid transparent;
+  transition: all 0.2s;
+}
+
+.drawer-links a:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border-left-color: var(--accent);
+}
+
+.drawer-links .d-icon {
+  font-size: 1.1rem;
+  width: 22px;
+  text-align: center;
+}
+
+.drawer-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.07);
+  margin: 0.5rem 1.5rem;
+}
+
+.drawer-highlight {
+  margin: 1rem 1.5rem 0.5rem;
+  background: rgba(255, 184, 0, 0.1);
+  border: 1px solid rgba(255, 184, 0, 0.25);
+  border-radius: 10px;
+  border-left: 3px solid var(--gold) !important;
+  color: var(--gold) !important;
+}
+
+.drawer-highlight:hover {
+  background: rgba(255, 184, 0, 0.18) !important;
+  color: var(--gold) !important;
+}
+
+.drawer-footer {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+
+/* ── 5. Buttons ──────────────────────────────────────────── */
+
+.btn-primary {
+  background: var(--blue-light);
+  color: white;
+  padding: 14px 34px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  border: 2px solid var(--blue-light);
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.btn-primary:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(0, 168, 255, 0.35);
+}
+
+.btn-outline {
+  background: transparent;
+  color: white;
+  padding: 14px 34px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.92rem;
+  border: 2px solid rgba(255, 255, 255, 0.28);
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.btn-outline:hover {
+  border-color: white;
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.btn-gold {
+  display: inline-block;
+  background: var(--gold);
+  color: #140800;
+  padding: 14px 34px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+
+.btn-gold:hover {
+  background: #FFC929;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(255, 184, 0, 0.4);
+}
+
+.btn-green {
+  display: inline-block;
+  background: #4ade80;
+  color: #001a0a;
+  padding: 14px 34px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+
+.btn-green:hover {
+  background: #22c55e;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(74, 222, 128, 0.35);
+}
+
+.btn-sm-primary {
+  background: var(--blue-light);
+  color: white;
+  padding: 10px 22px;
+  border-radius: 7px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.btn-sm-primary:hover {
+  background: var(--accent);
+  transform: translateY(-1px);
+}
+
+.btn-sm-outline {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 10px 22px;
+  border-radius: 7px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s;
+  display: inline-block;
+}
+
+.btn-sm-outline:hover {
+  border-color: white;
+  color: white;
+}
+
+
+/* ── 6. Hero ─────────────────────────────────────────────── */
+
+.hero {
+  height: 100vh;
+  min-height: 620px;
+  background: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.hero-video-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to bottom,
+    rgba(10, 22, 40, 0.6) 0%,
+    rgba(10, 22, 40, 0.45) 50%,
+    rgba(10, 22, 40, 0.75) 100%
+  );
+}
+
+.hero-video-tint {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse at 28% 55%, rgba(0, 87, 184, 0.25) 0%, transparent 65%),
+    radial-gradient(ellipse at 75% 30%, rgba(0, 168, 255, 0.08) 0%, transparent 55%);
+}
+
+.hero-pitch {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hero-pitch svg {
+  width: 100%;
+  height: 100%;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  padding: 0 2rem;
+  max-width: 860px;
+  animation: heroIn 0.9s ease both;
+}
+
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-badge {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  margin: 0 auto 1.5rem;
+  filter: drop-shadow(0 0 28px rgba(0, 168, 255, 0.45));
+  animation: float 4.5s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-9px); }
+}
+
+.hero-eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+}
+
+.hero-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(4.5rem, 13vw, 9.5rem);
+  font-weight: 900;
+  color: white;
+  line-height: 0.88;
+  text-transform: uppercase;
+  margin-bottom: 0.6rem;
+}
+
+.hero-title .blue {
+  color: var(--accent);
+  display: block;
+}
+
+.hero-tagline {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.45rem);
+  color: rgba(255, 255, 255, 0.42);
+  letter-spacing: 7px;
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.25);
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  z-index: 3;
+}
+
+.hero-scroll-bar {
+  width: 1px;
+  height: 42px;
+  background: linear-gradient(to bottom, transparent, rgba(0, 168, 255, 0.6));
+  animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.25; transform: scaleY(0.5); transform-origin: top; }
+  50%       { opacity: 1;    transform: scaleY(1); }
+}
+
+/* Hide video on mobile */
+@media (max-width: 768px) {
+  .hero-video { display: none; }
+}
+
+
+/* ── 7. Featured Banner ──────────────────────────────────── */
+
+/* Shared banner layout */
+.banner-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 3rem;
+  align-items: center;
+}
+
+/* — Tournament — */
+.banner-tournament {
+  background: linear-gradient(135deg, #140800 0%, #271200 50%, #140800 100%);
+  padding: 4.5rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-tournament::after {
+  content: '🏆';
+  position: absolute;
+  right: -1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18rem;
+  opacity: 0.04;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.t-label {
+  font-size: 0.68rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.t-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-weight: 900;
+  color: white;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.t-sub {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.3rem;
+  color: var(--gold);
+  font-weight: 600;
+  margin: 0.4rem 0 1.2rem;
+}
+
+.t-details {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+
+.t-detail-label {
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+}
+
+.t-detail-val {
+  color: white;
+  font-weight: 600;
+  font-size: 0.92rem;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Countdown */
+.countdown {
+  display: flex;
+  gap: 0.9rem;
+}
+
+.cd-unit {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 184, 0, 0.18);
+  border-radius: 12px;
+  padding: 1.1rem 1.2rem;
+  min-width: 74px;
+  text-align: center;
+}
+
+.cd-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.6rem;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+  display: block;
+}
+
+.cd-lbl {
+  font-size: 0.58rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+  display: block;
+}
+
+/* — Holiday Camp — */
+.banner-camp {
+  background: linear-gradient(135deg, #001a0a 0%, #00301a 50%, #001a0a 100%);
+  padding: 4.5rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-camp::after {
+  content: '⚽';
+  position: absolute;
+  right: -1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18rem;
+  opacity: 0.04;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.camp-label {
+  font-size: 0.68rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #4ade80;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.camp-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-weight: 900;
+  color: white;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.camp-sub {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.3rem;
+  color: #4ade80;
+  font-weight: 600;
+  margin: 0.4rem 0 1.2rem;
+}
+
+.camp-details {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+
+.camp-detail-label {
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+}
+
+.camp-detail-val {
+  color: white;
+  font-weight: 600;
+  font-size: 0.92rem;
+  display: block;
+  margin-top: 2px;
+}
+
+/* — Welcome (default) — */
+.banner-welcome {
+  background: linear-gradient(135deg, var(--navy-mid) 0%, #0a2040 100%);
+  padding: 5rem 2.5rem;
+  border-top: 1px solid rgba(0, 168, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 168, 255, 0.1);
+}
+
+.welcome-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.welcome-eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.welcome-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 900;
+  color: white;
+  text-transform: uppercase;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.welcome-text {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.8;
+  max-width: 660px;
+  margin: 0 auto 2.5rem;
+}
+
+.welcome-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+
+/* ── 8. Wendy Jones Tribute ──────────────────────────────── */
+
+.wendy {
+  background: var(--navy-mid);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 4rem 2.5rem;
+}
+
+.wendy-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.wendy-photo {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 3px solid rgba(0, 168, 255, 0.3);
+  box-shadow: 0 0 0 6px rgba(0, 168, 255, 0.08);
+}
+
+.wendy-eyebrow {
+  font-size: 0.65rem;
+  letter-spacing: 3.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.wendy-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 0.3rem;
+}
+
+.wendy-role {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.38);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 500;
+  margin-bottom: 0.9rem;
+}
+
+.wendy-text {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.75;
+  max-width: 560px;
+}
+
+.wendy-charity-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 1rem;
+  background: rgba(0, 168, 255, 0.07);
+  border: 1px solid rgba(0, 168, 255, 0.18);
+  border-radius: 50px;
+  padding: 6px 14px 6px 10px;
+  font-size: 0.78rem;
+}
+
+.wendy-charity-badge .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+
+.wendy-charity-badge span {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.wendy-charity-badge strong {
+  color: white;
+}
+
+
+/* ── 9. Senior Men's Team ────────────────────────────────── */
+
+.seniors {
+  background: var(--navy);
+  padding: 6rem 2.5rem;
+  position: relative;
+  overflow: visible;
+}
+
+.seniors::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 80% 50%, rgba(0, 87, 184, 0.2) 0%, transparent 65%);
+}
+
+.seniors-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.seniors-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(2.5rem, 5vw, 3.8rem);
+  font-weight: 900;
+  color: white;
+  text-transform: uppercase;
+  line-height: 0.95;
+  margin: 0.5rem 0 0.35rem;
+}
+
+.seniors-league {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 168, 255, 0.1);
+  border: 1px solid rgba(0, 168, 255, 0.25);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+}
+
+.league-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: blink 2s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+.seniors-text p {
+  color: rgba(255, 255, 255, 0.52);
+  font-size: 0.95rem;
+  line-height: 1.78;
+  margin-bottom: 2rem;
+}
+
+.seniors-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 1.1rem;
+  text-align: center;
+}
+
+.stat-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: white;
+  line-height: 1;
+  display: block;
+}
+
+.stat-lbl {
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 3px;
+  display: block;
+}
+
+.seniors-visual {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  text-align: center;
+}
+
+.seniors-badge-wrap {
+  margin-bottom: 2rem;
+}
+
+.seniors-badge-wrap img {
+  width: 100px;
+  margin: 0 auto;
+  filter: drop-shadow(0 0 20px rgba(0, 168, 255, 0.3));
+}
+
+.seniors-division-card {
+  background: rgba(0, 87, 184, 0.15);
+  border: 1px solid rgba(0, 168, 255, 0.2);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.div-label {
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 0.4rem;
+}
+
+.div-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: white;
+  text-transform: uppercase;
+}
+
+.div-org {
+  font-size: 0.78rem;
+  color: var(--accent);
+  margin-top: 3px;
+}
+
+.seniors-links {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+
+/* ── 10. Explore Grid ────────────────────────────────────── */
+
+.explore {
+  background: var(--off-white);
+  padding: 4rem 2.5rem;
+}
+
+.explore-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.explore-header p {
+  font-size: 0.68rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.explore-header h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--navy);
+  text-transform: uppercase;
+}
+
+.explore-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.explore-card {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 14px;
+  padding: 1.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  transition: all 0.25s;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.explore-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transition: transform 0.25s;
+  transform-origin: bottom;
+}
+
+.explore-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  border-color: rgba(0, 168, 255, 0.2);
+}
+
+.explore-card:hover::before {
+  transform: scaleY(1);
+}
+
+.explore-card-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+
+.explore-card-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.explore-card-desc {
+  font-size: 0.78rem;
+  color: #7A8EA8;
+  line-height: 1.5;
+}
+
+
+/* ── 11. Features Section ────────────────────────────────── */
+
+.features {
+  background: white;
+  padding: 6rem 2.5rem;
+}
+
+.section-eyebrow {
+  font-size: 0.68rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  font-weight: 600;
+  margin-bottom: 0.6rem;
+}
+
+.section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 800;
+  color: var(--navy);
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 580px;
+  margin: 0 auto 3.5rem;
+}
+
+.features-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 1.4rem;
+}
+
+.feature-card {
+  background: var(--off-white);
+  border-radius: 16px;
+  padding: 2.4rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--accent));
+  transform: scaleX(0);
+  transition: transform 0.3s;
+  transform-origin: left;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 44px rgba(0, 0, 0, 0.09);
+  background: white;
+}
+
+.feature-card:hover::after {
+  transform: scaleX(1);
+}
+
+.feature-label {
+  font-size: 0.62rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.feature-card h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: uppercase;
+  margin-bottom: 0.65rem;
+}
+
+.feature-card p {
+  color: #5C6E84;
+  font-size: 0.9rem;
+  line-height: 1.72;
+}
+
+.feature-card a {
+  display: inline-block;
+  margin-top: 1.15rem;
+  color: var(--blue-light);
+  font-weight: 600;
+  font-size: 0.84rem;
+  transition: color 0.2s;
+}
+
+.feature-card a:hover {
+  color: var(--accent);
+}
+
+
+/* ── 12. Why Join ────────────────────────────────────────── */
+
+.why-join {
+  background: var(--navy);
+  padding: 6rem 2.5rem;
+}
+
+.why-join .section-title {
+  color: white;
+}
+
+.why-join .section-eyebrow {
+  color: var(--accent);
+}
+
+.why-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 1.4rem;
+}
+
+.why-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 2.4rem;
+  transition: all 0.3s;
+}
+
+.why-card:hover {
+  background: rgba(0, 120, 215, 0.15);
+  border-color: rgba(0, 168, 255, 0.25);
+  transform: translateY(-3px);
+}
+
+.why-card-num {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 4.5rem;
+  font-weight: 900;
+  color: rgba(0, 168, 255, 0.13);
+  line-height: 1;
+  margin-bottom: 0.85rem;
+}
+
+.why-card h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  margin-bottom: 0.65rem;
+}
+
+.why-card p {
+  color: rgba(255, 255, 255, 0.48);
+  font-size: 0.9rem;
+  line-height: 1.72;
+}
+
+
+/* ── 13. Find a Team ─────────────────────────────────────── */
+
+.find-team {
+  background: var(--off-white);
+  padding: 6rem 2.5rem;
+}
+
+.find-team-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.find-team-text h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(2.4rem, 5vw, 3.5rem);
+  font-weight: 900;
+  color: var(--navy);
+  text-transform: uppercase;
+  line-height: 1;
+  margin: 0.6rem 0 1rem;
+}
+
+.find-team-text p {
+  color: #5C6E84;
+  font-size: 0.95rem;
+  line-height: 1.72;
+  margin-bottom: 2rem;
+}
+
+.find-team-visual {
+  background: var(--navy);
+  border-radius: 20px;
+  padding: 3rem;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(10, 22, 40, 0.18);
+}
+
+.find-team-visual img {
+  max-width: 180px;
+  width: 100%;
+  margin: 0 auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+.find-team-visual p {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.8rem;
+  margin-top: 1rem;
+}
+
+
+/* ── 14. Location ────────────────────────────────────────── */
+
+.location {
+  background: white;
+  padding: 6rem 2.5rem;
+}
+
+.location-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.location h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: var(--navy);
+  text-transform: uppercase;
+  line-height: 1;
+  margin-bottom: 2rem;
+}
+
+.loc-detail {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.loc-icon {
+  font-size: 1.2rem;
+  margin-top: 3px;
+}
+
+.loc-label {
+  font-size: 0.7rem;
+  color: var(--grey);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+
+.loc-val {
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.loc-val a {
+  color: var(--blue-light);
+}
+
+.map-wrap {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 44px rgba(0, 0, 0, 0.1);
+  height: 370px;
+}
+
+.map-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+
+/* ── 15. Sponsors Strip ──────────────────────────────────── */
+
+.sponsors {
+  background: var(--off-white);
+  padding: 3.5rem 2.5rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.sponsors-lbl {
+  text-align: center;
+  font-size: 0.65rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: #A0AEC0;
+  margin-bottom: 2.5rem;
+  font-weight: 500;
+}
+
+.sponsors-wrap {
+  overflow: hidden;
+  position: relative;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.sponsors-wrap::before,
+.sponsors-wrap::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 90px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.sponsors-wrap::before {
+  left: 0;
+  background: linear-gradient(to right, var(--off-white), transparent);
+}
+
+.sponsors-wrap::after {
+  right: 0;
+  background: linear-gradient(to left, var(--off-white), transparent);
+}
+
+.sponsors-track {
+  display: flex;
+  gap: 3.5rem;
+  align-items: center;
+  animation: sponsorScroll 22s linear infinite;
+  width: max-content;
+}
+
+.sponsors-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes sponsorScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.sponsors-track img {
+  height: 95px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  transition: transform 0.3s;
+}
+
+.sponsors-track img:hover {
+  transform: scale(1.08);
+}
+
+
+/* ── 16. Footer ──────────────────────────────────────────── */
+
+.site-footer {
+  background: var(--navy);
+  padding: 4rem 2.5rem 2rem;
+}
+
+.footer-inner-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.5fr repeat(3, 1fr);
+  gap: 3rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  margin-bottom: 2rem;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.footer-brand img {
+  height: 48px;
+  object-fit: contain;
+  align-self: flex-start;
+}
+
+.footer-brand p {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.38);
+  line-height: 1.72;
+  max-width: 230px;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+.footer-social {
+  width: 35px;
+  height: 35px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.85rem;
+  font-weight: 700;
+  transition: all 0.2s;
+}
+
+.footer-social:hover {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: white;
+}
+
+.footer-col h4 {
+  color: white;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+}
+
+.footer-col a {
+  display: block;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.875rem;
+  margin-bottom: 0.6rem;
+  transition: color 0.2s;
+}
+
+.footer-col a:hover {
+  color: var(--accent);
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.25);
+}
+
+
+/* ── 17. Scroll Animations ───────────────────────────────── */
+
+.fade-up {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s ease, transform 0.65s ease;
+}
+
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* ── 18. Responsive ──────────────────────────────────────── */
+
+.site-nav {
+  display: flex;
+  gap: 1.75rem;
+  align-items: center;
+}
+
+@media (max-width: 960px) {
+  .site-nav { display: none; }
+  .burger-btn { display: flex; }
+  .header-spacer { display: block; }
+
+  header { justify-content: space-between; }
+  .header-logo { position: absolute; left: 50%; transform: translateX(-50%); }
+
+  .explore-grid { grid-template-columns: repeat(2, 1fr); }
+  .banner-inner { grid-template-columns: 1fr; }
+  .countdown { justify-content: flex-start; }
+  .find-team-inner { grid-template-columns: 1fr; }
+  .location-inner { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .wendy-inner { flex-direction: column; text-align: center; }
+  .seniors-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .seniors { padding: 4rem 1.5rem; }
+  .seniors-league { white-space: normal; }
+  .sponsors-wrap { overflow: hidden; max-width: 100%; }
+}
+
+@media (max-width: 600px) {
+  .explore-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer-top { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; align-items: flex-start; }
+  .countdown { flex-wrap: wrap; }
+  .sponsors-track img { height: 65px; }
+  .sponsors-track { gap: 2rem; }
+  .seniors { padding: 3rem 1.25rem; }
+  .seniors-league { font-size: 0.65rem; letter-spacing: 0.5px; justify-content: center; }
+  .seniors-title { font-size: 2.2rem; }
+  .fixture-link-card-inner { flex-direction: column; align-items: flex-start; }
+  .fixture-league-img { height: 48px; }
+  .fixture-link-title { font-size: 0.95rem; }
+}
+
+/* ============================================================
+   Coaching School — Page Specific CSS
+   ============================================================ */
+
+/* ── Page Hero ───────────────────────────────────────────── */
+
+.page-hero {
+  background: var(--navy);
+  padding: 10rem 2.5rem 6rem;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.page-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(0,87,184,0.3) 0%, transparent 65%),
+    radial-gradient(ellipse at 70% 30%, rgba(0,168,255,0.1) 0%, transparent 55%);
+}
+
+.page-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.page-hero-eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.8rem;
+  font-weight: 500;
+}
+
+.page-hero-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(3.5rem, 10vw, 7rem);
+  font-weight: 900;
+  color: white;
+  text-transform: uppercase;
+  line-height: 0.9;
+  margin-bottom: 1rem;
+}
+
+.page-hero-title span {
+  color: var(--accent);
+  display: block;
+}
+
+.page-hero-sub {
+  font-size: 1rem;
+  color: rgba(255,255,255,0.5);
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+
+/* ── Coaching Info Cards ─────────────────────────────────── */
+
+.coaching-info {
+  background: var(--off-white);
+  padding: 4rem 2.5rem;
+}
+
+.coaching-info-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.coaching-info-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.info-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+  transition: all 0.3s;
+}
+
+.info-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+.info-card-icon {
+  font-size: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.info-card-label {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.info-card-value {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--navy);
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.info-card-sub {
+  font-size: 0.8rem;
+  color: #7A8EA8;
+  line-height: 1.6;
+}
+
+
+/* ── About Section ───────────────────────────────────────── */
+
+.coaching-about {
+  background: white;
+  padding: 6rem 2.5rem;
+}
+
+.coaching-about-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.coaching-about-text p {
+  color: #5C6E84;
+  font-size: 0.95rem;
+  line-height: 1.75;
+  margin-top: 1rem;
+}
+
+.coaching-about-badges {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.badge-card {
+  background: var(--off-white);
+  border-radius: 14px;
+  padding: 1.5rem;
+  border: 1px solid rgba(0,0,0,0.05);
+  transition: all 0.3s;
+}
+
+.badge-card:hover {
+  background: white;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  transform: translateY(-3px);
+}
+
+.badge-icon {
+  font-size: 1.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.badge-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.badge-text {
+  font-size: 0.8rem;
+  color: #7A8EA8;
+  line-height: 1.55;
+}
+
+
+/* ── Coaches Grid ────────────────────────────────────────── */
+
+.coaches {
+  background: var(--off-white);
+  padding: 6rem 2.5rem;
+}
+
+.coaches-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 1.5rem;
+}
+
+.coach-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  transition: all 0.3s;
+  text-align: center;
+}
+
+.coach-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+}
+
+.coach-img-wrap {
+  width: 100%;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.coach-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+
+.coach-card:hover .coach-img-wrap img {
+  transform: scale(1.05);
+}
+
+.coach-name {
+  padding: 0.85rem 0.75rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.coach-card.head-coach .coach-img-wrap img {
+  object-position: top center;
+}
+
+.coach-card.head-coach {
+  position: relative;
+  border: 2px solid var(--accent);
+}
+
+.head-coach-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--accent);
+  color: white;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+
+@media (max-width: 960px) {
+  .coaching-info-grid { grid-template-columns: repeat(2, 1fr); }
+  .coaching-about-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .page-hero { padding: 8rem 1.5rem 4rem; }
+}
+
+@media (max-width: 600px) {
+  .coaching-info-grid { grid-template-columns: repeat(2, 1fr); }
+  .coaching-about-badges { grid-template-columns: 1fr 1fr; }
+  .coaches-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+}
+
+/* ============================================================
+   Holiday Camps — Page Specific CSS
+   ============================================================ */
+
+/* ── Next Camp Section ───────────────────────────────────── */
+
+.next-camp {
+  background: white;
+  padding: 6rem 2.5rem;
+}
+
+.next-camp-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+.next-camp-text p {
+  color: #5C6E84;
+  font-size: 0.95rem;
+  line-height: 1.75;
+  margin-top: 1rem;
+}
+
+.camp-poster-wrap {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+}
+
+.camp-poster-wrap img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.coming-soon-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: var(--accent);
+  color: white;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 8px;
+}
+
+
+/* ── Video Section ───────────────────────────────────────── */
+
+.camp-video-section {
+  background: var(--navy);
+  padding: 6rem 2.5rem;
+}
+
+.camp-video-section .section-title { color: white; }
+.camp-video-section .section-eyebrow { color: var(--accent); }
+
+.camp-video-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.camp-video-wrap {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  margin-top: 0;
+}
+
+.camp-video-wrap video {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+
+/* ── What to Expect ──────────────────────────────────────── */
+
+.camp-expect {
+  background: var(--off-white);
+  padding: 6rem 2.5rem;
+}
+
+.camp-expect-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+
+/* ── Responsive ──────────────────────────────────────────── */
+
+@media (max-width: 960px) {
+  .next-camp-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .camp-expect-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .camp-expect-grid { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   Fixtures — Page Specific CSS
+   ============================================================ */
+
+.fixtures-page {
+  background: var(--off-white);
+  padding: 6rem 2.5rem;
+}
+
+.fixtures-page-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+}
+
+.fixture-block {
+  background: white;
+  border-radius: 20px;
+  padding: 2.5rem;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.fixture-block-eyebrow {
+  font-size: 0.65rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+}
+
+.fixture-block-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--navy);
+  text-transform: uppercase;
+  line-height: 1;
+  margin-bottom: 0.75rem;
+}
+
+.fixture-block-desc {
+  color: #5C6E84;
+  font-size: 0.9rem;
+  line-height: 1.72;
+}
+
+.fixture-link-card {
+  display: block;
+  background: var(--off-white);
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 14px;
+  padding: 1.5rem;
+  transition: all 0.25s;
+  text-decoration: none;
+}
+
+.fixture-link-card:hover {
+  background: white;
+  border-color: rgba(0,168,255,0.3);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.1);
+  transform: translateY(-3px);
+}
+
+.fixture-link-card-inner {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.fixture-league-img {
+  height: 64px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  border-radius: 8px;
+}
+
+.fixture-link-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+
+.fixture-link-sub {
+  font-size: 0.8rem;
+  color: var(--blue-light);
+  font-weight: 600;
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+
+@media (max-width: 960px) {
+  .fixtures-page-inner { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   News & Events — Page Specific CSS
+   ============================================================ */
+
+/* ── Latest News (Firebase) ──────────────────────────────── */
+
+.news-latest {
+  background: var(--off-white);
+  padding: 6rem 2.5rem;
+}
+
+.news-latest-inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.news-firebase-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2.5rem;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-left: 4px solid var(--accent);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+
+.news-firebase-label {
+  font-size: 0.68rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.news-firebase-card h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--navy);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.news-firebase-card p,
+.news-item {
+  color: #5C6E84;
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+.news-loading {
+  color: var(--grey);
+  font-style: italic;
+}
+
+
+/* ── News Image Grid ─────────────────────────────────────── */
+
+.news-grid-section {
+  background: white;
+  padding: 6rem 2.5rem;
+}
+
+.news-grid-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.news-card {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  transition: all 0.3s;
+}
+
+.news-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.12);
+}
+
+.news-card-img {
+  width: 100%;
+  background: var(--navy);
+  height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.news-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: transform 0.4s;
+  display: block;
+}
+
+.news-card:hover .news-card-img img {
+  transform: scale(1.04);
+}
+
+
+/* ── Facebook Feed ───────────────────────────────────────── */
+
+.news-facebook {
+  background: var(--off-white);
+  padding: 6rem 2.5rem;
+}
+
+.news-facebook-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.facebook-embed-wrap {
+  margin: 0 auto 2rem;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: center;
+}
+
+.facebook-cta p {
+  color: #5C6E84;
+  font-size: 0.95rem;
+  margin-bottom: 1.25rem;
+}
+
+
+/* ── Responsive ──────────────────────────────────────────── */
+
+@media (max-width: 960px) {
+  .news-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .news-grid { grid-template-columns: 1fr; }
+  .news-card-img img { height: 220px; }
+}
+
+/* ============================================================
+   Club Updates & Facebook Feed — Homepage additions
+   ============================================================ */
+
+/* ── Club Updates ────────────────────────────────────────── */
+
+.club-updates {
+  background: var(--navy);
+  padding: 6rem 2.5rem;
+}
+
+.club-updates .section-title { color: white; }
+.club-updates .section-eyebrow { color: var(--accent); }
+
+.updates-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.update-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 2rem;
+  border-left: 4px solid var(--accent);
+  transition: all 0.3s;
+}
+
+.update-card:hover {
+  background: rgba(0,120,215,0.15);
+  border-color: rgba(0,168,255,0.3);
+  transform: translateY(-3px);
+}
+
+.update-tag {
+  font-size: 0.68rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.update-card h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: white;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  line-height: 1.1;
+}
+
+.update-card p {
+  color: rgba(255,255,255,0.55);
+  font-size: 0.9rem;
+  line-height: 1.72;
+  margin-bottom: 1rem;
+}
+
+.update-date {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 500;
+}
+
+
+/* ── Facebook Feed ───────────────────────────────────────── */
+
+.homepage-facebook {
+  background: var(--off-white);
+  padding: 6rem 2.5rem;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+.homepage-facebook-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.facebook-embed-wrap {
+  margin: 0 auto 2rem;
+  border-radius: 16px;
+  overflow: visible;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  width: 100%;
+  min-height: 600px;
+}
+
+.facebook-embed-wrap .fb-page,
+.facebook-embed-wrap .fb-page span,
+.facebook-embed-wrap .fb-page iframe {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+.facebook-follow-cta {
+  margin-top: 1.5rem;
+}
+
+/* ============================================================
+   Shop — Page Specific CSS
+   ============================================================ */
+
+/* ── Coming Soon Banner ──────────────────────────────────── */
+
+.shop-coming-soon {
+  background: var(--navy-mid);
+  border-bottom: 1px solid rgba(0,168,255,0.12);
+  padding: 4rem 2.5rem;
+  text-align: center;
+}
+
+.shop-coming-soon-inner {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.shop-coming-soon-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.shop-coming-soon h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: white;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.shop-coming-soon p {
+  color: rgba(255,255,255,0.55);
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+
+/* ── Product Grid ────────────────────────────────────────── */
+
+.shop-products {
+  background: var(--off-white);
+  padding: 6rem 2.5rem;
+}
+
+.product-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.product-card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+  transition: all 0.3s;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.1);
+}
+
+.product-img-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--navy);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+
+.product-img-wrap img.product-placeholder {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+  opacity: 0.25;
+}
+
+.product-card:hover .product-img-wrap img {
+  transform: scale(1.04);
+}
+
+.product-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: var(--accent);
+  color: white;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+.product-info {
+  padding: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--navy);
+  text-transform: uppercase;
+}
+
+.product-price {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--blue-light);
+}
+
+
+/* ── Responsive ──────────────────────────────────────────── */
+
+@media (max-width: 960px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 500px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ============================================================
+   Top Tier Trophies — Page Specific CSS
+   ============================================================ */
+
+/* ── Contact Section ─────────────────────────────────────── */
+
+.toptier-contact {
+  background: var(--off-white);
+  padding: 6rem 2.5rem;
+}
+
+.toptier-contact-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
+}
+
+.toptier-contact-text p {
+  color: #5C6E84;
+  font-size: 0.95rem;
+  line-height: 1.75;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.toptier-contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.toptier-contact-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  text-decoration: none;
+  transition: all 0.25s;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+
+.toptier-contact-item:hover {
+  border-color: rgba(0,168,255,0.3);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+.toptier-contact-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.toptier-contact-label {
+  font-size: 0.65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  font-weight: 600;
+  display: block;
+  margin-bottom: 2px;
+}
+
+.toptier-contact-val {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--navy);
+  display: block;
+}
+
+/* CTA Card */
+.toptier-cta-card {
+  background: var(--navy);
+  border-radius: 20px;
+  padding: 2.5rem;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(10,22,40,0.2);
+}
+
+.toptier-cta-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.toptier-cta-card h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: white;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.toptier-cta-card p {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin-bottom: 1.75rem;
+}
+
+.toptier-free-badge {
+  margin-top: 1.25rem;
+  font-size: 0.78rem;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+
+/* ── Features Strip ──────────────────────────────────────── */
+
+.toptier-features {
+  background: var(--navy);
+  padding: 3.5rem 2.5rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.toptier-features-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.toptier-feature {
+  text-align: center;
+  padding: 1.5rem 1rem;
+  border-right: 1px solid rgba(255,255,255,0.07);
+}
+
+.toptier-feature:last-child {
+  border-right: none;
+}
+
+.toptier-feature-icon {
+  font-size: 1.75rem;
+  margin-bottom: 0.6rem;
+}
+
+.toptier-feature-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: white;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+
+.toptier-feature-text {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.5;
+}
+
+
+/* ── Trophy Gallery ──────────────────────────────────────── */
+
+.toptier-gallery {
+  background: white;
+  padding: 6rem 2.5rem;
+}
+
+.toptier-gallery-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.toptier-gallery-item {
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  transition: all 0.3s;
+}
+
+.toptier-gallery-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.12);
+}
+
+.toptier-gallery-item img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s;
+}
+
+.toptier-gallery-item:hover img {
+  transform: scale(1.04);
+}
+
+.toptier-gallery-item.toptier-featured {
+  grid-column: span 3;
+}
+
+.toptier-gallery-item.toptier-featured img {
+  height: 380px;
+  object-fit: contain;
+  background: var(--navy);
+}
+
+.toptier-gallery-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(10,22,40,0.9), transparent);
+  color: white;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2rem 1.25rem 1rem;
+  letter-spacing: 0.5px;
+}
+
+
+/* ── Bottom CTA ──────────────────────────────────────────── */
+
+.toptier-bottom-cta {
+  background: var(--off-white);
+  padding: 5rem 2.5rem;
+  text-align: center;
+  border-top: 1px solid rgba(0,0,0,0.06);
+}
+
+.toptier-bottom-cta-inner {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.toptier-bottom-cta h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--navy);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.toptier-bottom-cta p {
+  color: #5C6E84;
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+}
+
+.toptier-bottom-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.toptier-bottom-cta .btn-outline {
+  color: var(--navy);
+  border-color: rgba(10,22,40,0.3);
+}
+
+.toptier-bottom-cta .btn-outline:hover {
+  border-color: var(--navy);
+  background: rgba(10,22,40,0.06);
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+
+@media (max-width: 960px) {
+  .toptier-contact-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .toptier-features-inner { grid-template-columns: repeat(2, 1fr); }
+  .toptier-gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .toptier-gallery-item.toptier-featured { grid-column: span 2; }
+  .toptier-feature { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .toptier-feature:nth-child(2n) { border-right: none; }
+  .toptier-feature:last-child { border-bottom: none; }
+}
+
+@media (max-width: 600px) {
+  .toptier-gallery-grid { grid-template-columns: 1fr; }
+  .toptier-gallery-item.toptier-featured { grid-column: span 1; }
+  .toptier-features-inner { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* — Tournament Live Banner — */
+.btn-live {
+  display: inline-block;
+  background: #c0000a;
+  color: #fff;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 0.85rem 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+}
+
+.btn-live:hover {
+  background: #e0000c;
+  transform: translateY(-2px);
+}
+
+.live-badge-wrap {
+  text-align: center;
+}
+
+.live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(192, 0, 10, 0.15);
+  border: 2px solid #c0000a;
+  border-radius: 14px;
+  padding: 1.2rem 2rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #ff1a24;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+
+.live-dot {
+  width: 16px;
+  height: 16px;
+  background: #ff1a24;
+  border-radius: 50%;
+  display: inline-block;
+  animation: pulse-red 1.2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.live-sub {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.4);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-top: 0.6rem;
+}
+
+@keyframes pulse-red {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 26, 36, 0.6); }
+  50%       { box-shadow: 0 0 0 10px rgba(255, 26, 36, 0); }
+}

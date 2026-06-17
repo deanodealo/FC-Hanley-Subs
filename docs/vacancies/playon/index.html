@@ -1,209 +1,252 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PlayOn - Find Your Game</title>
-  <link rel="stylesheet" href="index.css" />
-  <meta name="description" content="PlayOn connects players, teams, coaches, and referees in grassroots football. Find your game today.">
-  <meta name="keywords" content="football, grassroots, players, teams, coaches, referees">
-  <meta name="author" content="PlayOn">
-
-<!-- Standard Favicon -->
-<link rel="icon" type="image/png" sizes="32x32" href="images/logo2.png">
-<link rel="icon" type="image/png" sizes="16x16" href="images/logo2.png">
-
-<!-- Apple Touch Icons -->
-<link rel="apple-touch-icon" sizes="180x180" href="images/logo2.png">
-<link rel="apple-touch-icon" sizes="152x152" href="images/logo2.png">
-<link rel="apple-touch-icon" sizes="120x120" href="images/logo2.png">
-<link rel="apple-touch-icon" sizes="76x76" href="images/logo2.png">
-
-<!-- Android / Chrome -->
-<link rel="icon" type="image/png" sizes="192x192" href="images/logo2.png">
-
-<!-- Manifest for PWA -->
-<link rel="manifest" href="manifest.json">
-
-<!-- Optional: MS (Windows) Tile -->
-<meta name="msapplication-TileImage" content="images/logo2-144.png">
-<meta name="msapplication-TileColor" content="#1A2A44">
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Find a Team | FC Hanley</title>
+  <meta name="description" content="Find your next grassroots football team with PlayOn. Browse FC Hanley team vacancies for players and coaches.">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/styles.css">
+  <link rel="stylesheet" href="playon.css">
 </head>
 <body>
 
-<!-- Header -->
-<header>
-  <!-- Animated Burger Button -->
-  <button class="burger" aria-label="Menu" onclick="toggleMenu()">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
+<!-- DRAWER OVERLAY -->
+<div class="nav-overlay" id="navOverlay" onclick="closeDrawer()"></div>
 
-  <!-- Logo Top-Right -->
-  <div class="logo-container">
-    <img src="images/logo.png" alt="PlayOn Logo" />
+<!-- DRAWER NAV -->
+<nav class="drawer" id="sideMenu">
+  <div class="drawer-header">
+    <img src="images/logo.png" alt="PlayOn">
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
   </div>
-</header>
-
-<!-- Overlay -->
-<div id="menuOverlay" class="overlay" onclick="closeMenu()"></div>
-
-<!-- Side Menu -->
-<nav id="sideMenu" class="side-menu">
-  <a href="index.html">Home</a>
-  <a href="about.html">About</a>
-  <a href="vacancies.html">Vacancies</a>
-  <!--<a href="referees.html">Find a Ref</a>-->
-  <a href="#" onclick="showLogin(event)">Login</a>
-  <a href="register.html">Register</a>
-  <div class="menu-logo">
-    <div class="logo-wrapper">
-      <img src="images/logo.png" alt="PlayOn Logo">
-    </div>
+  <div class="drawer-links">
+    <a href="index.html"><span class="d-icon">🔍</span> Find a Team</a>
+    <a href="vacancies.html"><span class="d-icon">📋</span> All Vacancies</a>
+    <a href="about.html"><span class="d-icon">ℹ️</span> How It Works</a>
+    <a href="manager-vacancies.html" id="manageVacanciesLink" style="display:none"><span class="d-icon">⚙️</span> Manage Vacancies</a>
+    <a href="#" id="loginLink" onclick="showLogin(event)"><span class="d-icon">🔐</span> Login</a>
+    <a href="register.html" id="registerLink"><span class="d-icon">📝</span> Register</a>
+    <a href="#" id="logoutLink" style="display:none" onclick="logout()"><span class="d-icon">🚪</span> Logout</a>
+    <div class="drawer-divider"></div>
+    <a href="../../index.html"><span class="d-icon">🏠</span> Back to FC Hanley</a>
   </div>
+  <div class="drawer-footer">Powered by PlayOn</div>
 </nav>
 
-<!-- Login Popup Overlay -->
+<!-- HEADER -->
+<header id="site-header">
+  <button class="burger-btn" onclick="openDrawer()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+  <a href="../../index.html" class="header-logo">
+    <img src="../../images/HanleyBadge.png" alt="FC Hanley Badge">
+    <span class="header-logo-name">FC Hanley</span>
+  </a>
+  <nav class="site-nav">
+    <a href="../../coaching-school.html">Coaching</a>
+    <a href="../../holidaycamps.html">Camps</a>
+    <a href="../../fixtures.html">Fixtures</a>
+    <a href="../../toptier.html">Trophies</a>
+    <a href="../../shop.html">Shop</a>
+    <a href="vacancies.html" class="nav-cta">Find a Team</a>
+  </nav>
+  <div class="header-spacer"></div>
+</header>
+
+<!-- LOGIN POPUP -->
 <div id="loginOverlay" class="login-overlay" onclick="closeLogin(event)">
   <div class="login-form-container" onclick="event.stopPropagation()">
     <button class="login-close" onclick="closeLogin()" aria-label="Close">&times;</button>
-    
-    <!-- Logo in popup -->
     <div class="login-logo">
       <div class="login-logo-wrapper">
         <img src="images/logo.png" alt="PlayOn Logo">
       </div>
     </div>
-
     <form class="login-form" id="loginForm">
       <h2>Welcome Back</h2>
-      
       <label for="loginEmail">Email</label>
       <input type="email" id="loginEmail" required>
-      
       <label for="loginPassword">Password</label>
       <input type="password" id="loginPassword" required>
-      
       <button type="submit" id="loginBtn">Login</button>
-      
-      <div class="forgot-password">
-        <a href="#" onclick="forgotPassword(event)">Forgot Password?</a>
-      </div>
-      
+      <div class="forgot-password"><a href="#" onclick="forgotPassword(event)">Forgot Password?</a></div>
       <div id="loginMessage" class="login-message"></div>
-      
-      <div class="register-link">
-        Don't have an account? <a href="register.html">Register here</a>
-      </div>
+      <div class="register-link">Don't have an account? <a href="register.html">Register here</a></div>
     </form>
   </div>
 </div>
 
-
-  <!-- Hero -->
-  <section class="hero">
-    <h1>Players. Teams. Coaches. Connected.</h1>
-    <p>PlayOn makes grassroots football simple. Find your game today.</p>
-    <a href="about.html" class="hero-btn">Get Started</a>
-  </section>
-
-  <!-- Features -->
-  <section class="features">
-
-        <a href="vacancies.html" style="text-decoration: none; color: inherit;">
-  <div class="feature-card">
-    <h3>🏆 Find Teams</h3>
-    <p>Players - join teams that match your Age, Experience and Location.</p>
+<!-- HERO -->
+<section class="playon-hero">
+  <div class="playon-hero-content">
+    <div class="playon-hero-eyebrow">FC Hanley · Stoke-on-Trent</div>
+    <h1>Find Your<span>Team</span></h1>
+    <p>Browse the latest FC Hanley vacancies. Players, coaches and club representatives — find your place in grassroots football.</p>
+    <div class="playon-logo-credit">
+      <img src="images/logo.png" alt="PlayOn">
+      Powered by PlayOn
+    </div>
   </div>
-</a>
+</section>
 
-    <div class="feature-card" onclick="handleAddVacanciesClick()" style="cursor: pointer;">
-  <h3>🔍 Add Vacancies</h3>
-  <p>Managers - add your team vacancies by Position, Age & Experience</p>
-</div>
+<!-- FEATURES -->
+<section class="playon-section">
+  <div class="playon-features">
+
+    <a href="vacancies.html" class="playon-feature-card">
+      <div class="playon-feature-icon">🏆</div>
+      <h3>Find a Team</h3>
+      <p>Players — browse vacancies by age group, position, experience and day. Find the right team for you and contact the manager directly.</p>
+      <div class="playon-card-cta">View all vacancies →</div>
+    </a>
+
+    <div class="playon-feature-card" onclick="handleAddVacanciesClick()" style="cursor:pointer;">
+      <div class="playon-feature-icon">🔍</div>
+      <h3>Add Vacancies</h3>
+      <p>Managers — register and add your team vacancies by position, age group and experience level. Your listing appears instantly.</p>
+      <div class="playon-card-cta">Login or register to manage your vacancies →</div>
+    </div>
+
+    <a href="vacancies.html" class="playon-feature-card">
+      <div class="playon-feature-icon">🎓</div>
+      <h3>Find a Coach</h3>
+      <p>Coaches looking for teams, or teams seeking the right coach — browse all available coaching and management vacancies.</p>
+      <div class="playon-card-cta">View all vacancies →</div>
+    </a>
+
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="playon-section-white">
+  <div class="playon-inner">
+    <div class="section-header fade-up">
+      <div class="section-eyebrow">Simple & Free</div>
+      <h2 class="section-title">How It Works</h2>
+    </div>
+    <div class="playon-features">
+      <div class="playon-feature-card fade-up">
+        <div class="playon-feature-icon">1️⃣</div>
+        <h3>Browse Vacancies</h3>
+        <p>No registration needed. Simply visit the Vacancies page and filter by age group, position, day and experience level.</p>
+      </div>
+      <div class="playon-feature-card fade-up">
+        <div class="playon-feature-icon">2️⃣</div>
+        <h3>Contact the Manager</h3>
+        <p>Found a vacancy that suits you? Click Contact Manager to reach them directly by email, phone, text or WhatsApp.</p>
+      </div>
+      <div class="playon-feature-card fade-up">
+        <div class="playon-feature-icon">3️⃣</div>
+        <h3>Get Playing</h3>
+        <p>Agree the details and get on the pitch. It really is that simple.</p>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:2.5rem;">
+      <a href="vacancies.html" class="btn-primary">Browse All Vacancies →</a>
+    </div>
+  </div>
+</section>
+
+<!-- SPONSORS -->
+<section class="sponsors">
+  <div class="sponsors-lbl">Our proud sponsors</div>
+  <div class="sponsors-wrap">
+    <div class="sponsors-track">
+      <img src="../../images/PCT.jpg"          alt="PCT Coaching">
+      <img src="../../images/withey.jpeg"       alt="Withey Grounds Maintenance">
+      <img src="../../images/Northwood.jpeg"    alt="Northwood Community Sports">
+      <img src="../../images/futureplast.jpeg"  alt="Future Plastering">
+      <img src="../../images/colclough.jpeg"    alt="Colclough Jones Flooring">
+      <img src="../../images/toptier.jpg"       alt="Top Tier Trophies">
+      <img src="../../images/PCT.jpg"           alt="PCT Coaching">
+      <img src="../../images/withey.jpeg"       alt="Withey Grounds Maintenance">
+      <img src="../../images/Northwood.jpeg"    alt="Northwood Community Sports">
+      <img src="../../images/futureplast.jpeg"  alt="Future Plastering">
+      <img src="../../images/colclough.jpeg"    alt="Colclough Jones Flooring">
+      <img src="../../images/toptier.jpg"       alt="Top Tier Trophies">
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner-grid">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="../../images/HanleyBadge.png" alt="FC Hanley">
+        <p>Grassroots football club based in Stoke-on-Trent. Passion. Pride. Community.</p>
+        <div class="footer-socials">
+          <a href="https://www.facebook.com/FCHanley" class="footer-social" target="_blank" rel="noopener">f</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Club</h4>
+        <a href="../../coaching-school.html">Coaching School</a>
+        <a href="../../holidaycamps.html">Holiday Camps</a>
+        <a href="../../fixtures.html">Fixtures</a>
+        <a href="../../toptier.html">Trophies</a>
+        <a href="../../shop.html">Shop</a>
+      </div>
+      <div class="footer-col">
+        <h4>Find a Team</h4>
+        <a href="vacancies.html">All Vacancies</a>
+        <a href="about.html">How It Works</a>
+        <a href="register.html">Register</a>
+        <a href="privacy.html">Privacy Policy</a>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <a href="mailto:contact@fchanley.club">contact@fchanley.club</a>
+        <a href="https://www.staffordshirefa.com/" target="_blank" rel="noopener">Staffordshire FA</a>
+        <a href="https://find-and-update.company-information.service.gov.uk/company/09565826" target="_blank" rel="noopener">Companies House</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 FC Hanley Ltd (09565826). All rights reserved.</span>
+      <span style="color:rgba(255,255,255,0.18)">Designed for the community ⚽</span>
+    </div>
+    <div class="playon-footer-credit">
+      <img src="images/logo.png" alt="PlayOn">
+      Vacancy system powered by PlayOn
+    </div>
+  </div>
+</footer>
 
 <script>
+  function openDrawer() {
+    document.getElementById('sideMenu').classList.add('open');
+    document.getElementById('navOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    document.getElementById('sideMenu').classList.remove('open');
+    document.getElementById('navOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
   function handleAddVacanciesClick() {
     if (window.auth && window.auth.currentUser) {
-      // User is logged in
       window.location.href = 'manager-vacancies.html';
     } else {
-      // User is logged out - show login popup
       showLogin(event);
     }
   }
-</script>
 
-<a href="vacancies.html" style="text-decoration: none; color: inherit;">
-    <div class="feature-card">
-      <h3>🎓 Find Coaches</h3>
-      <p>Coaches looking for teams, or teams seeking the right coach.</p>
-    </div>
-  </a>    
-    <!--<div class="feature-card">
-      <h3>
-        <img src="images/whistle.svg" alt="Whistle" class="icon" />
-        Find Refs
-      </h3>
-      <p>Connect with referees for your next match or tournament.</p>
-      <p>COMING SOON!</p>
-    </div>-->
-  </section>
+  // Scroll fade-up
+  const io = new IntersectionObserver(entries => {
+    entries.forEach((e,i) => {
+      if (e.isIntersecting) { setTimeout(() => e.target.classList.add('visible'), i*70); io.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => io.observe(el));
 
-<div class="back-to-hanley">
-  <h2>Want to use PlayOn for your Grass Roots club Vacancies!?  Contact me at deancolclough05@gmail.com</h2>
-  <p class="back-text">Click below to go back to FCHanley.com</p>
-
-  <a href="https://fchanley.com" class="hanley-logo-link">
-    <img src="images/HanleyBadge.png" alt="FC Hanley Logo" class="hanley-logo">
-  </a>
-</div>
-
-
-
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 PlayOn. All rights reserved.</p>
-    <p>
-      <a href="index.html">Home</a> |
-    <a href="about.html">About</a> |
-    <a href="privacy.html">Privacy</a>
-    </p>
-  </footer>
-
-<script>
-  const burger = document.querySelector('.burger');
-  const sideMenu = document.getElementById('sideMenu');
-  const overlay = document.getElementById('menuOverlay');
-
-  function toggleMenu() {
-    const isOpening = !sideMenu.classList.contains('open');
-
-    sideMenu.classList.toggle('open', isOpening);
-    overlay.classList.toggle('active', isOpening);
-    burger.classList.toggle('open', isOpening); // animate burger to X
-    document.body.classList.toggle('menu-open', isOpening);
-  }
-
-  function closeMenu() {
-    sideMenu.classList.remove('open');
-    overlay.classList.remove('active');
-    burger.classList.remove('open'); // reset burger icon
-    document.body.classList.remove('menu-open');
-  }
-
-// Close menu when a link is clicked or ESC key pressed
-document.addEventListener('DOMContentLoaded', function () {
-  const links = sideMenu.querySelectorAll('a');
-  links.forEach(link => link.addEventListener('click', closeMenu));
-
+  // Header shadow
+  window.addEventListener('scroll', () => {
+    document.getElementById('site-header').style.boxShadow = window.scrollY > 40 ? '0 4px 24px rgba(0,0,0,0.35)' : 'none';
   });
-  
 </script>
 
 <script src="js/login-popup.js"></script>
-
 </body>
 </html>

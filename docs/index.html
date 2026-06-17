@@ -1,388 +1,543 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FC Hanley | Youth Football Club in Stoke-on-Trent</title>
-  <meta name="description" content="Official website of FC Hanley, a grassroots youth football club based in Stoke-on-Trent. View teams, fixtures, tournaments, and community updates.">
-  <meta name="keywords" content="FC Hanley, youth football, football club, Stoke-on-Trent, grassroots football, football tournaments, junior & Adult football teams">
-  <meta name="theme-color" content="#0078D7" />
-  <meta property="og:title" content="FC Hanley | Youth Football Club in Stoke-on-Trent">
-  <meta property="og:description" content="Official website of FC Hanley, a grassroots youth football club based in Stoke-on-Trent. View teams, fixtures, tournaments, and more.">
-  <meta property="og:image" content="https://fchanley.com/images/HanleyBadge.png">
-  <meta property="og:url" content="https://fchanley.com">
-  <meta property="og:type" content="website">
-
-  <link rel="stylesheet" href="styles/styles.css">
-  <link rel="icon" href="images/hanleybadge2.png" type="image/png" sizes="48x48">
-  <link rel="apple-touch-icon" href="images/hanleybadge2.png">
-  <link rel="manifest" href="manifest.json">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" />
-  <link rel="canonical" href="https://fchanley.com/" />
-
-  <!-- Burger menu styles -->
-  <style>
-    /* Burger toggle button */
-    #burger-toggle {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      width: 30px;
-      height: 22px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: none;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      padding: 0;
-      z-index: 2000;
-    }
-
-    #burger-toggle span {
-      display: block;
-      height: 3px;
-      width: 100%;
-      background: #fff;
-      border-radius: 2px;
-      transition: all 0.3s ease;
-    }
-
-    /* ── Scrolling sponsors strip ───────────────── */
-    .sponsors {
-      background: #F4F6FA;
-      padding: 2.5rem 1.5rem;
-      border-top: 1px solid rgba(0,0,0,0.07);
-    }
-    .sponsors-lbl {
-      text-align: center;
-      font-size: 0.65rem;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: #A0AEC0;
-      margin-bottom: 2rem;
-      font-weight: 500;
-    }
-    .sponsors-wrap {
-      overflow: hidden;
-      position: relative;
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-    .sponsors-wrap::before,
-    .sponsors-wrap::after {
-      content: '';
-      position: absolute;
-      top: 0; bottom: 0;
-      width: 80px;
-      z-index: 2;
-      pointer-events: none;
-    }
-    .sponsors-wrap::before { left: 0;  background: linear-gradient(to right, #F4F6FA, transparent); }
-    .sponsors-wrap::after  { right: 0; background: linear-gradient(to left,  #F4F6FA, transparent); }
-    .sponsors-track {
-      display: flex;
-      gap: 3rem;
-      align-items: center;
-      animation: sponsorScroll 22s linear infinite;
-      width: max-content;
-    }
-    .sponsors-track:hover { animation-play-state: paused; }
-    @keyframes sponsorScroll {
-      from { transform: translateX(0); }
-      to   { transform: translateX(-50%); }
-    }
-    .sponsors-track img {
-      height: 60px;
-      width: auto;
-      object-fit: contain;
-      flex-shrink: 0;
-      transition: transform 0.3s;
-    }
-    .sponsors-track img:hover { transform: scale(1.08); }
-    @media (max-width: 600px) {
-      .sponsors-track img { height: 50px; }
-      .sponsors-track { gap: 2rem; }
-    }
-
-    /* Animate to X when open */
-    #burger-toggle.open span:nth-child(1) {
-      transform: rotate(45deg) translate(5px, 5px);
-    }
-    #burger-toggle.open span:nth-child(2) {
-      opacity: 0;
-    }
-    #burger-toggle.open span:nth-child(3) {
-      transform: rotate(-45deg) translate(5px, -5px);
-    }
-
-    /* Dropdown — starts from top of page, slides in from left */
-    .burger-dropdown {
-      position: fixed !important;
-      top: 0 !important;
-      left: 0 !important;
-      z-index: 1900 !important;
-      transform: translateX(-100%) !important;
-      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    }
-
-    .burger-dropdown.open {
-      transform: translateX(0) !important;
-    }
-  </style>
-
-  <script>
-    if (window.location.hostname === "www.fchanley.com") {
-      window.location.replace("https://fchanley.com" + window.location.pathname);
-    }
-  </script>
-
-  <script src="add-to-home.js" defer></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FC Hanley | Youth Football Club in Stoke-on-Trent</title>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<meta name="theme-color" content="#0A1628">
+<link rel="manifest" href="manifest.json">
+<script src="add-to-home.js" defer></script>
 </head>
+<body>
 
-<body class="page-about">
+<!-- DRAWER OVERLAY -->
+<div class="nav-overlay" id="navOverlay" onclick="closeDrawer()"></div>
 
-  <!-- FC Hanley Scroll Progress Bar -->
-  <div id="scroll-progress-bar"></div>
+<!-- SLIDE-IN DRAWER -->
+<nav class="drawer" id="drawer">
+    <div class="drawer-header">
+        <img src="https://fchanley.com/images/HanleyBadge.png" alt="FC Hanley">
+        <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="drawer-links">
+        <a href="coaching-school.html"><span class="d-icon">⚽</span> Coaching School</a>
+        <a href="holidaycamps.html"><span class="d-icon">🏕️</span> Holiday Camps</a>
+        <a href="fixtures.html"><span class="d-icon">📅</span> Fixtures</a>
+        <a href="toptier.html"><span class="d-icon">🎖️</span> Top Tier Trophies</a>
+        <a href="shop.html"><span class="d-icon">🛒</span> Shop</a>
+        <a href="vacancies/playon/index.html"><span class="d-icon">🔍</span> Find a Team</a>
+        <div class="drawer-divider"></div>
+    </div>
+    <div class="drawer-footer">© 2026 FC Hanley Ltd</div>
+</nav>
 
-  <!-- Burger Menu Overlay -->
-  <div class="burger-overlay" id="burger-overlay"></div>
-
-  <!-- Burger toggle -->
-  <button id="burger-toggle" aria-label="Toggle menu">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
-
-  <!-- Header -->
-  <header class="club-header">
-    <a href="index.html">
-      <img src="images/HanleyBadge.png" alt="FC Hanley Badge" class="badge overlapping-logo">
+<!-- HEADER -->
+<header id="site-header">
+    <button class="burger-btn" onclick="openDrawer()" aria-label="Open menu">
+        <span></span><span></span><span></span>
+    </button>
+    <a href="index.html" class="header-logo">
+        <img src="https://fchanley.com/images/HanleyBadge.png" alt="FC Hanley Badge">
+        <span class="header-logo-name">FC Hanley</span>
     </a>
-    <div class="header-text">
-      <h1>FC Hanley Football Club</h1>
-      <p>Passion. Pride. Community.</p>
+    <nav class="site-nav">
+        <a href="coaching-school.html">Coaching</a>
+        <a href="holidaycamps.html">Camps</a>
+        <a href="fixtures.html">Fixtures</a>
+        <a href="toptier.html">Trophies</a>
+        <a href="shop.html">Shop</a>
+        <a href="vacancies/playon/index.html" class="nav-cta">Find a Team</a>
+    </nav>
+    <div class="header-spacer"></div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+
+    <!-- ═══════════════════════════════════════════════════
+         HERO VIDEO BACKGROUND
+         Replace the src below with your own footage file.
+         Recommended: MP4, under 8MB, 1920x1080, no sound.
+         Good hosts: Cloudinary (free tier), Bunny.net,
+         or just drop the file into your site folder.
+         ═══════════════════════════════════════════════════ -->
+    <video
+        class="hero-video"
+        src="videos/coachingschoolvid short2.mp4"
+        autoplay muted loop playsinline
+        poster="https://fchanley.com/images/HanleyBadge.png">
+        <!-- poster= is the fallback image shown before video loads on desktop,
+             and permanently on mobile where video is hidden -->
+    </video>
+
+    <!-- Overlay layers — darken and tint the video -->
+    <div class="hero-video-overlay"></div>
+    <div class="hero-video-tint"></div>
+
+    <!-- Subtle pitch line markings on top -->
+    <div class="hero-pitch">
+        <svg viewBox="0 0 1400 800" preserveAspectRatio="xMidYMid slice" fill="none" stroke="white" stroke-width="1.5">
+            <rect x="80" y="60" width="1240" height="680"/>
+            <line x1="700" y1="60" x2="700" y2="740"/>
+            <circle cx="700" cy="400" r="90"/>
+            <circle cx="700" cy="400" r="4" fill="white" stroke="none"/>
+            <rect x="80" y="220" width="170" height="360"/>
+            <rect x="80" y="305" width="65" height="190"/>
+            <rect x="1150" y="220" width="170" height="360"/>
+            <rect x="1255" y="305" width="65" height="190"/>
+            <circle cx="230" cy="400" r="4" fill="white" stroke="none"/>
+            <circle cx="1170" cy="400" r="4" fill="white" stroke="none"/>
+            <path d="M80 80 A22 22 0 0 1 102 60"/><path d="M1298 60 A22 22 0 0 1 1320 80"/>
+            <path d="M1320 720 A22 22 0 0 1 1298 740"/><path d="M102 740 A22 22 0 0 1 80 720"/>
+        </svg>
     </div>
-  </header>
 
-  <!-- Slide-in menu -->
-  <div id="burger-dropdown" class="burger-dropdown">
-    <a href="gallery.html">Coaching School</a>
-    <a href="news.html">News & Events</a>
-    <a href="holidaycamps.html">Holiday Camps</a>
-    <a href="fixtures.html">Fixtures</a>
-    <a href="toptier.html">Top Tier Trophies</a>
-    <a href="guestbook.html">Feedback</a>
-    <a href="shop.html">Shop</a>
-    <!-- <a href="subz.html">Subz</a> -->
-    <a href="vacancies/playon/index.html">Find a Team</a>
-    <!--<a href="https://deanodealo.github.io/FCHanleytournament/" target="_blank">🏆 Will Brazier Tournament</a>-->
-   <!-- <a href="tournament-registration.html">🏆Tournament Registration</a> -->
-  </div>
-
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-content tournament-home-ad">
-      <h1 data-aos="fade-down" data-aos-easing="ease-out-back" data-aos-duration="1200">
-        The Will Brazier Festival of Football
-      </h1>
-      <p><strong>FC Hanley Tournament 2026</strong></p>
-      <p>Saturday 4th & Sunday 5th July 2026</p>
-      <p>U7 to U13 age groups available</p>
-      <p>Entry fee: <strong>£30 per team</strong></p>
-      <p>No academy teams please</p>
-      <!--<a href="tournament-registration.html" class="btn">Register Your Team</a>-->
-    </div>
-  </section>
-
-  <!-- Hero Section 2 -->
-  <section class="hero">
-    <div class="hero-inner">
-      <div class="hero-content3">
-        <p>Proudly supporting the Wendy Jones Foundation</p>
-        <img src="images/wendy.jpg" alt="wendy Image" class="circle-img">
-      </div>
-    </div>
-  </section>
-
-  <section class="cta" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
-    <h2>Want to Play!?</h2>
-    <p>Find the latest FC Hanley Team Vacancies. Search for a team that suits your ability and age group</p>
-    <p>Click the PlayOn button below</p>
-    <a href="/vacancies/playon/index.html" class="playon-link">
-      <img src="./images/logo.png" alt="PlayOn logo" class="playon-logo">
-    </a>
-  </section>
-
-  <div class="hero-wrapper">
-    <section class="hero-alt" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="600">
-      <div class="hero-content-alt">
-        <h2>How To Find Us</h2>
-        <p>You can find us at: <strong>FC Hanley, off Abbey Lane, Bucknall, ST28AJ</strong></p>
-        <p>Use the map below or tap to get directions</p>
-        <div class="map-container">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d2399.5563454602056!2d-2.15194591100012!3d53.0283379005154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNTPCsDAxJzQyLjAiTiAywrAwOCc0OS41Ilc!5e0!3m2!1sen!2suk!4v1751888674928!5m2!1sen!2suk"
-            width="600"
-            height="450"
-            style="border:0;"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade">
-          </iframe>
+    <div class="hero-content">
+        <img src="https://fchanley.com/images/HanleyBadge.png" alt="FC Hanley" class="hero-badge">
+        <div class="hero-eyebrow">Stoke-on-Trent · Youth & Adult Football</div>
+        <h1 class="hero-title">FC <span class="blue">Hanley</span></h1>
+        <p class="hero-tagline">Passion &nbsp;·&nbsp; Pride &nbsp;·&nbsp; Community</p>
+        <div class="hero-buttons">
+            <a href="vacancies/playon/index.html" class="btn-primary">Find Your Team</a>
+            <a href="coaching-school.html" class="btn-outline">Coaching School</a>
         </div>
-      </div>
-    </section>
-  </div>
-
-  <section class="hero-alt2">
-    <div class="hero-content-alt2">
-      <h2>Saturday Morning Coaching School</h2>
-      <p>Every Saturday Morning - 9:00am - All Welcome! Multiple Age Groups starting from age 2!</p>
-      <p>See our Coaching School page for full details</p>
     </div>
-  </section>
+    <div class="hero-scroll"><div class="hero-scroll-bar"></div><span>Scroll</span></div>
+</section>
 
-  <div class="hero-wrapper">
-    <section class="hero-alt" data-aos="fade-left" data-aos-duration="1000" data-aos-delay="600">
-      <div class="hero-content-alt">
-        <h2>Football Performance Camps</h2>
-        <p>Every school holiday. Join our UEFA and FA qualified coaches for full days of technical coaching and fun</p>
-        <p>See our Holiday Camps page for details of our next camp and to register</p>
-      </div>
-    </section>
 
-    <section class="hero-alt3">
-      <div class="hero-content-alt3">
-        <h2>Hungry!? Thirsty!?</h2>
-        <p>Free Parking and Full onsite facilites which include our Cafe serving a large range of both hot and cold food and drinks!</p>
-        <p>Including our famous Torpedo Sub Roll!</p>
-      </div>
-    </section>
-  </div>
+<!-- ═══════════════════════════════════════════════════════
+     FEATURED BANNER — swap between the three options below
+     Only ONE <section> block should be uncommented at a time
+     ═══════════════════════════════════════════════════════ -->
 
-  <section class="feature-grid">
-    <h2 data-aos="fade-up" data-aos-duration="800">Why Join FC Hanley?</h2>
-    <div class="grid-container">
-      <div class="card" data-aos="fade-right" data-aos-duration="800">
-        <h3>Join a Team</h3>
-        <p>We welcome all abilities across multiple age groups. Become part of an inclusive community</p>
-      </div>
-      <div class="card" data-aos="fade-up" data-aos-delay="200" data-aos-duration="800">
-        <h3>Player Development</h3>
-        <p>Our FA-qualified coaches run high-energy weekly sessions with a focus on fun and development</p>
-      </div>
-      <div class="card" data-aos="fade-up" data-aos-delay="400" data-aos-duration="800">
-        <h3>Local Leagues & Tournaments</h3>
-        <p>Take part in competitive leagues and tournaments throughout the season</p>
-      </div>
+
+<!-- ▼ TOURNAMENT LIVE — uncomment on the day ▼ -->
+
+<section class="banner-tournament">
+    <div class="banner-inner">
+        <div>
+            <div class="t-label">🔴 JUly 4th & 5th</div>
+            <div class="t-title">Will Brazier<br>Festival of Football</div>
+            <div class="t-sub">Fixtures, Results &amp; Tables</div>
+            <div class="t-details">
+                <div><span class="t-detail-label">Date</span><span class="t-detail-val">Sat 4th &amp; Sun 5th July 2026</span></div>
+                <div><span class="t-detail-label">Age Groups</span><span class="t-detail-val">U7 – U13</span></div>
+                <div><span class="t-detail-label">Location</span><span class="t-detail-val">Northwood Stadium Stoke-on-Trent</span></div>
+            </div>
+            <a href="https://deanodealo.github.io/FCHanleytournament/" class="btn-live" target="_blank">View Fixtures, Tables &amp; Results →</a>
+        </div>
+        <div class="live-badge-wrap">
+            <div class="live-badge">
+                <span class="live-dot"></span>
+                LIVE
+            </div>
+            <div class="live-sub">Updates in real time</div>
+        </div>
     </div>
-  </section>
+</section>
 
-  <img src="images/toptiertrophies.jpg" alt="Top Tier Trophies" class="trophy-img2"
-       data-aos="fade-right" data-aos-duration="1000" data-aos-delay="500">
+<!-- ▲ END TOURNAMENT LIVE ▲ -->
 
-  <!-- Sponsor Section -->
-  <div class="sponsors">
-    <p class="sponsors-lbl">Our proud sponsors</p>
+
+<!-- ▼ OPTION 2: HOLIDAY CAMP (uncomment when camp is next up) ▼-->
+<!--<section class="banner-camp">
+    <div class="banner-inner">
+        <div>
+            <div class="camp-label">📣 Now Open for Bookings</div>
+            <div class="camp-title">Summer Performance<br>Football Camp</div>
+            <div class="camp-sub">FC Hanley Holiday Camps 2026</div>
+            <div class="camp-details">
+                <div><span class="camp-detail-label">Dates</span><span class="camp-detail-val">UPDATE THIS</span></div>
+                <div><span class="camp-detail-label">Ages</span><span class="camp-detail-val">UPDATE THIS</span></div>
+                <div><span class="camp-detail-label">Location</span><span class="camp-detail-val">Abbey Lane, Bucknall</span></div>
+            </div>
+            <a href="holidaycamps.html" class="btn-green">Book Your Place →</a>
+        </div>
+        <div style="text-align:center;">
+            <img src="https://fchanley.com/images/HanleyBadge.png" style="width:160px; filter:drop-shadow(0 0 30px rgba(74,222,128,0.3));" alt="FC Hanley">
+        </div>
+    </div>
+</section>-->
+<!-- ▲ END OPTION 2 ▲ -->
+
+
+<!-- ▼ OPTION 3: DEFAULT WELCOME (use when nothing specific is on) ▼
+<section class="banner-welcome">
+    <div class="welcome-inner">
+        <div class="welcome-eyebrow">Welcome to FC Hanley</div>
+        <div class="welcome-title">Passion. Pride.<br>Community.</div>
+        <p class="welcome-text">FC Hanley is a grassroots football club based in Stoke-on-Trent, built on the values of inclusion, development, and community spirit. From our youngest players on Saturday mornings to our senior men competing in the Staffordshire County Premier Division — everyone has a home at FC Hanley.</p>
+        <div class="welcome-buttons">
+            <a href="vacancies/playon/index.html" class="btn-primary">Find a Team</a>
+            <a href="coaching-school.html" class="btn-outline">Coaching School</a>
+        </div>
+    </div>
+</section>
+▲ END OPTION 3 ▲ -->
+
+
+<!-- WENDY JONES TRIBUTE -->
+<section class="wendy">
+    <div class="wendy-inner fade-up">
+        <img src="https://fchanley.com/images/wendy.jpg" alt="Wendy Jones" class="wendy-photo">
+        <div class="wendy-content">
+            <div class="wendy-eyebrow">In loving memory</div>
+            <div class="wendy-name">Wendy Jones</div>
+            <div class="wendy-role">Former Chairperson · FC Hanley</div>
+            <p class="wendy-text">Wendy was a founding pillar of FC Hanley — a tireless champion for grassroots football and the community she loved. Her legacy lives on in everything we do at this club. We are proud to support The Wendy Jones Foundation in her honour.</p>
+            <div class="wendy-charity-badge">
+                <div class="dot"></div>
+                <span>Proudly supporting <strong>The Wendy Jones Foundation</strong></span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SENIOR MEN'S TEAM -->
+<section class="seniors">
+    <div class="seniors-inner">
+        <div class="seniors-text">
+            <div class="section-eyebrow">First Team</div>
+            <div class="seniors-title">Senior Men's<br>Team</div>
+            <div class="seniors-league">
+                <div class="league-dot"></div>
+                Staffordshire County Premier Division
+            </div>
+            <p>FC Hanley's senior men's team compete at the highest level of Staffordshire county football. A proud, hard-working squad representing the community on the pitch every week. Come down and support your local side.</p>
+            <div class="seniors-stats">
+                <div class="stat-box">
+                    <span class="stat-num">1st</span>
+                    <span class="stat-lbl">Division</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-num">SNR</span>
+                    <span class="stat-lbl">Level</span>
+                </div>
+                <div class="stat-box">
+                    <span class="stat-num">⚽</span>
+                    <span class="stat-lbl">Weekly</span>
+                </div>
+            </div>
+            <a href="https://fulltime.thefa.com/displayTeam.html?divisionseason=529675453&teamID=997982778#tab-1" class="btn-primary" target="_blank" rel="noopener">View Fixtures &amp; Results →</a>
+        </div>
+        <div class="seniors-visual fade-up">
+            <div class="seniors-badge-wrap">
+                <img src="https://fchanley.com/images/HanleyBadge.png" alt="FC Hanley">
+            </div>
+            <div class="seniors-division-card">
+                <div class="div-label">Competing In</div>
+                <div class="div-name">Staffordshire County<br>Senior League</div>
+                <div class="div-org">Premier Division</div>
+            </div>
+            <div class="seniors-links">
+                <a href="https://fulltime.thefa.com/displayTeam.html?divisionseason=529675453&teamID=997982778#tab-1" class="btn-sm-primary" target="_blank" rel="noopener">Fixtures</a>
+                <a href="news.html" class="btn-sm-outline">Match Reports</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- EXPLORE THE CLUB -->
+<section class="explore">
+    <div class="explore-header fade-up">
+        <p>Explore the Club</p>
+        <h2>Everything You Need</h2>
+    </div>
+    <div class="explore-grid">
+        <a href="fixtures.html" class="explore-card fade-up">
+            <span class="explore-card-icon">📅</span>
+            <div class="explore-card-title">Fixtures &amp; Results</div>
+            <div class="explore-card-desc">Schedules and results for all FC Hanley teams this season</div>
+        </a>
+        <a href="coaching-school.html" class="explore-card fade-up">
+            <span class="explore-card-icon">⚽</span>
+            <div class="explore-card-title">Coaching School</div>
+            <div class="explore-card-desc">Saturday morning sessions from age 4 — all abilities welcome</div>
+        </a>
+        <a href="holidaycamps.html" class="explore-card fade-up">
+            <span class="explore-card-icon">🏕️</span>
+            <div class="explore-card-title">Holiday Camps</div>
+            <div class="explore-card-desc">Full-day performance camps every school holiday</div>
+        </a>
+        <a href="news.html" class="explore-card fade-up">
+            <span class="explore-card-icon">📰</span>
+            <div class="explore-card-title">News &amp; Events</div>
+            <div class="explore-card-desc">Latest club news, match reports, and upcoming events</div>
+        </a>
+        <a href="toptier.html" class="explore-card fade-up">
+            <span class="explore-card-icon">🏆</span>
+            <div class="explore-card-title">Trophies &amp; Medals</div>
+            <div class="explore-card-desc">Quality awards for your team — browse the Top Tier range</div>
+        </a>
+        <a href="shop.html" class="explore-card fade-up">
+            <span class="explore-card-icon">🛒</span>
+            <div class="explore-card-title">Club Shop</div>
+            <div class="explore-card-desc">Official FC Hanley kit and merchandise</div>
+        </a>
+        <a href="vacancies/playon/index.html" class="explore-card fade-up">
+            <span class="explore-card-icon">🔍</span>
+            <div class="explore-card-title">Find a Team</div>
+            <div class="explore-card-desc">Search vacancies across all age groups and abilities</div>
+        </a>
+    </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     CLUB UPDATES — add/remove cards below as needed
+     To add a new update: copy one .update-card block
+     To remove an update: delete the .update-card block
+     Tags: 🏆 Trophy Win | 📣 Announcement | ⚽ Match Report
+           🏕️ Holiday Camp | 📅 Fixture News | 🎉 Club News
+     ═══════════════════════════════════════════════════════ -->
+<section class="club-updates">
+    <div class="section-header fade-up">
+        <div class="section-eyebrow">Latest</div>
+        <h2 class="section-title">Club Updates</h2>
+    </div>
+    <div class="updates-grid">
+
+        <!-- UPDATE CARD — copy this block to add more -->
+        <div class="update-card fade-up">
+            <div class="update-tag">🏆 Trophy Win</div>
+            <h3>Senior Challenge Vase Champions!</h3>
+            <p>Our senior men's team claimed the Senior Challenge Vase, beating Wyrley United 2-5 in a brilliant final at Stan Robinson Stadium, Stafford. An incredible achievement for the whole club!</p>
+            <span class="update-date">April 2026</span>
+        </div>
+        <!-- END UPDATE CARD -->
+
+        <div class="update-card fade-up">
+            <div class="update-tag">🏕️ Holiday Camp </div>
+            <h3>FC Hanley Summer Holiday Camp 2026!</h3>
+            <p>FA and UEFA qualified coaches, delivering professinal, fun nd inclusive sessions for all ages. Dates and booking details coming soon!</p>
+            <span class="update-date">June 2026</span>
+        </div>
+
+<div class="update-card fade-up">
+            <div class="update-tag">📣 Announcement </div>
+            <h3>The Will Brazier Festival of Football!</h3>
+            <p>Saturday 4th & Sunday 5th of July.  Registration is closing soon!  Ages U7 - U13.  Proudly raising funds in honor of Will Brazier.for the Douglas Macmillan Hospice </p>
+            <span class="update-date">June 2026</span>
+        </div>
+
+        <!-- ADD MORE CARDS HERE — example below, delete or keep:
+        <div class="update-card fade-up">
+            <div class="update-tag">📣 Announcement</div>
+            <h3>Your headline here</h3>
+            <p>Your update text here.</p>
+            <span class="update-date">Month Year</span>
+        </div>
+        -->
+
+    </div>
+</section>
+
+
+<!-- FEATURES -->
+<section class="features">
+    <div class="section-header fade-up">
+        <div class="section-eyebrow">What We Offer</div>
+        <h2 class="section-title">Everything Football</h2>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card fade-up">
+            <div class="feature-label">Every Saturday · 9am</div>
+            <h3>Coaching School</h3>
+            <p>All welcome from age 4. Multiple age groups delivered by FA-qualified coaches in a fun, inclusive environment every Saturday morning.</p>
+            <a href="coaching-school.html">Find out more →</a>
+        </div>
+        <div class="feature-card fade-up">
+            <div class="feature-label">Every School Holiday</div>
+            <h3>Performance Camps</h3>
+            <p>Full days of technical coaching and fun with our UEFA and FA qualified staff. A great development experience for all abilities and age groups.</p>
+            <a href="holidaycamps.html">View upcoming camps →</a>
+        </div>
+        <div class="feature-card fade-up">
+            <div class="feature-label">Throughout the Season</div>
+            <h3>Competitive Teams</h3>
+            <p>Take part in local leagues and tournaments with our competitive teams. Multiple age groups from youth through to our senior men's side.</p>
+            <a href="fixtures.html">View fixtures →</a>
+        </div>
+        <div class="feature-card fade-up">
+            <div class="feature-label">On Site · Free Parking</div>
+            <h3>Café &amp; Facilities</h3>
+            <p>Full onsite facilities including our café serving hot and cold food and drinks — including the famous Torpedo Sub Roll you won't want to miss.</p>
+            <a href="subz.html">See the menu →</a>
+        </div>
+        <div class="feature-card fade-up">
+            <div class="feature-label">Trophies &amp; Awards</div>
+            <h3>Top Tier Trophies</h3>
+            <p>Quality trophies, medals and awards for every occasion. From league winners to end-of-season player awards, we have you covered.</p>
+            <a href="toptier.html">Browse range →</a>
+        </div>
+        <div class="feature-card fade-up">
+            <div class="feature-label">Official Merchandise</div>
+            <h3>Club Shop</h3>
+            <p>Official FC Hanley kit and club merchandise. Represent the club with pride on and off the pitch.</p>
+            <a href="shop.html">Visit the shop →</a>
+        </div>
+    </div>
+</section>
+
+<!-- WHY JOIN -->
+<section class="why-join">
+    <div class="section-header fade-up">
+        <div class="section-eyebrow">Why FC Hanley</div>
+        <h2 class="section-title" style="color:white">More Than A Club</h2>
+    </div>
+    <div class="why-grid">
+        <div class="why-card fade-up">
+            <div class="why-card-num">01</div>
+            <h3>Join a Team</h3>
+            <p>We welcome all abilities across multiple age groups, from age 4 upwards. Become part of a proud, inclusive community where everyone has a place regardless of experience.</p>
+        </div>
+        <div class="why-card fade-up">
+            <div class="why-card-num">02</div>
+            <h3>Player Development</h3>
+            <p>Our UEFA and FA-qualified coaches run high-energy weekly sessions focused on technical skills, teamwork, and most importantly — fun.</p>
+        </div>
+        <div class="why-card fade-up">
+            <div class="why-card-num">03</div>
+            <h3>Leagues &amp; Tournaments</h3>
+            <p>Compete throughout the season in local leagues and cup competitions. There is always something to play for at every age group across the club.</p>
+        </div>
+        <div class="why-card fade-up">
+            <div class="why-card-num">04</div>
+            <h3>A Pathway to Senior Football</h3>
+            <p>From Saturday morning coaching at age 4 through to our senior men's team competing in the Staffordshire County Premier Division — FC Hanley offers a full football journey.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FIND A TEAM -->
+<section class="find-team">
+    <div class="find-team-inner">
+        <div class="find-team-text fade-up">
+            <div class="section-eyebrow">Player Vacancies</div>
+            <h2>Find Your Perfect Team</h2>
+            <p>Browse the latest FC Hanley team and coaching vacancies. Search for a team that suits your ability and age group, and take the next step in your football journey.</p>
+            <a href="vacancies/playon/index.html" class="btn-primary">Search Vacancies →</a>
+        </div>
+        <div class="find-team-visual fade-up">
+            <img src="https://fchanley.com/images/logo.png" alt="PlayOn">
+            <p>Powered by PlayOn — the UK's grassroots football platform</p>
+        </div>
+    </div>
+</section>
+
+
+<!-- FACEBOOK FEED -->
+<section class="homepage-facebook">
+    <div class="homepage-facebook-inner">
+        <div class="section-header fade-up">
+            <div class="section-eyebrow">Follow Us</div>
+            <h2 class="section-title">FC Hanley on Facebook</h2>
+        </div>
+        <div class="facebook-embed-wrap fade-up">
+            <div class="fb-page"
+                data-href="https://www.facebook.com/FCHanley/"
+                data-tabs="timeline"
+                data-width="500"
+                data-height="600"
+                data-small-header="false"
+                data-adapt-container-width="true"
+                data-hide-cover="false"
+                data-show-facepile="true">
+                <blockquote cite="https://www.facebook.com/FCHanley/" class="fb-xfbml-parse-ignore">
+                    <a href="https://www.facebook.com/FCHanley/">FC Hanley on Facebook</a>
+                </blockquote>
+            </div>
+        </div>
+        <div class="facebook-follow-cta fade-up">
+            <a href="https://www.facebook.com/FCHanley" target="_blank" rel="noopener" class="btn-primary">Follow on Facebook →</a>
+        </div>
+    </div>
+</section>
+
+<!-- Facebook SDK -->
+<div id="fb-root"></div>
+<script async defer crossorigin="anonymous"
+    src="https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v22.0"></script>
+
+    <!-- LOCATION -->
+<section class="location">
+    <div class="location-inner">
+        <div class="fade-up">
+            <h2>Find<br>Us Here</h2>
+            <div class="loc-detail"><span class="loc-icon">📍</span><div><span class="loc-label">Address</span><span class="loc-val">FC Hanley, off Abbey Lane, Bucknall, ST2 8AJ</span></div></div>
+            <div class="loc-detail"><span class="loc-icon">⚽</span><div><span class="loc-label">Saturday Coaching</span><span class="loc-val">Every Saturday from 9:00am — All welcome</span></div></div>
+            <div class="loc-detail"><span class="loc-icon">🚗</span><div><span class="loc-label">Parking</span><span class="loc-val">Free parking available on site</span></div></div>
+            <div class="loc-detail"><span class="loc-icon">✉️</span><div><span class="loc-label">Contact</span><span class="loc-val"><a href="mailto:contact@fchanley.club">contact@fchanley.club</a></span></div></div>
+        </div>
+        <div class="map-wrap fade-up">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d2399.5563454602056!2d-2.15194591100012!3d53.0283379005154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zNTPCsDAxJzQyLjAiTiAywrAwOCc0OS41Ilc!5e0!3m2!1sen!2suk!4v1751888674928!5m2!1sen!2suk" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="FC Hanley Location"></iframe>
+        </div>
+    </div>
+</section>
+
+<!-- SPONSORS -->
+<section class="sponsors">
+    <div class="sponsors-lbl">Our proud sponsors</div>
     <div class="sponsors-wrap">
-      <div class="sponsors-track">
-        <img src="images/PCT.jpg"          alt="PCT Coaching - FC Hanley Sponsor">
-        <img src="images/withey.jpeg"      alt="Withey Grounds Maintenance - FC Hanley Sponsor">
-        <img src="images/Northwood.jpeg"   alt="Northwood Community Sports - FC Hanley Sponsor">
-        <img src="images/futureplast.jpeg" alt="Future Plastering - FC Hanley Sponsor">
-        <img src="images/colclough.jpeg"   alt="Colclough Jones Flooring - FC Hanley Sponsor">
-        <img src="images/toptier.jpg"      alt="Top Tier Trophies - FC Hanley Sponsor">
-        <!-- Duplicated for seamless loop -->
-        <img src="images/PCT.jpg"          alt="PCT Coaching - FC Hanley Sponsor">
-        <img src="images/withey.jpeg"      alt="Withey Grounds Maintenance - FC Hanley Sponsor">
-        <img src="images/Northwood.jpeg"   alt="Northwood Community Sports - FC Hanley Sponsor">
-        <img src="images/futureplast.jpeg" alt="Future Plastering - FC Hanley Sponsor">
-        <img src="images/colclough.jpeg"   alt="Colclough Jones Flooring - FC Hanley Sponsor">
-        <img src="images/toptier.jpg"      alt="Top Tier Trophies - FC Hanley Sponsor">
-      </div>
+        <div class="sponsors-track">
+            <img class="sponsor-img" src="https://fchanley.com/images/PCT.jpg"          alt="PCT Coaching">
+            <img class="sponsor-img" src="https://fchanley.com/images/withey.jpeg"      alt="Withey Grounds Maintenance">
+            <img class="sponsor-img" src="https://fchanley.com/images/Northwood.jpeg"   alt="Northwood Community Sports">
+            <img class="sponsor-img" src="https://fchanley.com/images/futureplast.jpeg" alt="Future Plastering">
+            <img class="sponsor-img" src="https://fchanley.com/images/colclough.jpeg"   alt="Colclough Jones Flooring">
+            <img class="sponsor-img" src="https://fchanley.com/images/toptier.jpg"      alt="Top Tier Trophies">
+            <img class="sponsor-img" src="https://fchanley.com/images/PCT.jpg"          alt="PCT Coaching">
+            <img class="sponsor-img" src="https://fchanley.com/images/withey.jpeg"      alt="Withey Grounds Maintenance">
+            <img class="sponsor-img" src="https://fchanley.com/images/Northwood.jpeg"   alt="Northwood Community Sports">
+            <img class="sponsor-img" src="https://fchanley.com/images/futureplast.jpeg" alt="Future Plastering">
+            <img class="sponsor-img" src="https://fchanley.com/images/colclough.jpeg"   alt="Colclough Jones Flooring">
+            <img class="sponsor-img" src="https://fchanley.com/images/toptier.jpg"      alt="Top Tier Trophies">
+        </div>
     </div>
-  </div>
+</section>
 
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-  <script>
-    AOS.init();
-  </script>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <a href="https://www.staffordshirefa.com/" target="_blank">
-        <img src="images/staffsfa.png" alt="Staffordshire FA" class="footer-img">
-      </a>
-      <a href="https://www.facebook.com/FCHanley" target="_blank" rel="noopener noreferrer">
-        <img src="images/FBook.png" alt="Follow us on Facebook" class="footer-img footer-social">
-      </a>
-      <a href="mailto:deancolclough05@gmail.com" class="designer-logo">
-        <img src="images/dealo (3).PNG" alt="Site Designer" class="footer-img footer-designer">
-      </a>
-      <div class="footer-info">
-        <a href="https://find-and-update.company-information.service.gov.uk/company/09565826" target="_blank">FC Hanley Ltd (09565826)</a>
-        <a href="mailto:contact@fchanley.club">contact@fchanley.club</a>
-        <p>&copy; 2026 FC Hanley. All rights reserved.</p>
-      </div>
+<!-- FOOTER -->
+<footer class="site-footer">
+    <div class="footer-inner-grid">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <img src="https://fchanley.com/images/HanleyBadge.png" alt="FC Hanley">
+                <p>Grassroots football club based in Stoke-on-Trent. Passion. Pride. Community.</p>
+                <div class="footer-socials">
+                    <a href="https://www.facebook.com/FCHanley" class="footer-social" target="_blank" rel="noopener">f</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Club</h4>
+                <a href="coaching-school.html">Coaching School</a>
+                <a href="holidaycamps.html">Holiday Camps</a>
+                <a href="fixtures.html">Fixtures</a>
+                <a href="toptier.html">Trophies</a>
+                <a href="shop.html">Shop</a>
+            </div>
+            <div class="footer-col">
+                <h4>Community</h4>
+                <a href="vacancies/playon/index.html">Find a Team</a>
+                <a href="tournament-registration.html">Tournament 2026</a>
+            </div>
+            <div class="footer-col">
+                <h4>Info</h4>
+                <a href="mailto:contact@fchanley.club">contact@fchanley.club</a>
+                <a href="https://www.staffordshirefa.com/" target="_blank" rel="noopener">Staffordshire FA</a>
+                <a href="https://find-and-update.company-information.service.gov.uk/company/09565826" target="_blank" rel="noopener">Companies House</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+    <span>© 2026 FC Hanley Ltd (09565826). All rights reserved.</span>
+    <a href="mailto:deancolclough05@gmail.com" style="display:flex; align-items:center; gap:0.5rem; color:rgba(255,255,255,0.25); font-size:0.78rem;">
+        Site by <img src="images/dealo.png" alt="Site Designer" style="height:48px;">
+    </a>
+</div>
     </div>
-  </footer>
+</footer>
 
-  <!-- Burger Menu JS -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const burgerToggle = document.getElementById("burger-toggle");
-      const burgerDropdown = document.getElementById("burger-dropdown");
-      const overlay = document.getElementById("burger-overlay");
-
-      function openMenu() {
-        burgerDropdown.classList.add("open");
-        overlay.classList.add("show");
-        burgerToggle.classList.add("open");
-      }
-
-      function closeMenu() {
-        burgerDropdown.classList.remove("open");
-        overlay.classList.remove("show");
-        burgerToggle.classList.remove("open");
-      }
-
-      burgerToggle.addEventListener("click", () => {
-        if (burgerDropdown.classList.contains("open")) {
-          closeMenu();
-        } else {
-          openMenu();
-        }
-      });
-
-      overlay.addEventListener("click", closeMenu);
-
-      burgerDropdown.querySelectorAll("a").forEach(link => {
-        link.addEventListener("click", closeMenu);
-      });
-    });
-  </script>
-
-  <!-- Scroll Progress Bar JS -->
-  <script>
-    let timeoutId;
-    window.addEventListener('scroll', () => {
-      const progressBar = document.getElementById('scroll-progress-bar');
-      const scrollTop = window.scrollY;
-      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const scrolled = (scrollTop / docHeight) * 100;
-      progressBar.style.width = `${scrolled}%`;
-      progressBar.style.opacity = '1';
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        progressBar.style.opacity = '0';
-      }, 1500);
-    });
-  </script>
-
+<script src="js/main.js"></script>
 </body>
 </html>

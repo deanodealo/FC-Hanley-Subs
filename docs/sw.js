@@ -3,7 +3,7 @@ const CACHE_NAME = 'fchanley-v1';
 const PRECACHE = [
   '/',
   '/index.html',
-  '/styles/styles.css',
+  '/css/styles.css',
   '/images/HanleyBadge.png'
 ];
 

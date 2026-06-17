@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/styles.css">
+  <link rel="stylesheet" href="playon.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Us - PlayOn</title>
-  <link rel="stylesheet" href="index.css">
+  <title>Contact | FC Hanley</title>
   <style>
     .contact-container {
       max-width: 800px;
@@ -208,37 +210,76 @@
 </head>
 <body>
 
-<header>
-  <button class="burger" aria-label="Menu" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </button>
-  <div class="logo-container">
-    <img src="images/logo.png" alt="PlayOn Logo" />
-  </div>
-</header>
+<!-- DRAWER OVERLAY -->
+<div class="nav-overlay" id="navOverlay" onclick="closeDrawer()"></div>
 
-<div id="menuOverlay" class="overlay" onclick="closeMenu()"></div>
-
-<!-- Side Menu -->
-<nav id="sideMenu" class="side-menu">
-  <a href="index.html">Home</a>
-  <a href="about.html">About</a>
-  <a href="vacancies.html">Vacancies</a>
-  <!--<a href="referees.html">Find a Ref</a>-->
-  <a href="#" onclick="showLogin(event)">Login</a>
-  <a href="register.html">Register</a>
-  <div class="menu-logo">
-    <div class="logo-wrapper">
-      <img src="images/logo.png" alt="PlayOn Logo">
-    </div>
+<!-- DRAWER NAV -->
+<nav class="drawer" id="sideMenu">
+  <div class="drawer-header">
+    <img src="images/logo.png" alt="PlayOn">
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
   </div>
+<div class="drawer-links">
+    <a href="index.html"><span class="d-icon">🔍</span> Find a Team</a>
+    <a href="vacancies.html"><span class="d-icon">📋</span> All Vacancies</a>
+    <a href="about.html"><span class="d-icon">ℹ️</span> How It Works</a>
+    <div class="drawer-divider"></div>
+    <a href="#" class="auth-logged-out" onclick="showLogin(event)"><span class="d-icon">🔐</span> Login</a>
+    <a href="register.html" class="auth-logged-out"><span class="d-icon">📝</span> Register</a>
+    <a href="manager-vacancies.html" class="auth-logged-in" style="display:none"><span class="d-icon">⚙️</span> Manage Vacancies</a>
+    <a href="#" class="auth-logged-in" style="display:none" onclick="logout()"><span class="d-icon">🚪</span> Logout</a>
+    <div class="drawer-divider"></div>
+    <a href="../../index.html"><span class="d-icon">🏠</span> Back to FC Hanley</a>
+</div>
+  <div class="drawer-footer">Powered by PlayOn</div>
 </nav>
 
-<section class="hero">
-  <h1>Contact Us</h1>
-  <p>Get in touch - we're here to help!</p>
-</section>
+<!-- HEADER -->
+<header id="site-header">
+  <button class="burger-btn" onclick="openDrawer()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+  <a href="../../index.html" class="header-logo">
+    <img src="../../images/HanleyBadge.png" alt="FC Hanley Badge">
+    <span class="header-logo-name">FC Hanley</span>
+  </a>
+  <nav class="site-nav">
+    <a href="../../coaching-school.html">Coaching</a>
+    <a href="../../holidaycamps.html">Camps</a>
+    <a href="../../fixtures.html">Fixtures</a>
+    <a href="../../toptier.html">Trophies</a>
+    <a href="../../shop.html">Shop</a>
+    <a href="vacancies.html" class="nav-cta">Find a Team</a>
+  </nav>
+  <div class="header-spacer"></div>
+</header>
 
+<!-- LOGIN POPUP -->
+<div id="loginOverlay" class="login-overlay" onclick="closeLogin(event)">
+  <div class="login-form-container" onclick="event.stopPropagation()">
+    <button class="login-close" onclick="closeLogin()" aria-label="Close">&times;</button>
+    <div class="login-logo"><div class="login-logo-wrapper"><img src="images/logo.png" alt="PlayOn Logo"></div></div>
+    <form class="login-form" id="loginForm">
+      <h2>Welcome Back</h2>
+      <label for="loginEmail">Email</label><input type="email" id="loginEmail" required>
+      <label for="loginPassword">Password</label><input type="password" id="loginPassword" required>
+      <button type="submit" id="loginBtn">Login</button>
+      <div class="forgot-password"><a href="#" onclick="forgotPassword(event)">Forgot Password?</a></div>
+      <div id="loginMessage" class="login-message"></div>
+      <div class="register-link">Don't have an account? <a href="register.html">Register here</a></div>
+    </form>
+  </div>
+</div>
+
+
+<!-- Side Menu -->
+<section class="playon-hero">
+  <div class="playon-hero-content">
+    <div class="playon-hero-eyebrow">Get in Touch</div>
+    <h1>Contact<span>Us</span></h1>
+    <p>Get in touch — we're here to help.</p>
+  </div>
+</section>
 <main class="contact-container">
   <!-- Contact Information -->
   <div class="contact-card">
@@ -336,15 +377,6 @@
   </div>
 </main>
 
-<footer>
-  <p>&copy; 2025 PlayOn. All rights reserved.</p>
-  <p>
-    <a href="index.html">Home</a> |
-    <a href="about.html">About</a> |
-    <a href="privacy.html">Privacy</a>
-  </p>
-</footer>
-
 <script>
   const burger = document.querySelector('.burger');
   const sideMenu = document.getElementById('sideMenu');
@@ -404,6 +436,89 @@
 </script>
 
 <script src="js/login-popup.js"></script>
+
+
+<!-- SPONSORS -->
+<section class="sponsors">
+  <div class="sponsors-lbl">Our proud sponsors</div>
+  <div class="sponsors-wrap">
+    <div class="sponsors-track">
+      <img src="../../images/PCT.jpg"          alt="PCT Coaching">
+      <img src="../../images/withey.jpeg"       alt="Withey Grounds Maintenance">
+      <img src="../../images/Northwood.jpeg"    alt="Northwood Community Sports">
+      <img src="../../images/futureplast.jpeg"  alt="Future Plastering">
+      <img src="../../images/colclough.jpeg"    alt="Colclough Jones Flooring">
+      <img src="../../images/toptier.jpg"       alt="Top Tier Trophies">
+      <img src="../../images/PCT.jpg"           alt="PCT Coaching">
+      <img src="../../images/withey.jpeg"       alt="Withey Grounds Maintenance">
+      <img src="../../images/Northwood.jpeg"    alt="Northwood Community Sports">
+      <img src="../../images/futureplast.jpeg"  alt="Future Plastering">
+      <img src="../../images/colclough.jpeg"    alt="Colclough Jones Flooring">
+      <img src="../../images/toptier.jpg"       alt="Top Tier Trophies">
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-inner-grid">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="../../images/HanleyBadge.png" alt="FC Hanley">
+        <p>Grassroots football club based in Stoke-on-Trent. Passion. Pride. Community.</p>
+        <div class="footer-socials">
+          <a href="https://www.facebook.com/FCHanley" class="footer-social" target="_blank" rel="noopener">f</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Club</h4>
+        <a href="../../coaching-school.html">Coaching School</a>
+        <a href="../../holidaycamps.html">Holiday Camps</a>
+        <a href="../../fixtures.html">Fixtures</a>
+        <a href="../../toptier.html">Trophies</a>
+        <a href="../../shop.html">Shop</a>
+      </div>
+      <div class="footer-col">
+        <h4>Find a Team</h4>
+        <a href="vacancies.html">All Vacancies</a>
+        <a href="about.html">How It Works</a>
+        <a href="register.html">Register</a>
+        <a href="privacy.html">Privacy Policy</a>
+      </div>
+      <div class="footer-col">
+        <h4>Info</h4>
+        <a href="mailto:contact@fchanley.club">contact@fchanley.club</a>
+        <a href="https://www.staffordshirefa.com/" target="_blank" rel="noopener">Staffordshire FA</a>
+        <a href="https://find-and-update.company-information.service.gov.uk/company/09565826" target="_blank" rel="noopener">Companies House</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 FC Hanley Ltd (09565826). All rights reserved.</span>
+      <span style="color:rgba(255,255,255,0.18)">Designed for the community &#x26;#9917;</span>
+    </div>
+    <div class="playon-footer-credit">
+      <img src="images/logo.png" alt="PlayOn">
+      Vacancy system powered by PlayOn
+    </div>
+  </div>
+</footer>
+
+
+<script>
+  function openDrawer() {
+    document.getElementById('sideMenu').classList.add('open');
+    document.getElementById('navOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDrawer() {
+    document.getElementById('sideMenu').classList.remove('open');
+    document.getElementById('navOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  window.addEventListener('scroll', () => {
+    const h = document.getElementById('site-header');
+    if (h) h.style.boxShadow = window.scrollY > 40 ? '0 4px 24px rgba(0,0,0,0.35)' : 'none';
+  });
+</script>
 
 </body>
 </html>
