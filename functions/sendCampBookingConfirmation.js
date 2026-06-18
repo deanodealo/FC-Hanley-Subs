@@ -66,9 +66,7 @@ Thank you for booking onto ${booking.campName}! Your payment of £${Number(booki
 Booking summary:
 ${childLines}
 
-[PLACEHOLDER — replace this section with real details once written:
-start times, where to book in on the day, what to bring, parking,
-drop-off/pick-up arrangements, contact number for the day, etc.]
+On the day please report to one of the coaches who will be on hand to welcome your child. 
 
 If you have any questions, you can reply directly to this email.
 

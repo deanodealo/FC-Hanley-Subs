@@ -587,7 +587,7 @@ const CAMP_CONFIG = {
   heroSub: "Select a week, choose your days, and secure your child's place.",
   intro: "Complete the form below for each child you're registering, choose the week(s) and day(s) they'll attend, then confirm payment to secure their place. Places are allocated on a first-come, first-served basis.",
 
-  pricePerDay: 1, // £ per child per day
+  pricePerDay: 25, // £ per child per day
 
   // Offer: book this many days in a SINGLE WEEK, cheapest one is free.
   // Set to null to disable (e.g. "offer: null").
@@ -1183,7 +1183,7 @@ const CHARGE_FUNCTION_URL = "https://europe-west1-fchanley-8d910.cloudfunctions.
         });
 
         // 5. Success
-        msg.textContent = "🎉 Booking complete! Payment received and your place(s) are confirmed.";
+        msg.textContent = "🎉 Booking complete! Payment received and your place(s) are confirmed. A confirmation email is on its way — please check your junk/spam folder if it doesn't appear in your inbox shortly.";
         msg.className = "form-message success";
 
         document.getElementById("campForm").reset();
