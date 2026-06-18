@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Holiday Camp Registration | FC Hanley</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<meta name="theme-color" content="#0A1628">
+<link rel="manifest" href="manifest.json">
+<script src="add-to-home.js" defer></script>
+
+<!-- Square Web Payments SDK (Production) -->
+<script src="https://web.squarecdn.com/v1/square.js"></script>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<style>
+/* ══════════════════════════════════════════════════════════
+   CAMP REGISTRATION — page-scoped styles
+   Built on the same tokens as styles.css (--navy, --blue,
+   --accent, --gold, Barlow Condensed / DM Sans). Nothing here
+   should need a global stylesheet change.
+   ══════════════════════════════════════════════════════════ */
+
+.camp-reg-page { background: var(--off-white); }
+
+/* — closed state banner (shown automatically once every camp's
+     dates have passed — see CAMP_CONFIG.status logic at bottom) — */
+.camp-reg-closed {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 4rem 2rem 6rem;
+  text-align: center;
+}
+.camp-reg-closed h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--navy);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.camp-reg-closed p { color: #5A6B82; line-height: 1.7; margin-bottom: 1.5rem; }
+
+/* — layout shell — */
+.camp-reg-wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 3.5rem 1.5rem 6rem;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 2rem;
+  align-items: start;
+}
+@media (max-width: 960px) {
+  .camp-reg-wrap { grid-template-columns: 1fr; padding: 2.5rem 1.25rem 4rem; }
+}
+
+.camp-reg-card {
+  background: white;
+  border-radius: 16px;
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.05);
+  padding: 2.25rem;
+}
+@media (max-width: 600px) { .camp-reg-card { padding: 1.5rem; } }
+
+.camp-reg-intro {
+  color: #5A6B82;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.camp-reg-section + .camp-reg-section { margin-top: 2.25rem; padding-top: 2.25rem; border-top: 1px solid rgba(0,0,0,0.07); }
+
+.camp-reg-section-label {
+  font-size: 0.68rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+/* — child entries — */
+.child-block {
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+  position: relative;
+}
+.child-block-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+.child-block-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.child-remove-btn {
+  background: none;
+  border: none;
+  color: #C0392B;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.child-remove-btn:hover { background: rgba(192,57,43,0.08); }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+.form-row.single { grid-template-columns: 1fr; }
+@media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 0.4rem;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.92rem;
+  color: var(--text);
+  background: var(--off-white);
+  border: 1.5px solid rgba(0,0,0,0.1);
+  border-radius: 8px;
+  transition: border-color 0.15s, background 0.15s;
+  resize: vertical;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--blue-light);
+  background: white;
+}
+
+.field-hint {
+  font-size: 0.76rem;
+  color: #8A9BB0;
+  font-weight: 400;
+  line-height: 1.5;
+  margin: -0.15rem 0 0.5rem;
+}
+
+.required-mark { color: #C0392B; }
+
+.child-extra-row { margin-top: 1.25rem; }
+
+/* — consent toggle — */
+.consent-toggle { display: flex; gap: 0.6rem; }
+.consent-btn {
+  flex: 1;
+  padding: 0.65rem 1rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--navy);
+  background: var(--off-white);
+  border: 1.5px solid rgba(0,0,0,0.12);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.consent-btn:hover { border-color: var(--blue-light); }
+.consent-btn.active {
+  background: var(--blue-light);
+  border-color: var(--blue-light);
+  color: white;
+}
+.consent-btn[data-choice="no"].active {
+  background: #5A6B82;
+  border-color: #5A6B82;
+}
+
+/* — week picker — */
+.week-picker { display: flex; flex-direction: column; gap: 0.75rem; }
+
+.week-option {
+  border: 1.5px solid rgba(0,0,0,0.1);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+}
+.week-option:hover { border-color: var(--blue-light); }
+.week-option.active { border-color: var(--blue-light); background: rgba(0,120,215,0.05); }
+.week-option.full { opacity: 0.45; cursor: not-allowed; }
+
+.week-option-head { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; }
+.week-option-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1rem; color: var(--navy); text-transform: uppercase; display: flex; align-items: center; gap: 0.6rem; }
+
+.week-checkbox {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 2px solid rgba(0,0,0,0.22);
+  background: white;
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.15s;
+}
+.week-option.active .week-checkbox {
+  background: var(--blue-light);
+  border-color: var(--blue-light);
+}
+.week-option.active .week-checkbox::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 1px;
+  width: 6px;
+  height: 11px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.week-option.full .week-checkbox { border-color: rgba(0,0,0,0.1); background: rgba(0,0,0,0.04); }
+.week-option-dates { font-size: 0.75rem; color: #7A8EA8; }
+.week-option-full-tag { font-size: 0.68rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #C0392B; }
+
+/* day pills inside an active week */
+.day-pills {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.9rem;
+  padding-top: 0.9rem;
+  border-top: 1px dashed rgba(0,0,0,0.1);
+}
+.day-pill {
+  flex: 1 1 auto;
+  min-width: 64px;
+  text-align: center;
+  padding: 0.55rem 0.4rem;
+  border-radius: 8px;
+  border: 1.5px solid rgba(0,0,0,0.12);
+  background: white;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+.day-pill .dow { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.85rem; text-transform: uppercase; }
+.day-pill .ddate { display: block; font-size: 0.66rem; color: #94A3B8; margin-top: 1px; }
+.day-pill.selected { background: var(--blue-light); border-color: var(--blue-light); color: white; }
+.day-pill.selected .ddate { color: rgba(255,255,255,0.75); }
+.day-pill .free-tag { display: none; }
+.day-pill.free .free-tag { display: block; font-size: 0.6rem; color: var(--gold); font-weight: 700; margin-top: 1px; }
+.day-pill.selected.free .free-tag { color: #FFE08A; }
+
+/* — offer banner — */
+.offer-banner {
+  margin-top: 0.9rem;
+  background: rgba(255,184,0,0.1);
+  border: 1px solid rgba(255,184,0,0.35);
+  border-radius: 8px;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.78rem;
+  color: #8a6400;
+  font-weight: 600;
+  display: none;
+}
+.offer-banner.show { display: block; }
+
+/* — summary sidebar — */
+.summary-card {
+  background: var(--navy);
+  border-radius: 16px;
+  padding: 1.75rem;
+  color: white;
+  position: sticky;
+  top: 100px;
+}
+@media (max-width: 960px) { .summary-card { position: static; } }
+
+.summary-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 1.1rem;
+  color: var(--accent);
+}
+.summary-empty { font-size: 0.82rem; color: rgba(255,255,255,0.45); line-height: 1.6; }
+
+.summary-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.82rem;
+  padding: 0.55rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.summary-line .name { color: rgba(255,255,255,0.9); font-weight: 600; }
+.summary-line .meta { color: rgba(255,255,255,0.4); font-size: 0.72rem; display: block; margin-top: 1px; }
+.summary-line .price { color: white; font-weight: 700; white-space: nowrap; }
+.summary-line .price .was { color: rgba(255,255,255,0.35); text-decoration: line-through; font-weight: 400; margin-right: 4px; font-size: 0.74rem; }
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 1.1rem;
+  padding-top: 1.1rem;
+  border-top: 1.5px solid rgba(255,255,255,0.15);
+}
+.summary-total .label { font-size: 0.8rem; color: rgba(255,255,255,0.6); font-weight: 600; }
+.summary-total .amount { font-family: 'Barlow Condensed', sans-serif; font-size: 1.9rem; font-weight: 800; color: var(--accent); }
+
+.summary-savings {
+  font-size: 0.72rem;
+  color: var(--gold);
+  font-weight: 600;
+  margin-top: 0.4rem;
+  text-align: right;
+}
+
+/* — pay / submit area (lives in the main card, full width) — */
+.pay-area { margin-top: 2.25rem; padding-top: 2.25rem; border-top: 1px solid rgba(0,0,0,0.07); }
+#card-container { margin-bottom: 1rem; }
+.form-message { font-size: 0.85rem; margin-top: 0.75rem; min-height: 1.2em; }
+.form-message.error { color: #C0392B; }
+.form-message.success { color: #1E7E34; }
+
+.add-child-btn {
+  background: transparent;
+  border: 1.5px dashed rgba(0,87,184,0.4);
+  color: var(--blue-light);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.7rem 1.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.15s;
+}
+.add-child-btn:hover { background: rgba(0,87,184,0.06); border-color: var(--blue-light); }
+</style>
+</head>
+<body class="camp-reg-page">
+
+<!-- DRAWER OVERLAY -->
+<div class="nav-overlay" id="navOverlay" onclick="closeDrawer()"></div>
+
+<!-- SLIDE-IN DRAWER -->
+<nav class="drawer" id="drawer">
+    <div class="drawer-header">
+        <img src="https://fchanley.com/images/HanleyBadge.png" alt="FC Hanley">
+        <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="drawer-links">
+        <a href="coaching-school.html"><span class="d-icon">⚽</span> Coaching School</a>
+        <a href="holidaycamps.html"><span class="d-icon">🏕️</span> Holiday Camps</a>
+        <a href="fixtures.html"><span class="d-icon">📅</span> Fixtures</a>
+        <a href="toptier.html"><span class="d-icon">🎖️</span> Top Tier Trophies</a>
+        <a href="shop.html"><span class="d-icon">🛒</span> Shop</a>
+        <a href="vacancies/playon/index.html"><span class="d-icon">🔍</span> Find a Team</a>
+        <div class="drawer-divider"></div>
+    </div>
+    <div class="drawer-footer">© 2026 FC Hanley Ltd</div>
+</nav>
+
+<!-- HEADER -->
+<header id="site-header">
+    <button class="burger-btn" onclick="openDrawer()" aria-label="Open menu">
+        <span></span><span></span><span></span>
+    </button>
+    <a href="index.html" class="header-logo">
+        <img src="https://fchanley.com/images/HanleyBadge.png" alt="FC Hanley Badge">
+        <span class="header-logo-name">FC Hanley</span>
+    </a>
+    <nav class="site-nav">
+        <a href="coaching-school.html">Coaching</a>
+        <a href="holidaycamps.html">Camps</a>
+        <a href="fixtures.html">Fixtures</a>
+        <a href="toptier.html">Trophies</a>
+        <a href="shop.html">Shop</a>
+        <a href="vacancies/playon/index.html" class="nav-cta">Find a Team</a>
+    </nav>
+    <div class="header-spacer"></div>
+</header>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+    <div class="page-hero-content">
+        <div class="page-hero-eyebrow" id="heroEyebrow">Holiday Camps</div>
+        <h1 class="page-hero-title" id="heroTitle">Camp<span id="heroTitleSpan">Registration</span></h1>
+        <p class="page-hero-sub" id="heroSub">Select a week, choose your days, and secure your child's place.</p>
+    </div>
+</section>
+
+<main>
+
+  <!-- ═══════════════════════════════════════════════════════
+       CLOSED STATE — shown automatically if no camp in
+       CAMP_CONFIG is currently open for booking. See the
+       status logic at the bottom of the script.
+       ═══════════════════════════════════════════════════════ -->
+  <div class="camp-reg-closed hidden" id="closedState">
+    <h2>Registration Not Yet Open</h2>
+    <p id="closedMessage">Dates for the next FC Hanley Holiday Camp haven't been confirmed yet. Check back soon or follow us on Facebook for the announcement.</p>
+    <a href="holidaycamps.html" class="btn-primary">Back to Holiday Camps</a>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       REGISTRATION FORM
+       ═══════════════════════════════════════════════════════ -->
+  <div class="camp-reg-wrap" id="registrationForm">
+    <form class="camp-reg-card" id="campForm" novalidate>
+
+      <p class="camp-reg-intro" id="campIntro">
+        Complete the form below for each child you're registering, choose the week(s) and day(s) they'll attend,
+        then confirm payment to secure their place. Places are allocated on a first-come, first-served basis.
+      </p>
+
+      <!-- PARENT / CONTACT DETAILS -->
+      <div class="camp-reg-section">
+        <div class="camp-reg-section-label">Parent / Guardian Details</div>
+        <div class="form-row">
+          <div>
+            <label for="parentName">Full Name</label>
+            <input type="text" id="parentName" required>
+          </div>
+          <div>
+            <label for="parentPhone">Phone Number</label>
+            <input type="tel" id="parentPhone" required>
+          </div>
+        </div>
+        <div class="form-row single">
+          <div>
+            <label for="parentEmail">Email Address</label>
+            <input type="email" id="parentEmail" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHILDREN -->
+      <div class="camp-reg-section">
+        <div class="camp-reg-section-label">Children Attending</div>
+        <div id="childrenContainer"></div>
+        <button type="button" class="add-child-btn" id="addChildBtn">+ Add Another Child</button>
+      </div>
+
+      <!-- PAYMENT -->
+      <div class="pay-area">
+        <div class="camp-reg-section-label">Payment</div>
+
+        <label>Card Details</label>
+        <div id="card-container"></div>
+        <button type="button" id="pay-button" class="btn-primary">Pay &amp; Confirm Booking</button>
+
+        <div id="formMessage" class="form-message"></div>
+      </div>
+
+    </form>
+
+    <!-- SUMMARY SIDEBAR -->
+    <aside class="summary-card" id="summaryCard">
+      <div class="summary-title">Booking Summary</div>
+      <div id="summaryLines">
+        <p class="summary-empty">Add a child and select days to see your total.</p>
+      </div>
+      <div class="summary-total hidden" id="summaryTotalRow">
+        <span class="label">Total</span>
+        <span class="amount" id="summaryTotal">£0</span>
+      </div>
+      <div class="summary-savings hidden" id="summarySavings"></div>
+    </aside>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+    <div class="footer-inner-grid">
+        <div class="footer-top">
+            <div class="footer-brand">
+                <img src="https://fchanley.com/images/HanleyBadge.png" alt="FC Hanley">
+                <p>Grassroots football club based in Stoke-on-Trent. Passion. Pride. Community.</p>
+                <div class="footer-socials">
+                    <a href="https://www.facebook.com/FCHanley" class="footer-social" target="_blank" rel="noopener">f</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Club</h4>
+                <a href="coaching-school.html">Coaching School</a>
+                <a href="holidaycamps.html">Holiday Camps</a>
+                <a href="fixtures.html">Fixtures</a>
+                <a href="toptier.html">Trophies</a>
+                <a href="shop.html">Shop</a>
+            </div>
+            <div class="footer-col">
+                <h4>Community</h4>
+                <a href="vacancies/playon/index.html">Find a Team</a>
+                <a href="holidaycamps.html">Holiday Camps</a>
+            </div>
+            <div class="footer-col">
+                <h4>Info</h4>
+                <a href="mailto:contact@fchanley.club">contact@fchanley.club</a>
+                <a href="https://www.staffordshirefa.com/" target="_blank" rel="noopener">Staffordshire FA</a>
+                <a href="https://find-and-update.company-information.service.gov.uk/company/09565826" target="_blank" rel="noopener">Companies House</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+    <span>© 2026 FC Hanley Ltd (09565826). All rights reserved.</span>
+    <a href="mailto:deancolclough05@gmail.com" style="display:flex; align-items:center; gap:0.5rem; color:rgba(255,255,255,0.25); font-size:0.78rem;">
+        Site by <img src="images/dealo.PNG" alt="Site Designer" style="height:48px;">
+    </a>
+</div>
+    </div>
+</footer>
+
+<script src="js/main.js"></script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CAMP_CONFIG
+   ───────────────────────────────────────────────────────────
+   THIS IS THE ONLY BLOCK YOU SHOULD NEED TO EDIT BETWEEN CAMPS.
+
+   How to set up a new camp:
+   1. Set `name`, `pricePerDay`, and `ageGroups`.
+   2. Add one entry to `weeks` for each week you're running.
+      - `id`: short unique code, e.g. "w1"
+      - `label`: shown to parents, e.g. "Week 1"
+      - `days`: one entry per day you're open that week. Each day
+        needs a real calendar date (YYYY-MM-DD) so it can display
+        nicely AND so the page can auto-detect when a week/camp
+        has passed.
+      - `capacity`: optional. Leave as null for unlimited, or set
+        a number per day to mark a day "FULL" once you've manually
+        updated `booked` to match (this page doesn't track live
+        bookings — that still happens via Firebase/your bookings
+        sheet — `booked` is just a manual override switch).
+   3. Set `offer` to describe a "book X days, get the cheapest
+      free" deal — this applies PER WEEK, per child (confirmed
+      with Dean: not across the whole booking). Set `offer` to
+      null to run no offer at all.
+   4. When this camp is finished, you don't need to delete
+      anything — once every date in `weeks` is in the past, the
+      page automatically shows the "closed" state instead of the
+      form. To prepare the NEXT camp ahead of time, just duplicate
+      this whole CAMP_CONFIG object commented out below it, edit
+      the copy with new dates, and swap it in when ready. Old
+      configs can be deleted whenever you like — they're not
+      linked to anything else on the site.
+   ═══════════════════════════════════════════════════════════ */
+
+const CAMP_CONFIG = {
+  name: "Summer Performance Football Camp 2026",
+
+  // Shown in the hero. Edit freely.
+  heroEyebrow: "Holiday Camps",
+  heroSub: "Select a week, choose your days, and secure your child's place.",
+  intro: "Complete the form below for each child you're registering, choose the week(s) and day(s) they'll attend, then confirm payment to secure their place. Places are allocated on a first-come, first-served basis.",
+
+  pricePerDay: 18, // £ per child per day
+
+  // Offer: book this many days in a SINGLE WEEK, cheapest one is free.
+  // Set to null to disable (e.g. "offer: null").
+  offer: {
+    daysRequired: 4,
+    label: "Book 4 days in a week, get the 5th free"
+  },
+
+  ageGroups: [
+    { value: "u6-u8",  label: "U6 - U8" },
+    { value: "u9-u11", label: "U9 - U11" },
+    { value: "u12-u14", label: "U12 - U14" }
+  ],
+
+  weeks: [
+    {
+      id: "w1",
+      label: "Week 1",
+      days: [
+        { date: "2026-08-03", dow: "Mon" },
+        { date: "2026-08-04", dow: "Tue" },
+        { date: "2026-08-05", dow: "Wed" },
+        { date: "2026-08-06", dow: "Thu" },
+        { date: "2026-08-07", dow: "Fri" }
+      ],
+      capacity: null,
+      booked: 0
+    },
+    {
+      id: "w2",
+      label: "Week 2",
+      days: [
+        { date: "2026-08-10", dow: "Mon" },
+        { date: "2026-08-11", dow: "Tue" },
+        { date: "2026-08-12", dow: "Wed" },
+        { date: "2026-08-13", dow: "Thu" },
+        { date: "2026-08-14", dow: "Fri" }
+      ],
+      capacity: null,
+      booked: 0
+    }
+  ]
+};
+
+/* ═══════════════════════════════════════════════════════════
+   PAYMENT CONFIG
+   ───────────────────────────────────────────────────────────
+   Same Firebase project and Square Production credentials/
+   Cloud Function as tournament-registration.html — this is
+   the SAME Square account, just reused for camp bookings.
+   No changes needed here between camps; this is account-level
+   config, not camp-level config (that's all in CAMP_CONFIG above).
+   ═══════════════════════════════════════════════════════════ */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDXXX-LMkY4Q0oN0M9e5wLdVhANzL8ifHs",
+  authDomain: "fchanley-8d910.firebaseapp.com",
+  databaseURL: "https://fchanley-8d910-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "fchanley-8d910",
+  storageBucket: "fchanley-8d910.firebasestorage.app",
+  messagingSenderId: "384977183977",
+  appId: "1:384977183977:web:7805c8ba7e9122b883bc78",
+  measurementId: "G-1CBV4NK83L"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+const SQUARE_APP_ID      = "sq0idp-J-uv2nIgAaoWq8qaITDdnA";
+const SQUARE_LOCATION_ID = "LH6SFF775591G";
+const CHARGE_FUNCTION_URL = "https://europe-west1-fchanley-8d910.cloudfunctions.net/createSquarePayment";
+
+/* ───────────────────────────────────────────────────────────
+   Below this point is page logic. You shouldn't need to touch
+   it when setting up a new camp — only if you want to change
+   HOW the page behaves, not WHAT camp it's showing.
+   ─────────────────────────────────────────────────────────── */
+
+(function () {
+
+  function fmtDate(iso) {
+    const d = new Date(iso + "T00:00:00");
+    return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+  }
+
+  function isCampOpen(config) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return config.weeks.some(week =>
+      week.days.some(day => new Date(day.date + "T00:00:00") >= today)
+    );
+  }
+
+  // ── Closed-state gate ──────────────────────────────────────
+  if (!isCampOpen(CAMP_CONFIG)) {
+    document.getElementById("registrationForm").classList.add("hidden");
+    document.getElementById("closedState").classList.remove("hidden");
+    document.getElementById("closedMessage").textContent =
+      "Registration for " + CAMP_CONFIG.name + " has now closed. Check back soon for details of our next camp.";
+  } else {
+    document.getElementById("heroEyebrow").textContent = CAMP_CONFIG.heroEyebrow;
+    document.getElementById("heroTitleSpan").textContent = "Registration";
+    document.getElementById("heroSub").textContent = CAMP_CONFIG.heroSub;
+    document.getElementById("campIntro").textContent = CAMP_CONFIG.intro;
+    initForm();
+  }
+
+  function initForm() {
+    const childrenContainer = document.getElementById("childrenContainer");
+    const addChildBtn = document.getElementById("addChildBtn");
+    let childCount = 0;
+    const children = {}; // id -> { selections: { weekId: Set(dateIso) } }
+    let currentGrandTotalPounds = 0; // kept in sync by recalc(), used at payment time
+
+    function weekIsFull(week) {
+      return week.capacity != null && week.booked >= week.capacity;
+    }
+
+    function addChild() {
+      childCount += 1;
+      const childId = "child" + childCount;
+      children[childId] = { selections: {} };
+
+      const block = document.createElement("div");
+      block.className = "child-block";
+      block.id = childId;
+
+      const ageOptions = CAMP_CONFIG.ageGroups
+        .map(a => `<option value="${a.value}">${a.label}</option>`)
+        .join("");
+
+      const weekOptionsHtml = CAMP_CONFIG.weeks.map(week => {
+        const full = weekIsFull(week);
+        const dayPillsHtml = week.days.map(day => `
+          <div class="day-pill" data-week="${week.id}" data-date="${day.date}">
+            <span class="dow">${day.dow}</span>
+            <span class="ddate">${fmtDate(day.date)}</span>
+            <span class="free-tag"></span>
+          </div>
+        `).join("");
+
+        return `
+          <div class="week-option ${full ? "full" : ""}" data-week="${week.id}">
+            <div class="week-option-head">
+              <span class="week-option-name"><span class="week-checkbox" aria-hidden="true"></span>${week.label}</span>
+              <span class="week-option-dates">${fmtDate(week.days[0].date)} – ${fmtDate(week.days[week.days.length - 1].date)}</span>
+              ${full ? '<span class="week-option-full-tag">Full</span>' : ""}
+            </div>
+            <div class="day-pills hidden">
+              ${dayPillsHtml}
+            </div>
+            <div class="offer-banner">${CAMP_CONFIG.offer ? CAMP_CONFIG.offer.label : ""}</div>
+          </div>
+        `;
+      }).join("");
+
+      block.innerHTML = `
+        <div class="child-block-head">
+          <span class="child-block-title">Child ${childCount}</span>
+          <button type="button" class="child-remove-btn">Remove</button>
+        </div>
+        <div class="form-row">
+          <div>
+            <label>Child's Name</label>
+            <input type="text" class="child-name" required>
+          </div>
+          <div>
+            <label>Age Group</label>
+            <select class="child-age" required>
+              <option value="">Please select</option>
+              ${ageOptions}
+            </select>
+          </div>
+        </div>
+        <label>Select Week(s) &amp; Day(s)</label>
+        <div class="week-picker">
+          ${weekOptionsHtml}
+        </div>
+
+        <div class="form-row single child-extra-row">
+          <div>
+            <label>Additional Information</label>
+            <p class="field-hint">Let us know about any allergies, dietary needs, medical conditions, or behavioural/additional support our coaches should be aware of.</p>
+            <textarea class="child-additional-info" rows="3" placeholder="Leave blank if none"></textarea>
+          </div>
+        </div>
+
+        <div class="form-row single child-extra-row">
+          <div>
+            <label>Photo &amp; Video Consent <span class="required-mark">*</span></label>
+            <p class="field-hint">I consent to my child being photographed/filmed for FC Hanley's social media and website.</p>
+            <div class="consent-toggle" data-value="">
+              <button type="button" class="consent-btn" data-choice="yes">Yes</button>
+              <button type="button" class="consent-btn" data-choice="no">No</button>
+            </div>
+            <input type="hidden" class="child-consent" value="">
+          </div>
+        </div>
+      `;
+
+      childrenContainer.appendChild(block);
+
+      // Only allow removing if more than one child exists.
+      updateRemoveButtons();
+
+      // Wire up week toggles
+      block.querySelectorAll(".week-option").forEach(weekEl => {
+        const weekId = weekEl.dataset.week;
+        const week = CAMP_CONFIG.weeks.find(w => w.id === weekId);
+        if (weekIsFull(week)) return; // can't select a full week
+
+        weekEl.addEventListener("click", (e) => {
+          // Clicking a day pill is handled separately; don't toggle the week open/closed then.
+          if (e.target.closest(".day-pill")) return;
+
+          const pillsWrap = weekEl.querySelector(".day-pills");
+          const isOpen = !pillsWrap.classList.contains("hidden");
+
+          if (isOpen) {
+            // Closing this week clears its selections for this child
+            pillsWrap.classList.add("hidden");
+            weekEl.classList.remove("active");
+            delete children[childId].selections[weekId];
+            weekEl.querySelectorAll(".day-pill").forEach(p => p.classList.remove("selected"));
+          } else {
+            pillsWrap.classList.remove("hidden");
+            weekEl.classList.add("active");
+            // Opening a week starts with NO days selected — the parent
+            // ticks the specific days they want from the day-pills below.
+            children[childId].selections[weekId] = new Set();
+          }
+          recalc();
+        });
+
+        // Day pill toggles
+        weekEl.querySelectorAll(".day-pill").forEach(pillEl => {
+          pillEl.addEventListener("click", () => {
+            const date = pillEl.dataset.date;
+            const sel = children[childId].selections[weekId];
+            if (!sel) return;
+            if (sel.has(date)) {
+              sel.delete(date);
+              pillEl.classList.remove("selected");
+            } else {
+              sel.add(date);
+              pillEl.classList.add("selected");
+            }
+            // If no days left selected, collapse the week back to inactive
+            if (sel.size === 0) {
+              delete children[childId].selections[weekId];
+              weekEl.classList.remove("active");
+              weekEl.querySelector(".day-pills").classList.add("hidden");
+            }
+            recalc();
+          });
+        });
+      });
+
+      // Photo/video consent toggle
+      const consentWrap = block.querySelector(".consent-toggle");
+      const consentHidden = block.querySelector(".child-consent");
+      consentWrap.querySelectorAll(".consent-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const choice = btn.dataset.choice;
+          consentHidden.value = choice;
+          consentWrap.dataset.value = choice;
+          consentWrap.querySelectorAll(".consent-btn").forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+        });
+      });
+
+      block.querySelector(".child-remove-btn").addEventListener("click", () => {
+        delete children[childId];
+        block.remove();
+        updateRemoveButtons();
+        recalc();
+      });
+
+      recalc();
+    }
+
+    function updateRemoveButtons() {
+      const blocks = childrenContainer.querySelectorAll(".child-block");
+      blocks.forEach(b => {
+        const btn = b.querySelector(".child-remove-btn");
+        btn.style.visibility = blocks.length > 1 ? "visible" : "hidden";
+      });
+    }
+
+    // ── Pricing ────────────────────────────────────────────
+    // Returns { days, price, savedAmount } for one child's one week.
+    function freeDaysForCount(dateCount) {
+      // "Book N days, get the next one free" — the Nth day is the LAST
+      // paid day, the discount only kicks in once you've gone past it.
+      // e.g. daysRequired=4: 4 days = no discount, 5 days = 1 free,
+      // 9 days would be 2 free, etc. (offer.daysRequired + 1 days needed
+      // per free day, matching how it actually reads to a parent.)
+      if (!CAMP_CONFIG.offer) return 0;
+      const cycle = CAMP_CONFIG.offer.daysRequired + 1;
+      return Math.floor(dateCount / cycle);
+    }
+
+    function priceForWeekSelection(dateCount) {
+      const full = dateCount * CAMP_CONFIG.pricePerDay;
+      const freeDays = freeDaysForCount(dateCount);
+      const discounted = full - (freeDays * CAMP_CONFIG.pricePerDay);
+      return { days: dateCount, price: discounted, saved: full - discounted };
+    }
+
+    function recalc() {
+      const summaryLines = document.getElementById("summaryLines");
+      const summaryTotalRow = document.getElementById("summaryTotalRow");
+      const summaryTotal = document.getElementById("summaryTotal");
+      const summarySavings = document.getElementById("summarySavings");
+
+      let grandTotal = 0;
+      let grandSaved = 0;
+      let lineHtml = "";
+      let anySelections = false;
+
+      Object.keys(children).forEach(childId => {
+        const block = document.getElementById(childId);
+        if (!block) return;
+        const nameInput = block.querySelector(".child-name");
+        const childName = (nameInput && nameInput.value.trim()) || block.querySelector(".child-block-title").textContent;
+
+        const sel = children[childId].selections;
+        Object.keys(sel).forEach(weekId => {
+          const dateSet = sel[weekId];
+          if (dateSet.size === 0) return;
+          anySelections = true;
+          const week = CAMP_CONFIG.weeks.find(w => w.id === weekId);
+          const { days, price, saved } = priceForWeekSelection(dateSet.size);
+          grandTotal += price;
+          grandSaved += saved;
+
+          lineHtml += `
+            <div class="summary-line">
+              <span>
+                <span class="name">${childName}</span>
+                <span class="meta">${week.label} · ${days} day${days > 1 ? "s" : ""}</span>
+              </span>
+              <span class="price">
+                ${saved > 0 ? `<span class="was">£${(days * CAMP_CONFIG.pricePerDay).toFixed(0)}</span>` : ""}
+                £${price.toFixed(0)}
+              </span>
+            </div>
+          `;
+        });
+
+        // Update free-day tags live on the day pills for this child
+        Object.keys(sel).forEach(weekId => {
+          const weekEl = block.querySelector(`.week-option[data-week="${weekId}"]`);
+          if (!weekEl) return;
+          const dateSet = sel[weekId];
+          const offerBanner = weekEl.querySelector(".offer-banner");
+          const freeCount = freeDaysForCount(dateSet.size);
+          if (offerBanner) offerBanner.classList.toggle("show", !!CAMP_CONFIG.offer && dateSet.size > 0);
+
+          weekEl.querySelectorAll(".day-pill").forEach(p => {
+            p.classList.remove("free");
+            p.querySelector(".free-tag").textContent = "";
+          });
+          if (freeCount > 0) {
+            // Free day(s) are always the LAST selected date(s) in chronological
+            // order — derived straight from dateSet, never from DOM state, so
+            // unticking a day can't leave a stale "free" tag on the wrong pill.
+            // (freeCount > 0 guard matters: slice(-0) returns the WHOLE array
+            // in JS, not an empty one, so this can't be skipped.)
+            const sortedSelectedDates = Array.from(dateSet).sort();
+            const freeDates = new Set(sortedSelectedDates.slice(-freeCount));
+            weekEl.querySelectorAll(".day-pill.selected").forEach(p => {
+              if (freeDates.has(p.dataset.date)) {
+                p.classList.add("free");
+                p.querySelector(".free-tag").textContent = "FREE";
+              }
+            });
+          }
+        });
+      });
+
+      if (!anySelections) {
+        summaryLines.innerHTML = '<p class="summary-empty">Add a child and select days to see your total.</p>';
+        summaryTotalRow.classList.add("hidden");
+        summarySavings.classList.add("hidden");
+        summaryTotal.textContent = "£0";
+        currentGrandTotalPounds = 0;
+        return;
+      }
+
+      summaryLines.innerHTML = lineHtml;
+      summaryTotalRow.classList.remove("hidden");
+      summaryTotal.textContent = "£" + grandTotal.toFixed(0);
+      currentGrandTotalPounds = grandTotal;
+
+      if (grandSaved > 0) {
+        summarySavings.classList.remove("hidden");
+        summarySavings.textContent = "You're saving £" + grandSaved.toFixed(0) + " with our multi-day offer";
+      } else {
+        summarySavings.classList.add("hidden");
+      }
+    }
+
+    // Re-run pricing whenever a child's name changes (summary line label only)
+    childrenContainer.addEventListener("input", (e) => {
+      if (e.target.classList.contains("child-name")) recalc();
+    });
+
+    addChildBtn.addEventListener("click", addChild);
+    addChild(); // start with one child block
+
+    // ── Square — initialise card widget ───────────────────────
+    let card;
+
+    async function initSquare() {
+      if (!window.Square) {
+        document.getElementById("formMessage").textContent = "Payment system failed to load. Please refresh the page.";
+        document.getElementById("formMessage").className = "form-message error";
+        return;
+      }
+      try {
+        const payments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
+        card = await payments.card();
+        await card.attach("#card-container");
+      } catch (err) {
+        console.error("Square init error:", err);
+        document.getElementById("formMessage").textContent = "Payment system could not be initialised. Please refresh.";
+        document.getElementById("formMessage").className = "form-message error";
+      }
+    }
+    initSquare();
+
+    function generateIdempotencyKey() {
+      return `${Date.now()}-${Math.random().toString(36).substring(2, 10)}`;
+    }
+
+    function buildBookingSummary(parentName, childrenData) {
+      // Human-readable description sent to Square (shows on the payment
+      // record) and stored in Firestore alongside the booking.
+      const childSummaries = childrenData.map(c => {
+        const weekParts = Object.entries(c.weeks).map(([weekId, dates]) => {
+          const week = CAMP_CONFIG.weeks.find(w => w.id === weekId);
+          return `${week ? week.label : weekId} (${dates.length} day${dates.length > 1 ? "s" : ""})`;
+        });
+        return `${c.name}: ${weekParts.join(", ")}`;
+      });
+      return `${CAMP_CONFIG.name} - ${parentName} family (${childrenData.length} child${childrenData.length > 1 ? "ren" : ""}) - ${childSummaries.join("; ")}`;
+    }
+
+    // ── Pay button — tokenise + verify + charge + save ────────
+    const payButton = document.getElementById("pay-button");
+
+    payButton.addEventListener("click", async () => {
+      const msg = document.getElementById("formMessage");
+      msg.textContent = "";
+      msg.className = "form-message";
+
+      const parentName = document.getElementById("parentName").value.trim();
+      const parentEmail = document.getElementById("parentEmail").value.trim();
+      const parentPhone = document.getElementById("parentPhone").value.trim();
+
+      if (!parentName || !parentEmail || !parentPhone) {
+        msg.textContent = "Please fill in your contact details.";
+        msg.className = "form-message error";
+        return;
+      }
+
+      // Validate every child block and build a clean data array for
+      // Firestore/Square at the same time.
+      const blocks = childrenContainer.querySelectorAll(".child-block");
+      const childrenData = [];
+
+      for (const block of blocks) {
+        const name = block.querySelector(".child-name").value.trim();
+        const age = block.querySelector(".child-age").value;
+        const childId = block.id;
+        const sel = children[childId].selections;
+        const hasSelection = Object.values(sel).some(s => s.size > 0);
+
+        if (!name || !age) {
+          msg.textContent = "Please complete every child's name and age group.";
+          msg.className = "form-message error";
+          return;
+        }
+        if (!hasSelection) {
+          msg.textContent = "Please select at least one day for " + name + ".";
+          msg.className = "form-message error";
+          return;
+        }
+        const consent = block.querySelector(".child-consent").value;
+        if (!consent) {
+          msg.textContent = "Please answer the photo & video consent question for " + name + ".";
+          msg.className = "form-message error";
+          return;
+        }
+
+        const weeks = {};
+        Object.entries(sel).forEach(([weekId, dateSet]) => {
+          if (dateSet.size > 0) weeks[weekId] = Array.from(dateSet).sort();
+        });
+
+        childrenData.push({
+          name,
+          ageGroup: age,
+          additionalInfo: block.querySelector(".child-additional-info").value.trim(),
+          photoVideoConsent: consent, // "yes" | "no"
+          weeks
+        });
+      }
+
+      if (currentGrandTotalPounds <= 0) {
+        msg.textContent = "Please select at least one day before paying.";
+        msg.className = "form-message error";
+        return;
+      }
+
+      if (!card) {
+        msg.textContent = "Payment system isn't ready yet. Please wait a moment and try again.";
+        msg.className = "form-message error";
+        return;
+      }
+
+      payButton.disabled = true;
+      payButton.textContent = "Processing...";
+
+      try {
+        // 1. Tokenise card details via Square SDK
+        const result = await card.tokenize();
+        if (result.status !== "OK") {
+          const errorMessages = result.errors
+            ? result.errors.map(e => e.message).join(", ")
+            : "Invalid card details. Please check and try again.";
+          msg.textContent = errorMessages;
+          msg.className = "form-message error";
+          return;
+        }
+
+        // 2. Verify buyer (required for UK/EU cards under PSD2)
+        const amountPence = Math.round(currentGrandTotalPounds * 100);
+        const payments = window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
+        const verificationDetails = {
+          amount: currentGrandTotalPounds.toFixed(2),
+          currencyCode: "GBP",
+          intent: "CHARGE",
+          billingContact: { email: parentEmail }
+        };
+        const verificationResult = await payments.verifyBuyer(result.token, verificationDetails);
+        if (!verificationResult || !verificationResult.token) {
+          msg.textContent = "Payment verification failed. Please try again.";
+          msg.className = "form-message error";
+          return;
+        }
+
+        // 3. Call the Cloud Function to charge the card
+        const bookingId = generateIdempotencyKey();
+        const idempotencyKey = generateIdempotencyKey();
+        const description = buildBookingSummary(parentName, childrenData);
+
+        const response = await fetch(CHARGE_FUNCTION_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sourceId: result.token,
+            verificationToken: verificationResult.token,
+            registrationId: bookingId,
+            idempotencyKey,
+            amountMoney: { amount: amountPence, currency: "GBP" },
+            bookingType: "camp",
+            description,
+            buyerEmail: parentEmail
+          })
+        });
+
+        const chargeResult = await response.json();
+        if (!response.ok || !chargeResult.success) {
+          msg.textContent = chargeResult.error || "Payment failed. Please try again.";
+          msg.className = "form-message error";
+          return;
+        }
+
+        // 4. Payment successful — save the booking to Firestore
+        await db.collection("campBookings").add({
+          campName: CAMP_CONFIG.name,
+          parentName,
+          parentEmail,
+          parentPhone,
+          children: childrenData,
+          amountPaid: currentGrandTotalPounds,
+          paymentStatus: "paid",
+          squarePaymentId: chargeResult.paymentId,
+          bookingId,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        // 5. Success
+        msg.textContent = "🎉 Booking complete! Payment received and your place(s) are confirmed. A confirmation will be sent to " + parentEmail + ".";
+        msg.className = "form-message success";
+
+        document.getElementById("campForm").reset();
+        // Note: we don't reload the page here, so the visual form state
+        // (selected days, child blocks) will still show what was just
+        // booked — acceptable for now since this page isn't linked yet;
+        // revisit if you want a full reset/redirect after go-live.
+
+      } catch (err) {
+        console.error("Payment error:", err);
+        msg.textContent = "An unexpected error occurred. Please try again or contact FC Hanley.";
+        msg.className = "form-message error";
+      } finally {
+        payButton.disabled = false;
+        payButton.textContent = "Pay & Confirm Booking";
+      }
+    });
+  }
+
+})();
+</script>
+
+</body>
+</html>

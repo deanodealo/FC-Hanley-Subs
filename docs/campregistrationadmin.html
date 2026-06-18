@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Camp Bookings Admin | FC Hanley</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<meta name="theme-color" content="#0A1628">
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+<style>
+/* ══════════════════════════════════════════════════════════
+   CAMP BOOKINGS ADMIN — page-scoped styles, built on the same
+   tokens as styles.css (--navy, --blue, --accent, --gold,
+   Barlow Condensed / DM Sans). No global stylesheet changes
+   needed for this page.
+   ══════════════════════════════════════════════════════════ */
+
+.admin-page { background: var(--off-white); min-height: 100vh; }
+
+.admin-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 6rem;
+}
+@media (max-width: 600px) { .admin-wrap { padding: 2rem 1.1rem 4rem; } }
+
+.admin-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.admin-actions button {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.65rem 1.3rem;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1.5px solid var(--blue-light);
+  background: white;
+  color: var(--blue-light);
+  transition: all 0.15s;
+}
+.admin-actions button:hover { background: var(--blue-light); color: white; }
+.admin-actions button.primary { background: var(--blue-light); color: white; }
+.admin-actions button.primary:hover { background: var(--accent); border-color: var(--accent); }
+
+/* — summary boxes — */
+.summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
+@media (max-width: 700px) { .summary-grid { grid-template-columns: 1fr; } }
+
+.summary-box {
+  background: var(--navy);
+  border-radius: 14px;
+  padding: 1.5rem;
+  text-align: center;
+}
+.summary-box h2 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 0.2rem;
+}
+.summary-box p { font-size: 0.78rem; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 1px; }
+
+/* — section headers — */
+.admin-section { margin-bottom: 2.5rem; }
+.admin-section-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 1rem;
+}
+
+/* — breakdown grids (weeks / age groups) — */
+.breakdown-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+
+.breakdown-box {
+  background: white;
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 12px;
+  padding: 1.1rem 1.2rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+.breakdown-box-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 0.7rem; }
+.breakdown-box-header span:first-child {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--navy);
+  text-transform: uppercase;
+}
+.breakdown-box-dates { font-size: 0.7rem; color: #94A3B8; }
+.breakdown-box-stats { display: flex; justify-content: space-between; font-size: 0.8rem; color: #5A6B82; }
+.breakdown-box-stats strong { color: var(--navy); }
+
+/* — filter row — */
+.filter-row {
+  display: flex;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+.filter-row label { font-size: 0.78rem; font-weight: 600; color: var(--navy); margin: 0; }
+.filter-row select,
+.filter-row input[type="text"] {
+  padding: 0.55rem 0.8rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  border: 1.5px solid rgba(0,0,0,0.12);
+  border-radius: 8px;
+  background: white;
+  color: var(--text);
+}
+.filter-row input[type="text"] { flex: 1; min-width: 180px; }
+
+/* — booking cards (one per parent submission) — */
+.bookings-list { display: flex; flex-direction: column; gap: 1rem; }
+
+.booking-card {
+  background: white;
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 14px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+
+.booking-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+.booking-parent-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--navy);
+}
+.booking-parent-contact { font-size: 0.82rem; color: #5A6B82; margin-top: 0.2rem; }
+.booking-parent-contact a { color: var(--blue-light); }
+.booking-meta { text-align: right; font-size: 0.78rem; color: #94A3B8; }
+.booking-meta .amount {
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #1E7E34;
+}
+.booking-meta .paid-tag {
+  display: inline-block;
+  background: rgba(30,126,52,0.1);
+  color: #1E7E34;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 0.15rem 0.5rem;
+  border-radius: 5px;
+  margin-top: 0.3rem;
+}
+
+.children-grid { display: flex; flex-direction: column; gap: 0.9rem; }
+
+.child-card {
+  background: var(--off-white);
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+  border-left: 3px solid var(--blue-light);
+}
+.child-card-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.5rem; }
+.child-card-name { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.02rem; color: var(--navy); }
+.child-card-age { font-size: 0.74rem; color: #7A8EA8; background: white; padding: 0.15rem 0.55rem; border-radius: 6px; border: 1px solid rgba(0,0,0,0.08); }
+
+.child-card-weeks { font-size: 0.8rem; color: #5A6B82; margin-bottom: 0.5rem; }
+.child-card-weeks strong { color: var(--navy); }
+
+.consent-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  padding: 0.18rem 0.55rem;
+  border-radius: 6px;
+}
+.consent-tag.yes { background: rgba(0,120,215,0.1); color: var(--blue-light); }
+.consent-tag.no { background: rgba(90,107,130,0.12); color: #5A6B82; }
+
+.child-card-info {
+  font-size: 0.8rem;
+  color: #8a6400;
+  background: rgba(255,184,0,0.1);
+  border: 1px solid rgba(255,184,0,0.3);
+  border-radius: 7px;
+  padding: 0.5rem 0.7rem;
+  margin-top: 0.5rem;
+  line-height: 1.5;
+}
+.child-card-info strong { display: block; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.2rem; }
+
+.no-results { text-align: center; padding: 3rem 1rem; color: #8A9BB0; font-size: 0.92rem; }
+.loading-msg { text-align: center; padding: 3rem 1rem; color: #8A9BB0; font-size: 0.92rem; }
+.error-msg { text-align: center; padding: 2rem 1rem; color: #C0392B; font-size: 0.88rem; }
+</style>
+</head>
+<body class="admin-page">
+
+<header id="site-header">
+    <a href="index.html" class="header-logo">
+        <img src="https://fchanley.com/images/HanleyBadge.png" alt="FC Hanley Badge">
+        <span class="header-logo-name">FC Hanley</span>
+    </a>
+</header>
+
+<section class="page-hero" style="padding: 8rem 2rem 3.5rem;">
+    <div class="page-hero-content">
+        <div class="page-hero-eyebrow">Admin</div>
+        <h1 class="page-hero-title" style="font-size: clamp(2.5rem, 7vw, 4.5rem);">Camp<span>Bookings</span></h1>
+        <p class="page-hero-sub" id="campNameSub">Loading camp details…</p>
+    </div>
+</section>
+
+<main class="admin-wrap">
+
+  <div class="admin-actions">
+    <button id="refreshBtn" class="primary">Refresh</button>
+    <button id="exportCsvBtn">Export CSV</button>
+  </div>
+
+  <div class="summary-grid">
+    <div class="summary-box"><h2 id="totalFamilies">0</h2><p>Families Booked</p></div>
+    <div class="summary-box"><h2 id="totalChildren">0</h2><p>Children Booked</p></div>
+    <div class="summary-box"><h2 id="totalIncome">£0</h2><p>Total Income</p></div>
+  </div>
+
+  <div class="admin-section">
+    <div class="admin-section-title">Bookings by Week</div>
+    <div id="weekBreakdown" class="breakdown-grid"></div>
+  </div>
+
+  <div class="admin-section">
+    <div class="admin-section-title">Bookings by Age Group</div>
+    <div id="ageBreakdown" class="breakdown-grid"></div>
+  </div>
+
+  <div class="admin-section">
+    <div class="admin-section-title">Registered Bookings</div>
+
+    <div class="filter-row">
+      <label for="weekFilter">Week</label>
+      <select id="weekFilter"><option value="all">All weeks</option></select>
+
+      <label for="ageFilter">Age group</label>
+      <select id="ageFilter"><option value="all">All age groups</option></select>
+
+      <input type="text" id="searchInput" placeholder="Search by parent or child name…">
+    </div>
+
+    <div id="bookingsList" class="bookings-list">
+      <p class="loading-msg">Loading bookings…</p>
+    </div>
+  </div>
+
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   CAMP_LOOKUP
+   ───────────────────────────────────────────────────────────
+   Firestore only stores weekId ("w1") and ageGroup value
+   ("u9-u11") against each child — not their display labels.
+   This lookup turns those back into readable text for the
+   dashboard. Keep this in sync with the CAMP_CONFIG block in
+   campregistration.html for whichever camp is currently live —
+   when you set up the next camp, update this to match.
+   ═══════════════════════════════════════════════════════════ */
+
+const CAMP_LOOKUP = {
+  name: "Summer Performance Football Camp 2026",
+
+  ageGroups: [
+    { value: "u6-u8",   label: "U6 - U8" },
+    { value: "u9-u11",  label: "U9 - U11" },
+    { value: "u12-u14", label: "U12 - U14" }
+  ],
+
+  weeks: [
+    { id: "w1", label: "Week 1", dateRange: "3 Aug – 7 Aug" },
+    { id: "w2", label: "Week 2", dateRange: "10 Aug – 14 Aug" }
+  ]
+};
+
+function ageLabel(value) {
+  const found = CAMP_LOOKUP.ageGroups.find(a => a.value === value);
+  return found ? found.label : (value || "Unknown");
+}
+function weekLabel(weekId) {
+  const found = CAMP_LOOKUP.weeks.find(w => w.id === weekId);
+  return found ? found.label : weekId;
+}
+
+document.getElementById("campNameSub").textContent = CAMP_LOOKUP.name;
+
+/* ───────────────────────────────────────────────────────────
+   Firebase — same project as campregistration.html
+   ─────────────────────────────────────────────────────────── */
+const firebaseConfig = {
+  apiKey: "AIzaSyDXXX-LMkY4Q0oN0M9e5wLdVhANzL8ifHs",
+  authDomain: "fchanley-8d910.firebaseapp.com",
+  databaseURL: "https://fchanley-8d910-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "fchanley-8d910",
+  storageBucket: "fchanley-8d910.firebasestorage.app",
+  messagingSenderId: "384977183977",
+  appId: "1:384977183977:web:7805c8ba7e9122b883bc78",
+  measurementId: "G-1CBV4NK83L"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let allBookings = [];
+
+const totalFamiliesEl = document.getElementById("totalFamilies");
+const totalChildrenEl = document.getElementById("totalChildren");
+const totalIncomeEl = document.getElementById("totalIncome");
+const weekBreakdownEl = document.getElementById("weekBreakdown");
+const ageBreakdownEl = document.getElementById("ageBreakdown");
+const bookingsListEl = document.getElementById("bookingsList");
+const weekFilterEl = document.getElementById("weekFilter");
+const ageFilterEl = document.getElementById("ageFilter");
+const searchInputEl = document.getElementById("searchInput");
+const refreshBtn = document.getElementById("refreshBtn");
+const exportCsvBtn = document.getElementById("exportCsvBtn");
+
+// Populate filter dropdowns from CAMP_LOOKUP
+CAMP_LOOKUP.weeks.forEach(w => {
+  const opt = document.createElement("option");
+  opt.value = w.id;
+  opt.textContent = w.label;
+  weekFilterEl.appendChild(opt);
+});
+CAMP_LOOKUP.ageGroups.forEach(a => {
+  const opt = document.createElement("option");
+  opt.value = a.value;
+  opt.textContent = a.label;
+  ageFilterEl.appendChild(opt);
+});
+
+async function loadBookings() {
+  bookingsListEl.innerHTML = '<p class="loading-msg">Loading bookings…</p>';
+  try {
+    const snapshot = await db
+      .collection("campBookings")
+      .orderBy("createdAt", "desc")
+      .get();
+
+    allBookings = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    renderDashboard();
+  } catch (error) {
+    console.error("Error loading bookings:", error);
+    bookingsListEl.innerHTML = '<p class="error-msg">Could not load bookings. Check Firestore rules.</p>';
+  }
+}
+
+// Flatten every (booking, child) pair into one row — this is the unit
+// most of the dashboard counts/filters against, since capacity and
+// breakdowns are inherently per-child, even though bookings are
+// grouped by family for the list view.
+function getAllChildRows() {
+  const rows = [];
+  allBookings.forEach(booking => {
+    (booking.children || []).forEach(child => {
+      rows.push({ booking, child });
+    });
+  });
+  return rows;
+}
+
+function renderDashboard() {
+  const allRows = getAllChildRows();
+
+  totalFamiliesEl.textContent = allBookings.length;
+  totalChildrenEl.textContent = allRows.length;
+  const income = allBookings.reduce((sum, b) => sum + Number(b.amountPaid || 0), 0);
+  totalIncomeEl.textContent = "£" + income.toFixed(0);
+
+  renderWeekBreakdown(allRows);
+  renderAgeBreakdown(allRows);
+  renderBookingsList();
+}
+
+function renderWeekBreakdown(allRows) {
+  weekBreakdownEl.innerHTML = CAMP_LOOKUP.weeks.map(week => {
+    // A child "counts" toward a week if they have at least one day
+    // booked in it — count children, not day-selections, since
+    // capacity is about how many kids are on site, not day-count.
+    // (Income isn't split per week here — a family's payment covers
+    // their whole booking with the multi-day offer applied per week,
+    // so a clean per-week income split isn't derivable from the
+    // stored data without re-running the pricing rules. Total income
+    // is shown at the top of the page instead.)
+    const rowsInWeek = allRows.filter(r => r.child.weeks && r.child.weeks[week.id] && r.child.weeks[week.id].length > 0);
+    const totalDays = rowsInWeek.reduce((sum, r) => sum + r.child.weeks[week.id].length, 0);
+
+    return `
+      <div class="breakdown-box">
+        <div class="breakdown-box-header">
+          <span>${week.label}</span>
+          <span class="breakdown-box-dates">${week.dateRange || ""}</span>
+        </div>
+        <div class="breakdown-box-stats">
+          <span><strong>${rowsInWeek.length}</strong> children</span>
+          <span><strong>${totalDays}</strong> days booked</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function renderAgeBreakdown(allRows) {
+  ageBreakdownEl.innerHTML = CAMP_LOOKUP.ageGroups.map(age => {
+    const rowsInGroup = allRows.filter(r => r.child.ageGroup === age.value);
+    return `
+      <div class="breakdown-box">
+        <div class="breakdown-box-header">
+          <span>${age.label}</span>
+        </div>
+        <div class="breakdown-box-stats">
+          <span><strong>${rowsInGroup.length}</strong> children</span>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function bookingMatchesFilters(booking) {
+  const weekVal = weekFilterEl.value;
+  const ageVal = ageFilterEl.value;
+  const search = searchInputEl.value.trim().toLowerCase();
+
+  const childrenMatch = (booking.children || []).filter(child => {
+    const matchesWeek = weekVal === "all" || (child.weeks && child.weeks[weekVal] && child.weeks[weekVal].length > 0);
+    const matchesAge = ageVal === "all" || child.ageGroup === ageVal;
+    return matchesWeek && matchesAge;
+  });
+
+  if (childrenMatch.length === 0) return false;
+
+  if (search) {
+    const parentMatches = (booking.parentName || "").toLowerCase().includes(search);
+    const childMatches = childrenMatch.some(c => (c.name || "").toLowerCase().includes(search));
+    if (!parentMatches && !childMatches) return false;
+  }
+
+  return true;
+}
+
+function renderBookingsList() {
+  const filtered = allBookings.filter(bookingMatchesFilters);
+
+  if (!filtered.length) {
+    bookingsListEl.innerHTML = '<p class="no-results">No bookings match the current filters.</p>';
+    return;
+  }
+
+  bookingsListEl.innerHTML = filtered.map(booking => {
+    const createdDate = booking.createdAt && booking.createdAt.toDate
+      ? booking.createdAt.toDate().toLocaleString("en-GB")
+      : "Not available";
+
+    const childrenHtml = (booking.children || []).map(child => {
+      const weeksText = Object.entries(child.weeks || {}).map(([weekId, dates]) => {
+        return `${weekLabel(weekId)} (${dates.length} day${dates.length > 1 ? "s" : ""})`;
+      }).join(", ") || "No days selected";
+
+      const consentClass = child.photoVideoConsent === "yes" ? "yes" : "no";
+      const consentText = child.photoVideoConsent === "yes" ? "Photo/Video: Yes" : "Photo/Video: No";
+
+      const infoHtml = child.additionalInfo
+        ? `<div class="child-card-info"><strong>Additional Information</strong>${escapeHtml(child.additionalInfo)}</div>`
+        : "";
+
+      return `
+        <div class="child-card">
+          <div class="child-card-head">
+            <span class="child-card-name">${escapeHtml(child.name || "Unnamed child")}</span>
+            <span class="child-card-age">${escapeHtml(ageLabel(child.ageGroup))}</span>
+            <span class="consent-tag ${consentClass}">${consentText}</span>
+          </div>
+          <div class="child-card-weeks"><strong>Weeks:</strong> ${escapeHtml(weeksText)}</div>
+          ${infoHtml}
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <div class="booking-card">
+        <div class="booking-card-head">
+          <div>
+            <div class="booking-parent-name">${escapeHtml(booking.parentName || "Unknown parent")}</div>
+            <div class="booking-parent-contact">
+              <a href="mailto:${escapeHtml(booking.parentEmail || "")}">${escapeHtml(booking.parentEmail || "")}</a>
+              &nbsp;·&nbsp; ${escapeHtml(booking.parentPhone || "")}
+            </div>
+          </div>
+          <div class="booking-meta">
+            <span class="amount">£${Number(booking.amountPaid || 0).toFixed(0)}</span>
+            <span class="paid-tag">${escapeHtml(booking.paymentStatus || "")}</span>
+            <div style="margin-top:0.4rem;">${createdDate}</div>
+          </div>
+        </div>
+        <div class="children-grid">
+          ${childrenHtml}
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function exportCsv() {
+  if (!allBookings.length) {
+    alert("No bookings to export.");
+    return;
+  }
+
+  const headers = [
+    "Parent Name", "Parent Email", "Parent Phone",
+    "Child Name", "Age Group", "Weeks Booked", "Total Days",
+    "Photo/Video Consent", "Additional Information",
+    "Amount Paid (Family Total)", "Payment Status", "Square Payment ID", "Booking ID", "Registered Date"
+  ];
+
+  const rows = [];
+  allBookings.forEach(booking => {
+    const createdDate = booking.createdAt && booking.createdAt.toDate
+      ? booking.createdAt.toDate().toLocaleString("en-GB")
+      : "";
+
+    (booking.children || []).forEach(child => {
+      const weeksText = Object.entries(child.weeks || {}).map(([weekId, dates]) => `${weekLabel(weekId)} (${dates.length}d)`).join("; ");
+      const totalDays = Object.values(child.weeks || {}).reduce((sum, dates) => sum + dates.length, 0);
+
+      rows.push([
+        booking.parentName || "",
+        booking.parentEmail || "",
+        booking.parentPhone || "",
+        child.name || "",
+        ageLabel(child.ageGroup),
+        weeksText,
+        totalDays,
+        child.photoVideoConsent === "yes" ? "Yes" : "No",
+        child.additionalInfo || "",
+        booking.amountPaid || "",
+        booking.paymentStatus || "",
+        booking.squarePaymentId || "",
+        booking.bookingId || "",
+        createdDate
+      ]);
+    });
+  });
+
+  const csvContent = [headers, ...rows]
+    .map(row => row.map(value => `"${String(value).replaceAll('"', '""')}"`).join(","))
+    .join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "fc-hanley-camp-bookings.csv";
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+weekFilterEl.addEventListener("change", renderBookingsList);
+ageFilterEl.addEventListener("change", renderBookingsList);
+searchInputEl.addEventListener("input", renderBookingsList);
+refreshBtn.addEventListener("click", loadBookings);
+exportCsvBtn.addEventListener("click", exportCsv);
+
+loadBookings();
+</script>
+
+</body>
+</html>

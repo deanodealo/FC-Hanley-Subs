@@ -22,15 +22,22 @@ exports.createSquarePayment = onRequest(
 
       try {
         const {
-  sourceId,
-  verificationToken,
-  registrationId,
-  idempotencyKey,
-  amountMoney,
-  teamName,
-  ageGroup,
-  buyerEmail
-} = req.body || {};
+          sourceId,
+          verificationToken,
+          registrationId,
+          idempotencyKey,
+          amountMoney,
+          // Tournament-specific (kept for backwards compatibility with the
+          // existing live tournament-registration.html — unchanged behaviour
+          // if these are the only fields sent).
+          teamName,
+          ageGroup,
+          // Generic fields — any booking type can send these instead of/
+          // alongside the tournament-specific ones above.
+          bookingType,   // e.g. "tournament" | "camp"
+          description,   // free-text summary for the Square payment note
+          buyerEmail
+        } = req.body || {};
 
         if (!sourceId)       return res.status(400).json({ error: "Missing sourceId" });
         if (!registrationId) return res.status(400).json({ error: "Missing registrationId" });
@@ -45,24 +52,42 @@ exports.createSquarePayment = onRequest(
           return res.status(400).json({ error: "Invalid amountMoney payload" });
         }
 
-const client = new SquareClient({
-  token: squareAccessToken.value(),
-  environment: SquareEnvironment.Production
-});
+        const client = new SquareClient({
+          token: squareAccessToken.value(),
+          environment: SquareEnvironment.Production
+        });
+
+        // Build the Square payment note based on whatever booking shape
+        // was actually sent, rather than assuming tournament fields exist.
+        // - Tournament calls (existing behaviour): teamName + ageGroup present.
+        // - Camp calls (and anything else going forward): pass `description`
+        //   directly, e.g. "FC Hanley Summer Camp 2026 - Smith family (2 children)".
+        // - bookingType is optional and only used as a label prefix if no
+        //   description was given.
+        let note;
+        if (description) {
+          note = description;
+        } else if (teamName || ageGroup) {
+          note = `FC Hanley Tournament - ${teamName || ""} (${ageGroup || ""})`;
+        } else if (bookingType) {
+          note = `FC Hanley - ${bookingType}`;
+        } else {
+          note = "FC Hanley payment";
+        }
 
         const paymentResponse = await client.payments.create({
-  sourceId,
-  verificationToken,
-  idempotencyKey,
-  amountMoney: {
-    amount: BigInt(amountMoney.amount),
-    currency: amountMoney.currency
-  },
-  locationId: "LH6SFF775591G",
-  referenceId: registrationId,
-  note: `FC Hanley Tournament - ${teamName || ""} (${ageGroup || ""})`,
-  buyerEmailAddress: buyerEmail || undefined
-});
+          sourceId,
+          verificationToken,
+          idempotencyKey,
+          amountMoney: {
+            amount: BigInt(amountMoney.amount),
+            currency: amountMoney.currency
+          },
+          locationId: "LH6SFF775591G",
+          referenceId: registrationId,
+          note,
+          buyerEmailAddress: buyerEmail || undefined
+        });
 
         const payment = paymentResponse.payment;
 
