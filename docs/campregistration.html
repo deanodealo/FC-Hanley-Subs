@@ -25,6 +25,13 @@
    should need a global stylesheet change.
    ══════════════════════════════════════════════════════════ */
 
+/* .hidden is used throughout this page's JS to toggle visibility
+   (closed-state vs form, day-pills expanding, etc). Defined here
+   directly rather than relying on it existing in the global
+   styles.css, so this page doesn't silently break if that
+   stylesheet doesn't define it or fails to load. */
+.hidden { display: none !important; }
+
 .camp-reg-page { background: var(--off-white); }
 
 /* — closed state banner (shown automatically once every camp's
@@ -592,7 +599,7 @@ const CAMP_CONFIG = {
   ageGroups: [
     { value: "u6-u8",  label: "U6 - U8" },
     { value: "u9-u11", label: "U9 - U11" },
-    { value: "u12-u14", label: "U12 - U14" }
+    { value: "u12-u14", label: "U12 - U16" }
   ],
 
   weeks: [
