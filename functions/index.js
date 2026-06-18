@@ -112,3 +112,5 @@ exports.createSquarePayment = onRequest(
     });
   }
 );
+
+exports.sendCampBookingConfirmation = require("./sendCampBookingConfirmation").sendCampBookingConfirmation;
