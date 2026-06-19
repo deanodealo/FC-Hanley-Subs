@@ -9,6 +9,173 @@
 <meta name="theme-color" content="#0A1628">
 <link rel="manifest" href="manifest.json">
 <script src="add-to-home.js" defer></script>
+
+<style>
+/* ── Ball-roll header animation ─────────────────────────────
+   Only runs on desktop (min-width: 769px) to avoid layout
+   issues with the mobile centred/absolute logo position.
+   ──────────────────────────────────────────────────────── */
+
+/* Wrap the logo img in a relative container so ghosts stack */
+.ball-group {
+    position: relative;
+    height: 44px;          /* matches .header-logo img height */
+    width: 44px;
+    flex-shrink: 0;
+}
+
+.ball-group .ball-real,
+.ball-group .ball-ghost img {
+    height: 44px;
+    width: auto;
+    display: block;
+}
+
+/* Ghost shells cap the maximum opacity for each layer */
+.ghost-shell {
+    position: absolute;
+    inset: 0;
+    opacity: var(--ghost-op, 0.3);
+    pointer-events: none;
+}
+
+.ball-ghost {
+    position: absolute;
+    inset: 0;
+    opacity: 0;   /* driven to 0→1 by ghost-pulse keyframe */
+    filter: blur(0px);
+}
+.ghost-1 { filter: blur(1px);   }
+.ghost-2 { filter: blur(2.5px); }
+.ghost-3 { filter: blur(4px);   }
+
+.ball-real {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    height: 44px;
+    width: auto;
+}
+
+/* ── Keyframes ─────────────────────────────────────────── */
+
+/*  Ball sweeps RIGHT (erasing text) then rolls back LEFT home.
+    Translation distance: 260px clears the "FC Hanley" text
+    at typical desktop header widths.                        */
+@keyframes ball-sweep {
+    0%   { transform: translateX(0px)   rotate(0deg);   }
+    30%  { transform: translateX(260px) rotate(540deg); }
+    38%  { transform: translateX(260px) rotate(540deg); }
+    70%  { transform: translateX(0px)   rotate(360deg); }
+    80%  { transform: translateX(-5px)  rotate(356deg); }
+    90%  { transform: translateX(2px)   rotate(358deg); }
+    100% { transform: translateX(0px)   rotate(360deg); }
+}
+
+/* Ghost appears during motion, hides when ball is stationary */
+@keyframes ghost-pulse {
+    0%   { opacity: 0; }
+    8%   { opacity: 1; }
+    28%  { opacity: 1; }
+    36%  { opacity: 0; }
+    50%  { opacity: 0; }
+    56%  { opacity: 1; }
+    68%  { opacity: 1; }
+    78%  { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+/* Text erases left→right as ball sweeps right,
+   re-prints left→right as ball returns          */
+@keyframes text-wipe {
+    0%   { clip-path: inset(0 0%   0 0); }
+    5%   { clip-path: inset(0 10%  0 0); }
+    18%  { clip-path: inset(0 60%  0 0); }
+    28%  { clip-path: inset(0 100% 0 0); }
+    38%  { clip-path: inset(0 100% 0 0); }
+    52%  { clip-path: inset(0 100% 0 0); }
+    60%  { clip-path: inset(0 55%  0 0); }
+    70%  { clip-path: inset(0 0%   0 0); }
+    100% { clip-path: inset(0 0%   0 0); }
+}
+
+/* ── Animation classes (added by JS) ───────────────────── */
+
+/* Mobile: shorter sweep, no ghost trail */
+.ball-group.anim .ball-real {
+    animation: ball-sweep-mobile 2.2s cubic-bezier(0.4,0,0.2,1) 0.3s both;
+}
+#headerLogoName.anim {
+    animation: text-wipe-mobile 2.2s linear 0.3s both;
+}
+.ball-group.anim .ghost-1,
+.ball-group.anim .ghost-2,
+.ball-group.anim .ghost-3 {
+    animation: none;
+    opacity: 0;
+}
+
+@keyframes ball-sweep-mobile {
+    0%   { transform: translateX(0px)   rotate(0deg);   }
+    30%  { transform: translateX(120px) rotate(540deg); }
+    38%  { transform: translateX(120px) rotate(540deg); }
+    70%  { transform: translateX(0px)   rotate(360deg); }
+    80%  { transform: translateX(-4px)  rotate(356deg); }
+    90%  { transform: translateX(2px)   rotate(358deg); }
+    100% { transform: translateX(0px)   rotate(360deg); }
+}
+
+@keyframes text-wipe-mobile {
+    0%   { clip-path: inset(0 0%   0 0); }
+    8%   { clip-path: inset(0 20%  0 0); }
+    22%  { clip-path: inset(0 100% 0 0); }
+    38%  { clip-path: inset(0 100% 0 0); }
+    52%  { clip-path: inset(0 100% 0 0); }
+    65%  { clip-path: inset(0 50%  0 0); }
+    72%  { clip-path: inset(0 0%   0 0); }
+    100% { clip-path: inset(0 0%   0 0); }
+}
+
+/* Desktop: full sweep with ghost trail */
+@media (min-width: 769px) {
+    .ball-group.anim .ball-real {
+        animation: ball-sweep 2.2s cubic-bezier(0.4,0,0.2,1) 0.3s both;
+    }
+    #headerLogoName.anim {
+        animation: text-wipe 2.2s linear 0.3s both;
+    }
+    .ball-group.anim .ghost-1 {
+        animation:
+            ball-sweep  2.2s cubic-bezier(0.4,0,0.2,1) 0.36s both,
+            ghost-pulse 2.2s ease                       0.36s both;
+    }
+    .ball-group.anim .ghost-2 {
+        animation:
+            ball-sweep  2.2s cubic-bezier(0.4,0,0.2,1) 0.44s both,
+            ghost-pulse 2.2s ease                       0.44s both;
+    }
+    .ball-group.anim .ghost-3 {
+        animation:
+            ball-sweep  2.2s cubic-bezier(0.4,0,0.2,1) 0.54s both,
+            ghost-pulse 2.2s ease                       0.54s both;
+    }
+}
+
+/* Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+    .ball-group.anim .ball-real,
+    .ball-group.anim .ghost-1,
+    .ball-group.anim .ghost-2,
+    .ball-group.anim .ghost-3,
+    #headerLogoName.anim {
+        animation: none !important;
+        clip-path: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+    }
+    .ghost-shell { display: none; }
+}
+</style>
 </head>
 <body>
 
@@ -38,9 +205,27 @@
     <button class="burger-btn" onclick="openDrawer()" aria-label="Open menu">
         <span></span><span></span><span></span>
     </button>
-    <a href="index.html" class="header-logo">
-        <img src="https://fchanley.com/images/HanleyBadge.png" alt="FC Hanley Badge">
-        <span class="header-logo-name">FC Hanley</span>
+    <a href="index.html" class="header-logo" id="headerLogo">
+        <!-- Ball group: real logo + 3 ghost trail layers -->
+        <div class="ball-group" id="ballGroup">
+            <div class="ghost-shell" style="--ghost-op:0.12; z-index:0;">
+                <div class="ball-ghost ghost-3">
+                    <img src="https://fchanley.com/images/HanleyBadge.png" alt="" aria-hidden="true">
+                </div>
+            </div>
+            <div class="ghost-shell" style="--ghost-op:0.25; z-index:1;">
+                <div class="ball-ghost ghost-2">
+                    <img src="https://fchanley.com/images/HanleyBadge.png" alt="" aria-hidden="true">
+                </div>
+            </div>
+            <div class="ghost-shell" style="--ghost-op:0.45; z-index:2;">
+                <div class="ball-ghost ghost-1">
+                    <img src="https://fchanley.com/images/HanleyBadge.png" alt="" aria-hidden="true">
+                </div>
+            </div>
+            <img class="ball-real" src="https://fchanley.com/images/HanleyBadge.png" alt="FC Hanley Badge">
+        </div>
+        <span class="header-logo-name" id="headerLogoName">FC Hanley</span>
     </a>
     <nav class="site-nav">
         <a href="coaching-school.html">Coaching</a>
@@ -54,7 +239,13 @@
 </header>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero" style="position:relative;">
+
+    <!-- Flying badge — absolutely positioned, sequenced by JS -->
+    <img src="https://fchanley.com/images/HanleyBadge.png"
+         alt="FC Hanley"
+         class="hero-badge-fly"
+         id="heroBadge">
 
     <!-- ═══════════════════════════════════════════════════
          HERO VIDEO BACKGROUND
@@ -78,24 +269,195 @@
 
     <!-- Subtle pitch line markings on top -->
     <div class="hero-pitch">
+        <!--
+          Each shape has stroke-dasharray = its own perimeter/circumference,
+          and starts with stroke-dashoffset equal to that same value (invisible).
+          CSS animates dashoffset to 0 = line draws itself.
+          Shapes are grouped and staggered so it reads like a groundskeeper
+          marking out the pitch: boundary → halfway → centre circle → boxes.
+
+          Perimeters:
+            outer rect  (1240×680)  = 2*(1240+680) = 3840
+            corner arcs (quarter ¼ of 2π×22) ≈ 35 each
+            halfway line (680)      = 680
+            centre circle (2π×90)  ≈ 565
+            left penalty box (170×360) = 2*(170+360) = 1060
+            left 6yd box   (65×190)  = 2*(65+190)  = 510
+            right penalty box        = 1060
+            right 6yd box            = 510
+        -->
         <svg viewBox="0 0 1400 800" preserveAspectRatio="xMidYMid slice" fill="none" stroke="white" stroke-width="1.5">
-            <rect x="80" y="60" width="1240" height="680"/>
-            <line x1="700" y1="60" x2="700" y2="740"/>
-            <circle cx="700" cy="400" r="90"/>
-            <circle cx="700" cy="400" r="4" fill="white" stroke="none"/>
-            <rect x="80" y="220" width="170" height="360"/>
-            <rect x="80" y="305" width="65" height="190"/>
-            <rect x="1150" y="220" width="170" height="360"/>
-            <rect x="1255" y="305" width="65" height="190"/>
-            <circle cx="230" cy="400" r="4" fill="white" stroke="none"/>
-            <circle cx="1170" cy="400" r="4" fill="white" stroke="none"/>
-            <path d="M80 80 A22 22 0 0 1 102 60"/><path d="M1298 60 A22 22 0 0 1 1320 80"/>
-            <path d="M1320 720 A22 22 0 0 1 1298 740"/><path d="M102 740 A22 22 0 0 1 80 720"/>
+
+            <!-- 1. Outer boundary -->
+            <rect class="pitch-draw" style="--len:3840; --delay:0.2s; --dur:1.8s"
+                  x="80" y="60" width="1240" height="680"/>
+
+            <!-- 2. Corner arcs -->
+            <path class="pitch-draw" style="--len:35; --delay:0.3s; --dur:0.3s"
+                  d="M80 80 A22 22 0 0 1 102 60"/>
+            <path class="pitch-draw" style="--len:35; --delay:0.35s; --dur:0.3s"
+                  d="M1298 60 A22 22 0 0 1 1320 80"/>
+            <path class="pitch-draw" style="--len:35; --delay:0.4s; --dur:0.3s"
+                  d="M1320 720 A22 22 0 0 1 1298 740"/>
+            <path class="pitch-draw" style="--len:35; --delay:0.45s; --dur:0.3s"
+                  d="M102 740 A22 22 0 0 1 80 720"/>
+
+            <!-- 3. Halfway line -->
+            <line class="pitch-draw" style="--len:680; --delay:1.4s; --dur:0.6s"
+                  x1="700" y1="60" x2="700" y2="740"/>
+
+            <!-- 4. Centre circle + spot -->
+            <circle class="pitch-draw" style="--len:566; --delay:2.0s; --dur:0.9s"
+                    cx="700" cy="400" r="90"/>
+            <circle cx="700" cy="400" r="4" fill="white" stroke="none"
+                    style="opacity:0; animation: pitch-spot-pop 0.3s ease 2.9s forwards"/>
+
+            <!-- 5. Left penalty box -->
+            <rect class="pitch-draw" style="--len:1060; --delay:2.6s; --dur:0.8s"
+                  x="80" y="220" width="170" height="360"/>
+            <!-- Left 6-yard box -->
+            <rect class="pitch-draw" style="--len:510; --delay:3.1s; --dur:0.5s"
+                  x="80" y="305" width="65" height="190"/>
+            <!-- Left penalty spot -->
+            <circle cx="230" cy="400" r="4" fill="white" stroke="none"
+                    style="opacity:0; animation: pitch-spot-pop 0.3s ease 3.4s forwards"/>
+
+            <!-- 6. Right penalty box -->
+            <rect class="pitch-draw" style="--len:1060; --delay:2.6s; --dur:0.8s"
+                  x="1150" y="220" width="170" height="360"/>
+            <!-- Right 6-yard box -->
+            <rect class="pitch-draw" style="--len:510; --delay:3.1s; --dur:0.5s"
+                  x="1255" y="305" width="65" height="190"/>
+            <!-- Right penalty spot -->
+            <circle cx="1170" cy="400" r="4" fill="white" stroke="none"
+                    style="opacity:0; animation: pitch-spot-pop 0.3s ease 3.4s forwards"/>
+
         </svg>
     </div>
 
+    <style>
+    /* ── Pitch draw-on animation ──────────────────────────────
+       Each element reads its own --len (perimeter) and --delay
+       from inline custom properties set on the element itself.
+       ──────────────────────────────────────────────────────── */
+    .pitch-draw {
+        stroke-dasharray:  var(--len);
+        stroke-dashoffset: var(--len);   /* fully hidden to start */
+        animation: pitch-line-draw var(--dur, 1s) ease-out var(--delay, 0s) forwards;
+    }
+
+    @keyframes pitch-line-draw {
+        to { stroke-dashoffset: 0; }
+    }
+
+    /* Penalty spots & centre spot pop in after their circle draws */
+    @keyframes pitch-spot-pop {
+        0%   { opacity: 0; transform: scale(0); }
+        60%  { opacity: 1; transform: scale(1.4); }
+        100% { opacity: 1; transform: scale(1);   }
+    }
+
+    /* Respect reduced motion — show pitch immediately, no animation */
+    @media (prefers-reduced-motion: reduce) {
+        .pitch-draw {
+            stroke-dasharray:  none !important;
+            stroke-dashoffset: 0    !important;
+            animation: none         !important;
+        }
+        [style*="pitch-spot-pop"] {
+            opacity: 1 !important;
+            animation: none !important;
+        }
+    }
+    </style>
+
+    <style>
+    /* ── Hero badge kick-in ────────────────────────────────────
+       The badge is pulled OUT of .hero-content so the parent's
+       heroIn fade doesn't interfere. It's absolutely positioned
+       to sit in the same visual spot, fully self-contained.
+       ──────────────────────────────────────────────────────── */
+
+    /* Placeholder keeps the space inside hero-content so the
+       title/eyebrow still sit below where the badge lands      */
+    .hero-badge-placeholder {
+        width: 110px;
+        height: 110px;
+        margin: 0 auto 1.5rem;
+        display: block;
+        visibility: hidden; /* invisible but holds layout space */
+    }
+
+    /* The real badge: absolutely positioned over the placeholder */
+    .hero-badge-fly {
+        position: absolute;
+        width: 110px;
+        height: 110px;
+        object-fit: contain;
+        filter: drop-shadow(0 0 28px rgba(0, 168, 255, 0.45));
+        z-index: 4;
+        /* JS sets top/left after measuring placeholder position  */
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    /* Phase 1: kick in from bottom-left */
+    .hero-badge-fly.kicking {
+        animation: badge-kick 0.75s cubic-bezier(0.15, 0.8, 0.35, 1.1) forwards;
+    }
+
+    /* Phase 2: settle bounces */
+    .hero-badge-fly.settling {
+        animation: badge-settle 0.65s ease-out forwards;
+    }
+
+    /* Phase 3: gentle float loop (matches styles.css float exactly) */
+    .hero-badge-fly.floating {
+        opacity: 1;
+        animation: float 4.5s ease-in-out infinite;
+    }
+
+    @keyframes badge-kick {
+        0% {
+            opacity: 0;
+            transform: translate(-180px, 220px) rotate(-320deg) scale(0.5);
+            filter: drop-shadow(0 0 28px rgba(0,168,255,0.45)) blur(6px);
+        }
+        50% {
+            opacity: 1;
+            filter: drop-shadow(0 0 28px rgba(0,168,255,0.45)) blur(2px);
+        }
+        100% {
+            opacity: 1;
+            transform: translate(0px, -14px) rotate(0deg) scale(1);
+            filter: drop-shadow(0 0 28px rgba(0,168,255,0.45)) blur(0px);
+        }
+    }
+
+    @keyframes badge-settle {
+        0%   { transform: translateY(-14px); opacity: 1; }
+        28%  { transform: translateY(8px);              }
+        52%  { transform: translateY(-6px);             }
+        72%  { transform: translateY(3px);              }
+        88%  { transform: translateY(-1px);             }
+        100% { transform: translateY(0px);  opacity: 1; }
+    }
+
+    /* Reduced motion: skip straight to float, no kick */
+    @media (prefers-reduced-motion: reduce) {
+        .hero-badge-fly {
+            opacity: 1 !important;
+            transform: none !important;
+            animation: float 4.5s ease-in-out infinite !important;
+        }
+        .hero-badge-fly.kicking,
+        .hero-badge-fly.settling { animation: float 4.5s ease-in-out infinite !important; }
+    }
+    </style>
+
     <div class="hero-content">
-        <img src="https://fchanley.com/images/HanleyBadge.png" alt="FC Hanley" class="hero-badge">
+        <!-- Invisible placeholder holds the layout space -->
+        <div class="hero-badge-placeholder" id="badgePlaceholder"></div>
         <div class="hero-eyebrow">Stoke-on-Trent · Youth & Adult Football</div>
         <h1 class="hero-title">FC <span class="blue">Hanley</span></h1>
         <p class="hero-tagline">Passion &nbsp;·&nbsp; Pride &nbsp;·&nbsp; Community</p>
@@ -262,7 +624,7 @@
             <div class="explore-card-title">Holiday Camps</div>
             <div class="explore-card-desc">Full-day performance camps every school holiday</div>
         </a>
-        <a href="news.html" class="explore-card fade-up">
+        <a href="https://www.facebook.com/FCHanley" class="explore-card fade-up">
             <span class="explore-card-icon">📰</span>
             <div class="explore-card-title">News &amp; Events</div>
             <div class="explore-card-desc">Latest club news, match reports, and upcoming events</div>
@@ -281,6 +643,11 @@
             <span class="explore-card-icon">🔍</span>
             <div class="explore-card-title">Find a Team</div>
             <div class="explore-card-desc">Search vacancies across all age groups and abilities</div>
+        </a>
+        <a href="#location" class="explore-card fade-up">
+            <span class="explore-card-icon">📍</span>
+            <div class="explore-card-title">Find Us</div>
+            <div class="explore-card-desc">Based off Abbey Lane, Bucknall, Stoke-on-Trent — free parking on site</div>
         </a>
     </div>
 </section>
@@ -364,7 +731,7 @@
             <div class="feature-label">On Site · Free Parking</div>
             <h3>Café &amp; Facilities</h3>
             <p>Full onsite facilities including our café serving hot and cold food and drinks — including the famous Torpedo Sub Roll you won't want to miss.</p>
-            <a href="subz.html">See the menu →</a>
+            <a>Hungry!?</a>
         </div>
         <div class="feature-card fade-up">
             <div class="feature-label">Trophies &amp; Awards</div>
@@ -520,7 +887,6 @@
             <div class="footer-col">
                 <h4>Community</h4>
                 <a href="vacancies/playon/index.html">Find a Team</a>
-                <a href="tournament-registration.html">Tournament 2026</a>
             </div>
             <div class="footer-col">
                 <h4>Info</h4>
@@ -539,5 +905,70 @@
 </footer>
 
 <script src="js/main.js"></script>
+<script>
+// ── Header ball-roll animation ───────────────────────────────
+// Fires once on page load. CSS handles desktop vs mobile behaviour.
+(function () {
+    const ballGroup = document.getElementById('ballGroup');
+    const logoName  = document.getElementById('headerLogoName');
+    if (!ballGroup || !logoName) return;
+
+    setTimeout(function () {
+        ballGroup.classList.add('anim');
+        logoName.classList.add('anim');
+    }, 150);
+}());
+</script>
+<script>
+// ── Hero badge kick-in sequencer ─────────────────────────────
+// Measures where the placeholder sits, positions the flying badge
+// over it, then runs: kick → settle → float
+(function () {
+    const badge       = document.getElementById('heroBadge');
+    const placeholder = document.getElementById('badgePlaceholder');
+    if (!badge || !placeholder) return;
+
+    function positionOverPlaceholder() {
+        const r = placeholder.getBoundingClientRect();
+        const s = badge.parentElement.getBoundingClientRect();
+        badge.style.top  = (r.top  - s.top)  + 'px';
+        badge.style.left = (r.left - s.left) + 'px';
+    }
+
+    // Reposition on resize so badge tracks the placeholder correctly
+    window.addEventListener('resize', positionOverPlaceholder);
+
+    function runSequence() {
+        positionOverPlaceholder();
+
+        // Phase 1 — kick in (0.75s, starts after 0.3s page settle)
+        setTimeout(function () {
+            badge.classList.add('kicking');
+
+            badge.addEventListener('animationend', function onKickEnd() {
+                badge.removeEventListener('animationend', onKickEnd);
+                badge.classList.remove('kicking');
+
+                // Phase 2 — settle bounces (0.65s)
+                badge.classList.add('settling');
+
+                badge.addEventListener('animationend', function onSettleEnd() {
+                    badge.removeEventListener('animationend', onSettleEnd);
+                    badge.classList.remove('settling');
+
+                    // Phase 3 — hand off to gentle float loop
+                    badge.classList.add('floating');
+                });
+            });
+        }, 300);
+    }
+
+    if (document.readyState === 'complete') {
+        runSequence();
+    } else {
+        window.addEventListener('load', runSequence);
+    }
+}());
+</script>
 </body>
 </html>
