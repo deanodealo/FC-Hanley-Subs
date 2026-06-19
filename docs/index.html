@@ -845,7 +845,37 @@
 </section>
 
 <!-- SPONSORS -->
-<section class="sponsors">
+<section class="sponsors" id="sponsorsSection">
+
+    <!-- Glowing blue football that rolls across on scroll into view -->
+    <div class="sponsor-ball-track" id="sponsorBallTrack" aria-hidden="true">
+        <svg class="sponsor-ball" id="sponsorBall"
+             viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <clipPath id="ballClip"><circle cx="25" cy="25" r="20"/></clipPath>
+                <radialGradient id="ballGrad" cx="38%" cy="32%" r="65%">
+                    <stop offset="0%" stop-color="#1e3a6e"/>
+                    <stop offset="100%" stop-color="#0a1628"/>
+                </radialGradient>
+            </defs>
+            <!-- Ball body -->
+            <circle cx="25" cy="25" r="20" fill="url(#ballGrad)"/>
+            <!-- Jabulani swoosh panels clipped to ball -->
+            <g clip-path="url(#ballClip)" fill="none" stroke-linecap="round">
+                <!-- Gold swoosh left -->
+                <path d="M5 18 Q14 22 13 32 Q12 40 20 46"  stroke="#c9a84c" stroke-width="3"/>
+                <!-- Blue swoosh right -->
+                <path d="M45 18 Q36 22 37 32 Q38 40 30 46" stroke="#00a8ff" stroke-width="3"/>
+                <!-- Gold cross sweep -->
+                <path d="M5 30 Q15 26 25 27 Q35 28 45 24"  stroke="#c9a84c" stroke-width="2" opacity="0.6"/>
+                <!-- Blue inner sweep -->
+                <path d="M8 20 Q18 28 25 26 Q33 24 44 30"  stroke="#00a8ff" stroke-width="1.5" opacity="0.45"/>
+            </g>
+            <!-- Outer rim -->
+            <circle cx="25" cy="25" r="20" fill="none" stroke="#c9a84c" stroke-width="1.4"/>
+        </svg>
+    </div>
+
     <div class="sponsors-lbl">Our proud sponsors</div>
     <div class="sponsors-wrap">
         <div class="sponsors-track">
@@ -970,5 +1000,119 @@
     }
 }());
 </script>
+
+<style>
+/* ── Sponsor ball roll ──────────────────────────────────────
+   Glowing football rolls across the top of the sponsor
+   strip once when the section scrolls into view.
+   ──────────────────────────────────────────────────────── */
+.sponsor-ball-track {
+    position: relative;
+    height: 44px;
+    overflow: visible;
+    pointer-events: none;
+    margin-bottom: -8px;
+}
+.sponsor-ball {
+    position: absolute;
+    top: 0;
+    left: -52px;
+    width: 44px;
+    height: 44px;
+    opacity: 0;
+    filter: drop-shadow(0 0 8px rgba(201, 168, 76, 0.6));
+}
+.sponsor-ball.rolling {
+    animation:
+        sponsor-ball-move 1.8s cubic-bezier(0.4, 0, 0.6, 1) forwards,
+        sponsor-ball-spin 1.8s linear forwards,
+        sponsor-ball-fade 1.8s ease forwards;
+}
+@keyframes sponsor-ball-move {
+    0%   { left: -52px; }
+    100% { left: var(--ball-end, 110%); }
+}
+@keyframes sponsor-ball-spin {
+    0%   { transform: rotate(0deg);   }
+    100% { transform: rotate(720deg); }
+}
+@keyframes sponsor-ball-fade {
+    0%   { opacity: 0; }
+    8%   { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { opacity: 0; }
+}
+.sponsor-ghost {
+    position: absolute;
+    top: 0;
+    width: 44px;
+    height: 44px;
+    pointer-events: none;
+}
+.sponsor-ghost.rolling {
+    animation:
+        sponsor-ball-move  1.8s cubic-bezier(0.4, 0, 0.6, 1) forwards,
+        sponsor-ball-spin  1.8s linear forwards,
+        sponsor-ghost-fade 1.8s ease forwards;
+}
+@keyframes sponsor-ghost-fade {
+    0%   { opacity: 0;    }
+    10%  { opacity: 1;    }
+    75%  { opacity: 1;    }
+    100% { opacity: 0;    }
+}
+@media (prefers-reduced-motion: reduce) {
+    .sponsor-ball.rolling,
+    .sponsor-ghost.rolling { animation: none !important; opacity: 0 !important; }
+}
+</style>
+
+<script>
+/* ── Sponsor ball roll trigger ──────────────────────────── */
+(function () {
+    const section = document.getElementById('sponsorsSection');
+    const track   = document.getElementById('sponsorBallTrack');
+    const ball    = document.getElementById('sponsorBall');
+    if (!section || !ball || !track) return;
+
+    /* Clone the ball SVG for ghost layers */
+    function makeGhost(blurPx, opacity) {
+        const g = ball.cloneNode(true);
+        g.removeAttribute('id');
+        g.classList.add('sponsor-ghost');
+        g.style.opacity = '0';
+        g.style.filter  = 'drop-shadow(0 0 6px rgba(0,168,255,0.3)) blur(' + blurPx + 'px)';
+        track.insertBefore(g, ball);
+        return g;
+    }
+
+    const ghost2 = makeGhost(2.5, 0.2);
+    const ghost1 = makeGhost(1,   0.4);
+
+    let fired = false;
+
+    const observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+            if (entry.isIntersecting && !fired) {
+                fired = true;
+                observer.disconnect();
+
+                const endPx = track.offsetWidth + 52;
+                [ball, ghost1, ghost2].forEach(function (el) {
+                    el.style.setProperty('--ball-end', endPx + 'px');
+                });
+
+                /* Ghosts staggered slightly behind */
+                setTimeout(function () { ghost2.classList.add('rolling'); }, 90);
+                setTimeout(function () { ghost1.classList.add('rolling'); }, 45);
+                setTimeout(function () { ball.classList.add('rolling');   }, 0);
+            }
+        });
+    }, { threshold: 0.3 });
+
+    observer.observe(section);
+}());
+</script>
+
 </body>
 </html>
