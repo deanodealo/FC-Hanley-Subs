@@ -1,5 +1,5 @@
-/* FC Hanley Service Worker – required for PWA install on Android */
-const CACHE_NAME = 'fchanley-v1';
+/* FC Hanley Service Worker – network-first strategy */
+const CACHE_NAME = 'fchanley-v2';
 const PRECACHE = [
   '/',
   '/index.html',
@@ -24,7 +24,20 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
+  /* Only handle GET requests — skip POST etc */
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
-    caches.match(event.request).then(cached => cached || fetch(event.request))
+    fetch(event.request)
+      .then(networkResponse => {
+        /* Got a fresh response — clone it into cache for offline fallback */
+        const copy = networkResponse.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(event.request, copy));
+        return networkResponse;
+      })
+      .catch(() => {
+        /* Network failed (offline) — fall back to cache */
+        return caches.match(event.request);
+      })
   );
 });
