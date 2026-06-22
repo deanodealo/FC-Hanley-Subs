@@ -35,6 +35,13 @@ async function initializeAuthState() {
 }
 
 document.addEventListener('DOMContentLoaded', async function() {
+  // Hide auth-sensitive nav links until Firebase resolves — prevents flash of wrong state
+  const authEls = ['manageVacanciesLink', 'loginLink', 'registerLink', 'logoutLink'];
+  authEls.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.visibility = 'hidden';
+  });
+
   await initializeAuthState();
   checkAuthState();
 });
@@ -43,24 +50,39 @@ async function checkAuthState() {
   try {
     if (!auth) { setTimeout(checkAuthState, 500); return; }
     const { onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
+
     onAuthStateChanged(auth, (user) => {
       if (user) {
         updateDrawerLoggedIn(user);
       } else {
         updateDrawerLoggedOut();
       }
+      // Reveal nav links now that auth state is known
+      const authEls = ['manageVacanciesLink', 'loginLink', 'registerLink', 'logoutLink'];
+      authEls.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.visibility = '';
+      });
     });
   } catch (error) {
     console.error('Error checking auth state:', error);
+    // On error, reveal anyway so nav isn't permanently hidden
+    const authEls = ['manageVacanciesLink', 'loginLink', 'registerLink', 'logoutLink'];
+    authEls.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.visibility = '';
+    });
   }
 }
 
 function updateDrawerLoggedIn(user) {
-  // Show/hide links by class
-  document.querySelectorAll('.auth-logged-out').forEach(el => el.style.display = 'none');
-  document.querySelectorAll('.auth-logged-in').forEach(el => el.style.display = '');
+  // Show manager links, hide guest links
+  const show = ['manageVacanciesLink', 'logoutLink'];
+  const hide = ['loginLink', 'registerLink'];
+  show.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = ''; });
+  hide.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
 
-  // Add user info if not already there
+  // Add user info if not already present
   const drawerLinks = document.querySelector('.drawer-links');
   if (drawerLinks && !document.getElementById('auth-user-info')) {
     const name = user.displayName || user.email || 'User';
@@ -73,11 +95,12 @@ function updateDrawerLoggedIn(user) {
 }
 
 function updateDrawerLoggedOut() {
-  // Show/hide links by class
-  document.querySelectorAll('.auth-logged-out').forEach(el => el.style.display = '');
-  document.querySelectorAll('.auth-logged-in').forEach(el => el.style.display = 'none');
+  // Show guest links, hide manager links
+  const show = ['loginLink', 'registerLink'];
+  const hide = ['manageVacanciesLink', 'logoutLink'];
+  show.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = ''; });
+  hide.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
 
-  // Remove user info if present
   const userInfo = document.getElementById('auth-user-info');
   if (userInfo) userInfo.remove();
 }
