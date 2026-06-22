@@ -50,6 +50,10 @@
     <a href="../../toptier.html">Trophies</a>
     <a href="../../shop.html">Shop</a>
     <a href="vacancies.html" class="nav-cta">Find a Team</a>
+    <!-- Desktop auth links — hidden until Firebase resolves -->
+    <a href="manager-vacancies.html" id="desktopManageLink" style="display:none; visibility:hidden" class="nav-cta" title="Manage your vacancies">⚙️ My Vacancies</a>
+    <a href="#" id="desktopLoginLink" style="visibility:hidden" onclick="showLogin(event)">Login</a>
+    <a href="#" id="desktopLogoutLink" style="display:none; visibility:hidden" onclick="logout()">Logout</a>
   </nav>
   <div class="header-spacer"></div>
 </header>
@@ -101,11 +105,12 @@
       <div class="playon-card-cta">View all vacancies →</div>
     </a>
 
-    <div class="playon-feature-card" onclick="handleAddVacanciesClick()" style="cursor:pointer;">
+    <!-- Add Vacancies card — CTA swaps based on auth state -->
+    <div class="playon-feature-card" id="addVacanciesCard" onclick="handleAddVacanciesClick()" style="cursor:pointer;">
       <div class="playon-feature-icon">🔍</div>
-      <h3>Add Vacancies</h3>
+      <h3>Manage Vacancies</h3>
       <p>Managers — register and add your team vacancies by position, age group and experience level. Your listing appears instantly.</p>
-      <div class="playon-card-cta">Login or register to manage your vacancies →</div>
+      <div class="playon-card-cta" id="addVacanciesCta">Login or register to manage your vacancies →</div>
     </div>
 
     <a href="vacancies.html" class="playon-feature-card">

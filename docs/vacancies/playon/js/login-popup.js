@@ -34,10 +34,15 @@ async function initializeAuthState() {
   }
 }
 
+// All IDs that need to be hidden until Firebase resolves
+const AUTH_IDS = [
+  'manageVacanciesLink', 'loginLink', 'registerLink', 'logoutLink',  // drawer
+  'desktopManageLink', 'desktopLoginLink', 'desktopLogoutLink'        // desktop nav
+];
+
 document.addEventListener('DOMContentLoaded', async function() {
-  // Hide auth-sensitive nav links until Firebase resolves — prevents flash of wrong state
-  const authEls = ['manageVacanciesLink', 'loginLink', 'registerLink', 'logoutLink'];
-  authEls.forEach(id => {
+  // Hide auth-sensitive links until Firebase resolves — prevents flash of wrong state
+  AUTH_IDS.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.visibility = 'hidden';
   });
@@ -45,6 +50,13 @@ document.addEventListener('DOMContentLoaded', async function() {
   await initializeAuthState();
   checkAuthState();
 });
+
+function revealAuthLinks() {
+  AUTH_IDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.visibility = '';
+  });
+}
 
 async function checkAuthState() {
   try {
@@ -57,32 +69,32 @@ async function checkAuthState() {
       } else {
         updateDrawerLoggedOut();
       }
-      // Reveal nav links now that auth state is known
-      const authEls = ['manageVacanciesLink', 'loginLink', 'registerLink', 'logoutLink'];
-      authEls.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) el.style.visibility = '';
-      });
+      revealAuthLinks();
     });
   } catch (error) {
     console.error('Error checking auth state:', error);
-    // On error, reveal anyway so nav isn't permanently hidden
-    const authEls = ['manageVacanciesLink', 'loginLink', 'registerLink', 'logoutLink'];
-    authEls.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.style.visibility = '';
-    });
+    revealAuthLinks(); // reveal anyway so nav isn't permanently hidden
   }
 }
 
 function updateDrawerLoggedIn(user) {
-  // Show manager links, hide guest links
-  const show = ['manageVacanciesLink', 'logoutLink'];
-  const hide = ['loginLink', 'registerLink'];
-  show.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = ''; });
-  hide.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+  // Drawer
+  const drawerShow = ['manageVacanciesLink', 'logoutLink'];
+  const drawerHide = ['loginLink', 'registerLink'];
+  drawerShow.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = ''; });
+  drawerHide.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
 
-  // Add user info if not already present
+  // Desktop nav
+  const desktopShow = ['desktopManageLink', 'desktopLogoutLink'];
+  const desktopHide = ['desktopLoginLink'];
+  desktopShow.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = ''; });
+  desktopHide.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+
+  // Add Vacancies card CTA
+  const cta = document.getElementById('addVacanciesCta');
+  if (cta) cta.textContent = 'Go to Manage Vacancies →';
+
+  // Drawer user info
   const drawerLinks = document.querySelector('.drawer-links');
   if (drawerLinks && !document.getElementById('auth-user-info')) {
     const name = user.displayName || user.email || 'User';
@@ -95,12 +107,23 @@ function updateDrawerLoggedIn(user) {
 }
 
 function updateDrawerLoggedOut() {
-  // Show guest links, hide manager links
-  const show = ['loginLink', 'registerLink'];
-  const hide = ['manageVacanciesLink', 'logoutLink'];
-  show.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = ''; });
-  hide.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+  // Drawer
+  const drawerShow = ['loginLink', 'registerLink'];
+  const drawerHide = ['manageVacanciesLink', 'logoutLink'];
+  drawerShow.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = ''; });
+  drawerHide.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
 
+  // Desktop nav
+  const desktopShow = ['desktopLoginLink'];
+  const desktopHide = ['desktopManageLink', 'desktopLogoutLink'];
+  desktopShow.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = ''; });
+  desktopHide.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+
+  // Add Vacancies card CTA
+  const cta = document.getElementById('addVacanciesCta');
+  if (cta) cta.textContent = 'Login or register to manage your vacancies →';
+
+  // Remove drawer user info
   const userInfo = document.getElementById('auth-user-info');
   if (userInfo) userInfo.remove();
 }
@@ -162,6 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
       setTimeout(() => {
         closeLogin();
         updateDrawerLoggedIn(userCredential.user);
+        revealAuthLinks();
       }, 800);
 
     } catch (error) {
@@ -209,6 +233,7 @@ async function logout() {
     const { signOut } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js');
     await signOut(auth);
     updateDrawerLoggedOut();
+    revealAuthLinks();
     window.location.href = 'index.html';
   } catch (error) {
     console.error('Logout error:', error);
