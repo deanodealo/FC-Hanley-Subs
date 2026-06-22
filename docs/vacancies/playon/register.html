@@ -135,11 +135,10 @@
     <a href="index.html"><span class="d-icon">🔍</span> Find a Team</a>
     <a href="vacancies.html"><span class="d-icon">📋</span> All Vacancies</a>
     <a href="about.html"><span class="d-icon">ℹ️</span> How It Works</a>
-    <div class="drawer-divider"></div>
-    <a href="#" class="auth-logged-out" onclick="showLogin(event)"><span class="d-icon">🔐</span> Login</a>
-    <a href="register.html" class="auth-logged-out"><span class="d-icon">📝</span> Register</a>
-    <a href="manager-vacancies.html" class="auth-logged-in" style="display:none"><span class="d-icon">⚙️</span> Manage Vacancies</a>
-    <a href="#" class="auth-logged-in" style="display:none" onclick="logout()"><span class="d-icon">🚪</span> Logout</a>
+    <a href="manager-vacancies.html" id="manageVacanciesLink" style="display:none"><span class="d-icon">⚙️</span> Manage Vacancies</a>
+    <a href="#" id="loginLink" onclick="showLogin(event)"><span class="d-icon">🔐</span> Login</a>
+    <a href="register.html" id="registerLink"><span class="d-icon">📝</span> Register</a>
+    <a href="#" id="logoutLink" style="display:none" onclick="logout()"><span class="d-icon">🚪</span> Logout</a>
     <div class="drawer-divider"></div>
     <a href="../../index.html"><span class="d-icon">🏠</span> Back to FC Hanley</a>
 </div>
