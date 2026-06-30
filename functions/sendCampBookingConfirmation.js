@@ -68,6 +68,8 @@ ${childLines}
 
 On the day please report to one of the coaches who will be on hand to welcome your child. 
 
+The day will run from 09:00 to 15:00, with wrap around available from 08:30 to 15:30. Please ensure your child brings a packed lunch, water bottle, and appropriate sportswear.
+
 If you have any questions, you can reply directly to this email.
 
 See you on the pitch!

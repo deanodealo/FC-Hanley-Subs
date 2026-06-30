@@ -355,6 +355,49 @@ input:focus, select:focus, textarea:focus {
 .form-message.error { color: #C0392B; }
 .form-message.success { color: #1E7E34; }
 
+/* — wrap-around care row (appears below day-pills once ≥1 day selected) — */
+.wrap-around-row {
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px dashed rgba(0,0,0,0.1);
+}
+.wrap-around-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #5A6B82;
+  margin-bottom: 0.55rem;
+}
+.wrap-around-pills {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+.wrap-care-pill {
+  flex: 1 1 auto;
+  min-width: 64px;
+  text-align: center;
+  padding: 0.45rem 0.35rem;
+  border-radius: 7px;
+  border: 1.5px solid rgba(0,0,0,0.1);
+  background: white;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #5A6B82;
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+.wrap-care-pill .dow  { display: block; font-family: 'Barlow Condensed', sans-serif; font-size: 0.8rem; text-transform: uppercase; }
+.wrap-care-pill .cost { display: block; font-size: 0.6rem; color: #94A3B8; margin-top: 1px; }
+.wrap-care-pill.selected {
+  background: #f0f7ff;
+  border-color: var(--blue-light);
+  color: var(--blue-light);
+}
+.wrap-care-pill.selected .cost { color: var(--blue-light); opacity: 0.75; }
+
 .add-child-btn {
   background: transparent;
   border: 1.5px dashed rgba(0,87,184,0.4);
@@ -587,7 +630,8 @@ const CAMP_CONFIG = {
   heroSub: "Select a week, choose your days, and secure your child's place.",
   intro: "Complete the form below for each child you're registering, choose the week(s) and day(s) they'll attend, then confirm payment to secure their place. Places are allocated on a first-come, first-served basis.",
 
-  pricePerDay: 25, // £ per child per day
+  pricePerDay: 20,          // £ per child per day (subject to multi-day offer)
+  wrapAroundCarePrice: 5,  // £ per child per day — NOT subject to offer
 
   // Offer: book this many days in a SINGLE WEEK, cheapest one is free.
   // Set to null to disable (e.g. "offer: null").
@@ -696,7 +740,7 @@ const CHARGE_FUNCTION_URL = "https://europe-west1-fchanley-8d910.cloudfunctions.
     function addChild() {
       childCount += 1;
       const childId = "child" + childCount;
-      children[childId] = { selections: {} };
+      children[childId] = { selections: {}, wrapAround: {} };
 
       const block = document.createElement("div");
       block.className = "child-block";
@@ -725,6 +769,10 @@ const CHARGE_FUNCTION_URL = "https://europe-west1-fchanley-8d910.cloudfunctions.
             </div>
             <div class="day-pills hidden">
               ${dayPillsHtml}
+            </div>
+            <div class="wrap-around-row hidden">
+              <div class="wrap-around-label">Wrap Around Care — +£${CAMP_CONFIG.wrapAroundCarePrice}/day</div>
+              <div class="wrap-around-pills"></div>
             </div>
             <div class="offer-banner">${CAMP_CONFIG.offer ? CAMP_CONFIG.offer.label : ""}</div>
           </div>
@@ -787,8 +835,9 @@ const CHARGE_FUNCTION_URL = "https://europe-west1-fchanley-8d910.cloudfunctions.
         if (weekIsFull(week)) return; // can't select a full week
 
         weekEl.addEventListener("click", (e) => {
-          // Clicking a day pill is handled separately; don't toggle the week open/closed then.
-          if (e.target.closest(".day-pill")) return;
+          // Clicking a day pill or wrap-around row is handled separately;
+          // don't let those clicks bubble up and toggle the week open/closed.
+          if (e.target.closest(".day-pill") || e.target.closest(".wrap-around-row")) return;
 
           const pillsWrap = weekEl.querySelector(".day-pills");
           const isOpen = !pillsWrap.classList.contains("hidden");
@@ -798,7 +847,10 @@ const CHARGE_FUNCTION_URL = "https://europe-west1-fchanley-8d910.cloudfunctions.
             pillsWrap.classList.add("hidden");
             weekEl.classList.remove("active");
             delete children[childId].selections[weekId];
+            delete children[childId].wrapAround[weekId];
             weekEl.querySelectorAll(".day-pill").forEach(p => p.classList.remove("selected"));
+            const warRow = weekEl.querySelector(".wrap-around-row");
+            if (warRow) warRow.classList.add("hidden");
           } else {
             pillsWrap.classList.remove("hidden");
             weekEl.classList.add("active");
@@ -818,6 +870,10 @@ const CHARGE_FUNCTION_URL = "https://europe-west1-fchanley-8d910.cloudfunctions.
             if (sel.has(date)) {
               sel.delete(date);
               pillEl.classList.remove("selected");
+              // Also remove wrap-around for this day if it was selected
+              if (children[childId].wrapAround[weekId]) {
+                children[childId].wrapAround[weekId].delete(date);
+              }
             } else {
               sel.add(date);
               pillEl.classList.add("selected");
@@ -825,9 +881,12 @@ const CHARGE_FUNCTION_URL = "https://europe-west1-fchanley-8d910.cloudfunctions.
             // If no days left selected, collapse the week back to inactive
             if (sel.size === 0) {
               delete children[childId].selections[weekId];
+              delete children[childId].wrapAround[weekId];
               weekEl.classList.remove("active");
               weekEl.querySelector(".day-pills").classList.add("hidden");
+              weekEl.querySelector(".wrap-around-row").classList.add("hidden");
             }
+            updateWrapAroundRow(childId, weekId, weekEl);
             recalc();
           });
         });
@@ -854,6 +913,58 @@ const CHARGE_FUNCTION_URL = "https://europe-west1-fchanley-8d910.cloudfunctions.
       });
 
       recalc();
+    }
+
+    function updateWrapAroundRow(childId, weekId, weekEl) {
+      const sel = children[childId].selections[weekId];
+      const warRow = weekEl.querySelector(".wrap-around-row");
+      if (!warRow) return;
+
+      if (!sel || sel.size === 0) {
+        warRow.classList.add("hidden");
+        return;
+      }
+
+      warRow.classList.remove("hidden");
+
+      // Ensure the wrapAround set exists for this week
+      if (!children[childId].wrapAround[weekId]) {
+        children[childId].wrapAround[weekId] = new Set();
+      }
+      const waSel = children[childId].wrapAround[weekId];
+
+      const pillsContainer = warRow.querySelector(".wrap-around-pills");
+
+      // Build a pill for each selected camp day, preserving existing toggle state
+      const week = CAMP_CONFIG.weeks.find(w => w.id === weekId);
+      const sortedDates = Array.from(sel).sort();
+
+      pillsContainer.innerHTML = sortedDates.map(date => {
+        const day = week.days.find(d => d.date === date);
+        const dow = day ? day.dow : date.slice(8); // fallback to day number
+        const isSelected = waSel.has(date);
+        return `
+          <div class="wrap-care-pill ${isSelected ? "selected" : ""}" data-date="${date}">
+            <span class="dow">${dow}</span>
+            <span class="cost">+£${CAMP_CONFIG.wrapAroundCarePrice}</span>
+          </div>
+        `;
+      }).join("");
+
+      // Wire up toggle events on the freshly-rendered pills
+      pillsContainer.querySelectorAll(".wrap-care-pill").forEach(pill => {
+        pill.addEventListener("click", () => {
+          const date = pill.dataset.date;
+          if (waSel.has(date)) {
+            waSel.delete(date);
+            pill.classList.remove("selected");
+          } else {
+            waSel.add(date);
+            pill.classList.add("selected");
+          }
+          recalc();
+        });
+      });
     }
 
     function updateRemoveButtons() {
@@ -923,6 +1034,22 @@ const CHARGE_FUNCTION_URL = "https://europe-west1-fchanley-8d910.cloudfunctions.
               </span>
             </div>
           `;
+
+          // Wrap-around care line for this week (if any selected)
+          const waSel = children[childId].wrapAround[weekId];
+          if (waSel && waSel.size > 0) {
+            const waCost = waSel.size * CAMP_CONFIG.wrapAroundCarePrice;
+            grandTotal += waCost;
+            lineHtml += `
+              <div class="summary-line">
+                <span>
+                  <span class="name" style="color:rgba(255,255,255,0.65);font-weight:500;">↳ Wrap Around Care</span>
+                  <span class="meta">${week.label} · ${waSel.size} day${waSel.size > 1 ? "s" : ""}</span>
+                </span>
+                <span class="price">£${waCost.toFixed(0)}</span>
+              </div>
+            `;
+          }
         });
 
         // Update free-day tags live on the day pills for this child
@@ -1017,7 +1144,9 @@ const CHARGE_FUNCTION_URL = "https://europe-west1-fchanley-8d910.cloudfunctions.
       const childSummaries = childrenData.map(c => {
         const weekParts = Object.entries(c.weeks).map(([weekId, dates]) => {
           const week = CAMP_CONFIG.weeks.find(w => w.id === weekId);
-          return `${week ? week.label : weekId} (${dates.length} day${dates.length > 1 ? "s" : ""})`;
+          const waDates = (c.wrapAroundDays && c.wrapAroundDays[weekId]) || [];
+          const waSuffix = waDates.length > 0 ? ` + wrap-around ${waDates.length}d` : "";
+          return `${week ? week.label : weekId} (${dates.length} day${dates.length > 1 ? "s" : ""}${waSuffix})`;
         });
         return `${c.name}: ${weekParts.join(", ")}`;
       });
@@ -1076,12 +1205,19 @@ const CHARGE_FUNCTION_URL = "https://europe-west1-fchanley-8d910.cloudfunctions.
           if (dateSet.size > 0) weeks[weekId] = Array.from(dateSet).sort();
         });
 
+        // Build wrap-around care data: weekId -> sorted array of dates
+        const wrapAroundDays = {};
+        Object.entries(children[childId].wrapAround).forEach(([weekId, dateSet]) => {
+          if (dateSet && dateSet.size > 0) wrapAroundDays[weekId] = Array.from(dateSet).sort();
+        });
+
         childrenData.push({
           name,
           ageGroup: age,
           additionalInfo: block.querySelector(".child-additional-info").value.trim(),
           photoVideoConsent: consent, // "yes" | "no"
-          weeks
+          weeks,
+          wrapAroundDays
         });
       }
 

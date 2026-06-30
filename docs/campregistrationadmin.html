@@ -483,6 +483,12 @@ function renderBookingsList() {
         return `${weekLabel(weekId)} (${dates.length} day${dates.length > 1 ? "s" : ""})`;
       }).join(", ") || "No days selected";
 
+      // Wrap-around care summary
+      const waEntries = Object.entries(child.wrapAroundDays || {}).filter(([, dates]) => dates && dates.length > 0);
+      const wrapAroundHtml = waEntries.length > 0
+        ? `<div class="child-card-weeks" style="color:#0057b8;"><strong>Wrap Around Care:</strong> ${escapeHtml(waEntries.map(([weekId, dates]) => `${weekLabel(weekId)} (${dates.length}d)`).join(", "))}</div>`
+        : "";
+
       const consentClass = child.photoVideoConsent === "yes" ? "yes" : "no";
       const consentText = child.photoVideoConsent === "yes" ? "Photo/Video: Yes" : "Photo/Video: No";
 
@@ -498,6 +504,7 @@ function renderBookingsList() {
             <span class="consent-tag ${consentClass}">${consentText}</span>
           </div>
           <div class="child-card-weeks"><strong>Weeks:</strong> ${escapeHtml(weeksText)}</div>
+          ${wrapAroundHtml}
           ${infoHtml}
         </div>
       `;
@@ -536,6 +543,7 @@ function exportCsv() {
   const headers = [
     "Parent Name", "Parent Email", "Parent Phone",
     "Child Name", "Age Group", "Weeks Booked", "Total Days",
+    "Wrap Around Days",
     "Photo/Video Consent", "Additional Information",
     "Amount Paid (Family Total)", "Payment Status", "Square Payment ID", "Booking ID", "Registered Date"
   ];
@@ -549,6 +557,10 @@ function exportCsv() {
     (booking.children || []).forEach(child => {
       const weeksText = Object.entries(child.weeks || {}).map(([weekId, dates]) => `${weekLabel(weekId)} (${dates.length}d)`).join("; ");
       const totalDays = Object.values(child.weeks || {}).reduce((sum, dates) => sum + dates.length, 0);
+      const waText = Object.entries(child.wrapAroundDays || {})
+        .filter(([, dates]) => dates && dates.length > 0)
+        .map(([weekId, dates]) => `${weekLabel(weekId)} (${dates.length}d)`)
+        .join("; ") || "";
 
       rows.push([
         booking.parentName || "",
@@ -558,6 +570,7 @@ function exportCsv() {
         ageLabel(child.ageGroup),
         weeksText,
         totalDays,
+        waText,
         child.photoVideoConsent === "yes" ? "Yes" : "No",
         child.additionalInfo || "",
         booking.amountPaid || "",
