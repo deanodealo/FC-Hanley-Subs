@@ -279,6 +279,7 @@ input:focus, select:focus, textarea:focus {
 .day-pill .free-tag { display: none; }
 .day-pill.free .free-tag { display: block; font-size: 0.6rem; color: var(--gold); font-weight: 700; margin-top: 1px; }
 .day-pill.selected.free .free-tag { color: #FFE08A; }
+.day-pill.disabled { opacity: 0.35; cursor: not-allowed; text-decoration: line-through; }
 
 /* — offer banner — */
 .offer-banner {
@@ -752,13 +753,16 @@ const CHARGE_FUNCTION_URL = "https://europe-west1-fchanley-8d910.cloudfunctions.
 
       const weekOptionsHtml = CAMP_CONFIG.weeks.map(week => {
         const full = weekIsFull(week);
-        const dayPillsHtml = week.days.map(day => `
-          <div class="day-pill" data-week="${week.id}" data-date="${day.date}">
+        const today = new Date(); today.setHours(0,0,0,0);
+        const dayPillsHtml = week.days.map(day => {
+          const isPast = new Date(day.date + "T00:00:00") < today;
+          return `
+          <div class="day-pill${isPast ? " disabled" : ""}" data-week="${week.id}" data-date="${day.date}">
             <span class="dow">${day.dow}</span>
             <span class="ddate">${fmtDate(day.date)}</span>
             <span class="free-tag"></span>
           </div>
-        `).join("");
+        `}).join("");
 
         return `
           <div class="week-option ${full ? "full" : ""}" data-week="${week.id}">
@@ -864,6 +868,7 @@ const CHARGE_FUNCTION_URL = "https://europe-west1-fchanley-8d910.cloudfunctions.
         // Day pill toggles
         weekEl.querySelectorAll(".day-pill").forEach(pillEl => {
           pillEl.addEventListener("click", () => {
+            if (pillEl.classList.contains("disabled")) return;
             const date = pillEl.dataset.date;
             const sel = children[childId].selections[weekId];
             if (!sel) return;
