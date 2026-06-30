@@ -1,5 +1,5 @@
 /* FC Hanley Service Worker – network-first strategy */
-const CACHE_NAME = 'fchanley-v2';
+const CACHE_NAME = 'fchanley-v3';
 const PRECACHE = [
   '/',
   '/index.html',
