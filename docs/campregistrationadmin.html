@@ -99,6 +99,47 @@
 .breakdown-box-stats { display: flex; justify-content: space-between; font-size: 0.8rem; color: #5A6B82; }
 .breakdown-box-stats strong { color: var(--navy); }
 
+/* — day breakdown (booked days per week, derived live from Firestore) — */
+.day-breakdown-week { margin-bottom: 1.4rem; }
+.day-breakdown-week:last-child { margin-bottom: 0; }
+.day-breakdown-week-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.65rem;
+}
+.day-pills-row { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+.day-pill {
+  background: white;
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  min-width: 88px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.day-pill-dow {
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--navy);
+  text-transform: uppercase;
+}
+.day-pill-date { display: block; font-size: 0.68rem; color: #94A3B8; margin-bottom: 0.35rem; }
+.day-pill-count {
+  display: block;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800;
+  font-size: 1.5rem;
+  color: var(--accent);
+  line-height: 1;
+}
+.day-pill-label { display: block; font-size: 0.6rem; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.4px; margin-top: 0.15rem; }
+
 /* — filter row — */
 .filter-row {
   display: flex;
@@ -251,6 +292,11 @@
   </div>
 
   <div class="admin-section">
+    <div class="admin-section-title">Bookings by Day</div>
+    <div id="dayBreakdown"></div>
+  </div>
+
+  <div class="admin-section">
     <div class="admin-section-title">Bookings by Age Group</div>
     <div id="ageBreakdown" class="breakdown-grid"></div>
   </div>
@@ -334,6 +380,7 @@ const totalFamiliesEl = document.getElementById("totalFamilies");
 const totalChildrenEl = document.getElementById("totalChildren");
 const totalIncomeEl = document.getElementById("totalIncome");
 const weekBreakdownEl = document.getElementById("weekBreakdown");
+const dayBreakdownEl = document.getElementById("dayBreakdown");
 const ageBreakdownEl = document.getElementById("ageBreakdown");
 const bookingsListEl = document.getElementById("bookingsList");
 const weekFilterEl = document.getElementById("weekFilter");
@@ -395,6 +442,7 @@ function renderDashboard() {
   totalIncomeEl.textContent = "£" + income.toFixed(0);
 
   renderWeekBreakdown(allRows);
+  renderDayBreakdown(allRows);
   renderAgeBreakdown(allRows);
   renderBookingsList();
 }
@@ -422,6 +470,67 @@ function renderWeekBreakdown(allRows) {
           <span><strong>${rowsInWeek.length}</strong> children</span>
           <span><strong>${totalDays}</strong> days booked</span>
         </div>
+      </div>
+    `;
+  }).join("");
+}
+
+// Builds the "Bookings by Day" view entirely from what's actually stored
+// against each child — child.weeks[weekId] is an array of real calendar
+// dates (YYYY-MM-DD) picked at registration time, so this doesn't need
+// any manually-maintained day list. Add a new week to CAMP_LOOKUP (for
+// the label) and this will pick up its dates automatically as soon as
+// someone books onto it.
+function renderDayBreakdown(allRows) {
+  // weekId -> { dateIso -> count of children booked that day }
+  const weekDateCounts = {};
+
+  allRows.forEach(({ child }) => {
+    Object.entries(child.weeks || {}).forEach(([weekId, dates]) => {
+      if (!weekDateCounts[weekId]) weekDateCounts[weekId] = {};
+      (dates || []).forEach(date => {
+        weekDateCounts[weekId][date] = (weekDateCounts[weekId][date] || 0) + 1;
+      });
+    });
+  });
+
+  const weekIds = Object.keys(weekDateCounts).sort((a, b) => {
+    const ia = CAMP_LOOKUP.weeks.findIndex(w => w.id === a);
+    const ib = CAMP_LOOKUP.weeks.findIndex(w => w.id === b);
+    if (ia === -1 && ib === -1) return a.localeCompare(b);
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
+  });
+
+  if (!weekIds.length) {
+    dayBreakdownEl.innerHTML = '<p class="no-results">No days booked yet.</p>';
+    return;
+  }
+
+  dayBreakdownEl.innerHTML = weekIds.map(weekId => {
+    const dateCounts = weekDateCounts[weekId];
+    const sortedDates = Object.keys(dateCounts).sort();
+
+    const pillsHtml = sortedDates.map(date => {
+      const d = new Date(date + "T00:00:00");
+      const dow = d.toLocaleDateString("en-GB", { weekday: "short" });
+      const dm = d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+      const count = dateCounts[date];
+      return `
+        <div class="day-pill">
+          <span class="day-pill-dow">${dow}</span>
+          <span class="day-pill-date">${dm}</span>
+          <span class="day-pill-count">${count}</span>
+          <span class="day-pill-label">${count === 1 ? "child" : "children"}</span>
+        </div>
+      `;
+    }).join("");
+
+    return `
+      <div class="day-breakdown-week">
+        <div class="day-breakdown-week-label">${weekLabel(weekId)}</div>
+        <div class="day-pills-row">${pillsHtml}</div>
       </div>
     `;
   }).join("");
