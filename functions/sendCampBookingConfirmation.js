@@ -27,7 +27,7 @@ const gmailAppPassword = defineSecret("GMAIL_APP_PASSWORD");
    ═══════════════════════════════════════════════════════════ */
 const CAMP_LOOKUP = {
   weeks: [
-    { id: "w1", label: "Week 1", dateRange: "3 Aug – 7 Aug" },
+    { id: "w1", label: "Week 1", dateRange: "27 Jul – 31 Jul" },
     { id: "w2", label: "Week 2", dateRange: "10 Aug – 14 Aug" }
   ]
 };

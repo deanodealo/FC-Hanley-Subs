@@ -140,6 +140,85 @@
 }
 .day-pill-label { display: block; font-size: 0.6rem; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.4px; margin-top: 0.15rem; }
 
+/* — daily register (who's in, which days, wrap-around highlight) — */
+.register-hint { font-size: 0.82rem; color: #5A6B82; margin: -0.4rem 0 1.1rem; }
+.reg-legend-wrap {
+  display: inline-block;
+  background: rgba(255,184,0,0.18);
+  color: #8a6400;
+  font-weight: 700;
+  font-size: 0.68rem;
+  padding: 0.05rem 0.4rem;
+  border-radius: 4px;
+  margin: 0 0.1rem;
+}
+.register-week-block { margin-bottom: 2rem; }
+.register-week-block:last-child { margin-bottom: 0; }
+.register-week-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--navy);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.7rem;
+}
+.register-table-wrap {
+  overflow-x: auto;
+  border: 1px solid rgba(0,0,0,0.07);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+.register-table { border-collapse: collapse; width: 100%; min-width: 480px; background: white; }
+.register-table th, .register-table td {
+  padding: 0.6rem 0.75rem;
+  font-size: 0.82rem;
+  text-align: center;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  white-space: nowrap;
+}
+.register-table th {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  color: #5A6B82;
+  background: var(--off-white);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.register-table th.reg-day-th { line-height: 1.3; }
+.register-table th .reg-day-dow { display: block; }
+.register-table th .reg-day-date { display: block; font-weight: 400; color: #94A3B8; }
+.register-table td.reg-name-cell, .register-table th.reg-name-th {
+  text-align: left;
+  position: sticky;
+  left: 0;
+  background: white;
+  z-index: 1;
+}
+.register-table th.reg-name-th { background: var(--off-white); }
+.register-table .reg-child-name { font-weight: 600; color: var(--navy); display: block; }
+.register-table .reg-parent-name { font-size: 0.7rem; color: #94A3B8; }
+.reg-cell-empty { color: rgba(0,0,0,0.12); }
+.reg-cell-booked {
+  color: #1E7E34;
+  font-weight: 700;
+}
+.reg-cell-wrap {
+  background: rgba(255,184,0,0.12);
+  color: #1E7E34;
+  font-weight: 700;
+  border-radius: 6px;
+  position: relative;
+}
+.reg-wrap-badge {
+  display: block;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: #8a6400;
+  letter-spacing: 0.3px;
+}
+
 /* — filter row — */
 .filter-row {
   display: flex;
@@ -302,6 +381,12 @@
   </div>
 
   <div class="admin-section">
+    <div class="admin-section-title">Daily Register</div>
+    <p class="register-hint">Who's in on which day, per week. Cells marked <span class="reg-legend-wrap">WA</span> also have Wrap Around Care booked that day.</p>
+    <div id="dailyRegister"></div>
+  </div>
+
+  <div class="admin-section">
     <div class="admin-section-title">Registered Bookings</div>
 
     <div class="filter-row">
@@ -382,6 +467,7 @@ const totalIncomeEl = document.getElementById("totalIncome");
 const weekBreakdownEl = document.getElementById("weekBreakdown");
 const dayBreakdownEl = document.getElementById("dayBreakdown");
 const ageBreakdownEl = document.getElementById("ageBreakdown");
+const dailyRegisterEl = document.getElementById("dailyRegister");
 const bookingsListEl = document.getElementById("bookingsList");
 const weekFilterEl = document.getElementById("weekFilter");
 const ageFilterEl = document.getElementById("ageFilter");
@@ -444,6 +530,7 @@ function renderDashboard() {
   renderWeekBreakdown(allRows);
   renderDayBreakdown(allRows);
   renderAgeBreakdown(allRows);
+  renderDailyRegister(allRows);
   renderBookingsList();
 }
 
@@ -531,6 +618,96 @@ function renderDayBreakdown(allRows) {
       <div class="day-breakdown-week">
         <div class="day-breakdown-week-label">${weekLabel(weekId)}</div>
         <div class="day-pills-row">${pillsHtml}</div>
+      </div>
+    `;
+  }).join("");
+}
+
+// Builds the "Daily Register" — one table per week, one row per child,
+// one column per date actually booked that week (derived from the data,
+// same as renderDayBreakdown). A cell shows a tick if that child is in
+// that day, and gets the wrap-around highlight + "WA" badge if
+// wrapAroundDays[weekId] also contains that date.
+function renderDailyRegister(allRows) {
+  // weekId -> Set of dateIso (every date anyone is booked on, that week)
+  const weekDates = {};
+  allRows.forEach(({ child }) => {
+    Object.entries(child.weeks || {}).forEach(([weekId, dates]) => {
+      if (!weekDates[weekId]) weekDates[weekId] = new Set();
+      (dates || []).forEach(date => weekDates[weekId].add(date));
+    });
+  });
+
+  const weekIds = Object.keys(weekDates).sort((a, b) => {
+    const ia = CAMP_LOOKUP.weeks.findIndex(w => w.id === a);
+    const ib = CAMP_LOOKUP.weeks.findIndex(w => w.id === b);
+    if (ia === -1 && ib === -1) return a.localeCompare(b);
+    if (ia === -1) return 1;
+    if (ib === -1) return -1;
+    return ia - ib;
+  });
+
+  if (!weekIds.length) {
+    dailyRegisterEl.innerHTML = '<p class="no-results">No days booked yet.</p>';
+    return;
+  }
+
+  dailyRegisterEl.innerHTML = weekIds.map(weekId => {
+    const sortedDates = Array.from(weekDates[weekId]).sort();
+
+    // Children with at least one day booked this week, sorted by name.
+    const childrenInWeek = allRows
+      .filter(r => r.child.weeks && r.child.weeks[weekId] && r.child.weeks[weekId].length > 0)
+      .sort((a, b) => (a.child.name || "").localeCompare(b.child.name || ""));
+
+    const headerCells = sortedDates.map(date => {
+      const d = new Date(date + "T00:00:00");
+      const dow = d.toLocaleDateString("en-GB", { weekday: "short" });
+      const dm = d.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+      return `<th class="reg-day-th"><span class="reg-day-dow">${dow}</span><span class="reg-day-date">${dm}</span></th>`;
+    }).join("");
+
+    const bodyRows = childrenInWeek.map(({ booking, child }) => {
+      const bookedDates = new Set(child.weeks[weekId] || []);
+      const wrapDates = new Set((child.wrapAroundDays && child.wrapAroundDays[weekId]) || []);
+
+      const dayCells = sortedDates.map(date => {
+        if (!bookedDates.has(date)) {
+          return `<td class="reg-cell-empty">—</td>`;
+        }
+        if (wrapDates.has(date)) {
+          return `<td class="reg-cell-wrap">✓<span class="reg-wrap-badge">WA</span></td>`;
+        }
+        return `<td class="reg-cell-booked">✓</td>`;
+      }).join("");
+
+      return `
+        <tr>
+          <td class="reg-name-cell">
+            <span class="reg-child-name">${escapeHtml(child.name || "Unnamed child")}</span>
+            <span class="reg-parent-name">${escapeHtml(booking.parentName || "")}</span>
+          </td>
+          ${dayCells}
+        </tr>
+      `;
+    }).join("");
+
+    return `
+      <div class="register-week-block">
+        <div class="register-week-label">${weekLabel(weekId)}</div>
+        <div class="register-table-wrap">
+          <table class="register-table">
+            <thead>
+              <tr>
+                <th class="reg-name-th">Child</th>
+                ${headerCells}
+              </tr>
+            </thead>
+            <tbody>
+              ${bodyRows}
+            </tbody>
+          </table>
+        </div>
       </div>
     `;
   }).join("");
