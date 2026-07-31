@@ -2934,3 +2934,21 @@ header {
   0%, 100% { box-shadow: 0 0 0 0 rgba(255, 26, 36, 0.6); }
   50%       { box-shadow: 0 0 0 10px rgba(255, 26, 36, 0); }
 }
+
+.banner-welcome {
+  background: linear-gradient(135deg, var(--navy-mid) 0%, var(--blue) 100%);
+  padding-top: 2rem;
+  padding-bottom: 2.5rem;   /* reduced now buttons are gone */
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+  border-top: 1px solid rgba(0, 168, 255, 0.1);
+  border-bottom: 1px solid rgba(0, 168, 255, 0.1);
+}
+
+.welcome-text {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.55);
+  line-height: 1.8;
+  max-width: 660px;
+  margin: 0 auto 1rem; /* was 2.5rem */
+}
