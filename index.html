@@ -1,89 +1,481 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dealo — Save Time, Save Money, Win More Customers</title>
+<meta name="description" content="Business improvement for independent businesses — websites, cost savings and admin automation, built around your budget. Plus grassroots football specialists.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="icon" type="image/png" href="dealo-icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/12.12.0/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/12.12.0/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/12.12.0/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/12.12.0/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/12.12.0/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/12.12.0/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/12.12.0/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/12.12.0/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/12.12.0/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/12.12.0/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo"><img src="dealo-logo-full.png" alt="Dealo"></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#losing-money">Losing Money?</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#business-systems">Business Systems</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#contact" class="nav-cta">Free Business Review</a></li>
+  </ul>
+  <button class="nav-burger" id="navBurger" aria-label="Menu" aria-expanded="false" aria-controls="navLinks">☰</button>
+</nav>
 
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+    <span class="orb orb-4"></span>
+  </div>
+  <div class="hero-motif" aria-hidden="true">
+    <svg viewBox="0 0 560 560" fill="none">
+      <rect x="40" y="40" width="480" height="480" rx="120" stroke="#2E3740" stroke-opacity="0.07" stroke-width="2"/>
+      <rect x="120" y="120" width="320" height="320" rx="80" stroke="#3B82F6" stroke-opacity="0.10" stroke-width="2"/>
+    </svg>
+  </div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">⚡ Business improvement, not just websites</div>
+    <h1>Save time, save money,<br>win more <em>customers.</em></h1>
+    <p class="lead">We help independent businesses work better — building websites, cutting unnecessary costs, and automating the admin that eats your week. No fixed packages, no corporate price tag — we work with whatever budget you've got, however you'd rather pay.</p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-primary">Get Your Free Business Review →</a>
+      <a href="#business-systems" class="btn-secondary">See the work</a>
     </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
+    <div class="hero-pillars">
+      <div class="hero-pillar">
+        <div class="hero-pillar-icon">📈</div>
+        <h3>More Customers</h3>
+        <p>Turn your online presence into a sales tool, not just a shopfront.</p>
+      </div>
+      <div class="hero-pillar">
+        <div class="hero-pillar-icon">💷</div>
+        <h3>Lower Costs</h3>
+        <p>Replace unnecessary subscriptions and manual processes with one system you own.</p>
+      </div>
+      <div class="hero-pillar">
+        <div class="hero-pillar-icon">⏱️</div>
+        <h3>Less Admin</h3>
+        <p>Automate the repetitive tasks that quietly eat into your week.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+<!-- CURRENT CUSTOMERS -->
+<section class="customers-strip">
+  <div class="block-inner">
+    <span class="customers-label">Trusted by local businesses &amp; clubs.  Live websites built by Dealo:</span>
+    <div class="customers-logos">
+      <a href="https://fchanley.com" target="_blank" rel="noopener" class="customer-logo">
+        <img src="fchanley-logo.png" alt="F.C Hanley">
+      </a>
+      <a href="https://deanodealo.github.io/Northwood/" target="_blank" rel="noopener" class="customer-logo">
+        <img src="northwood-logo.png" alt="Northwood Community Sports">
+      </a>
+    </div>
+  </div>
+</section>
 
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
-    </script>
-  </body>
+<!-- WHERE ARE YOU LOSING MONEY -->
+<section class="block" id="losing-money">
+  <div class="block-inner">
+    <div class="section-head">
+      <span class="eyebrow">The real question</span>
+      <h2>Where are you losing money?</h2>
+      <p>You didn't wake up wanting a website. You woke up wondering why you're so busy but not making enough. Here's where that usually comes from.</p>
+    </div>
+    <div class="money-grid">
+      <div class="money-card">
+        <div class="money-card-icon">🔍</div>
+        <h3>No Website? You're Missing Customers</h3>
+        <p class="money-problem">Customers search online before they buy. Without a proper website, people can't find you, don't quite trust you, and enquiries go to whoever they find first — usually a competitor.</p>
+        <ul class="service-list">
+          <li>Professional, mobile-friendly website</li>
+          <li>A proper Google presence</li>
+          <li>Enquiry forms &amp; booking options</li>
+        </ul>
+      </div>
+      <div class="money-card">
+        <div class="money-card-icon">🖥️</div>
+        <h3>Have a Website? Is It Working Hard Enough?</h3>
+        <p class="money-problem">Most businesses already have something — the real question is whether it's actually bringing customers in, or just sitting there.</p>
+        <ul class="service-list">
+          <li>Is it generating enquiries?</li>
+          <li>Is it mobile-friendly &amp; fast?</li>
+          <li>Is it easy to contact or book with you?</li>
+          <li>Are you overpaying for hosting or a website package?</li>
+        </ul>
+      </div>
+      <div class="money-card">
+        <div class="money-card-icon">💳</div>
+        <h3>Paying Too Much for Software?</h3>
+        <p class="money-problem">Booking systems, registration platforms, forms, CRMs, email tools — and hosting. Some firms quietly overcharge for basic hosting too, small monthly fees that add up to real money over a year, often without anyone noticing.</p>
+        <ul class="service-list">
+          <li>One system, not four separate subscriptions</li>
+          <li>You own it — no vendor lock-in</li>
+          <li>Built around what you actually need</li>
+        </ul>
+      </div>
+      <div class="money-card">
+        <div class="money-card-icon">⏱️</div>
+        <h3>Spending Too Much Time on Admin?</h3>
+        <p class="money-problem">Replying to enquiries, chasing payments, filling out the same paperwork — hours disappear every week that could be spent running the business.</p>
+        <ul class="service-list">
+          <li>Automated enquiries, bookings &amp; reminders</li>
+          <li>Forms, emails &amp; payments handled for you</li>
+          <li>A proper record of every customer</li>
+        </ul>
+      </div>
+    </div>
+    <div class="section-cta">
+      <a href="#contact" class="btn-primary">Get Your Free Business Review →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CALCULATOR -->
+<section class="block" id="calculator">
+  <div class="block-inner">
+    <div class="section-head">
+      <span class="eyebrow">See it for yourself</span>
+      <h2>How much could you save?</h2>
+      <p>Answer a few quick questions and get a rough idea of what could be freed up for your business — in money, and in time.</p>
+    </div>
+    <div class="calc-wrap">
+      <div class="calc-inputs">
+        <div class="calc-field">
+          <label>Do you currently have a website?</label>
+          <div class="calc-toggle" role="group" aria-label="Do you have a website">
+            <button type="button" class="calc-toggle-btn is-active" data-website="yes">Yes</button>
+            <button type="button" class="calc-toggle-btn" data-website="no">No</button>
+          </div>
+        </div>
+        <div class="calc-field" id="calcHostingField">
+          <label for="calcHosting">Monthly spend on hosting or your current website package (£)</label>
+          <input type="number" id="calcHosting" min="0" inputmode="decimal" placeholder="e.g. 40">
+        </div>
+        <div class="calc-field">
+          <label for="calcSoftware">Monthly spend on booking software, forms, CRM or email tools (£)</label>
+          <input type="number" id="calcSoftware" min="0" inputmode="decimal" placeholder="e.g. 60">
+        </div>
+        <div class="calc-field">
+          <label for="calcHours">Hours per week on admin — replying to enquiries, paperwork, chasing payments</label>
+          <input type="number" id="calcHours" min="0" inputmode="decimal" placeholder="e.g. 8">
+        </div>
+        <div class="calc-field">
+          <label for="calcRate">Roughly what's your time worth per hour (£)</label>
+          <input type="number" id="calcRate" min="0" inputmode="decimal" placeholder="e.g. 25">
+        </div>
+        <button type="button" id="calcButton" class="btn-primary calc-submit">Calculate My Savings →</button>
+      </div>
+      <div class="calc-result">
+        <div class="calc-result-placeholder" id="calcPlaceholder">
+          <div class="calc-result-icon">📊</div>
+          <p>Fill in the fields and hit calculate to see your estimate.</p>
+        </div>
+        <div class="calc-result-output" id="calcOutput">
+          <span class="calc-result-label">Estimated savings opportunity</span>
+          <div class="calc-result-figure" id="calcTotal">£0</div>
+          <div class="calc-result-breakdown">
+            <div class="calc-result-line" id="calcHostingRow">
+              <span>Potential hosting saving</span>
+              <strong id="calcHostingOut">£0/yr</strong>
+            </div>
+            <div class="calc-result-line">
+              <span>Potential software saving</span>
+              <strong id="calcSoftwareOut">£0/yr</strong>
+            </div>
+            <div class="calc-result-line">
+              <span>Admin time freed up</span>
+              <strong id="calcTimeOut">£0/yr</strong>
+            </div>
+          </div>
+          <p class="calc-result-note" id="calcWebsiteNote"></p>
+          <p class="calc-disclaimer">A rough guide, not a fixed quote. We'd still charge something for hosting or support, so this assumes roughly half of your current hosting &amp; software costs could realistically be saved, and that most — not all — of your admin time could be freed up.</p>
+          <a href="#contact" class="btn-primary">Get Your Free Business Review →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="block" id="about">
+  <div class="block-inner">
+    <div class="about-layout">
+      <div class="about-text">
+        <span class="eyebrow">Who's behind Dealo</span>
+        <h2>20 years inside one of the world's most technologically advanced companies</h2>
+        <p>Dealo is run by Dean, whose day job was leading software testing and quality for a global technology company operating at massive scale — helping shape automation strategy, engineering standards and modern ways of working for platforms used by millions.</p>
+        <p>Dealo brings that same standard to independent businesses: the same eye for what's actually broken, the same rigour for how it gets fixed — without the overhead or cost of a large agency.</p>
+      </div>
+      <div class="about-stats">
+        <div class="about-stat">
+          <span class="about-stat-num">20+ years</span>
+          <span class="about-stat-label">In software testing &amp; quality, at enterprise scale</span>
+        </div>
+        <div class="about-stat">
+          <span class="about-stat-num">Automation-first</span>
+          <span class="about-stat-label">Using the same tools and testing rigour that global tech platforms rely on</span>
+        </div>
+        <div class="about-stat">
+          <span class="about-stat-num">Hands-on</span>
+          <span class="about-stat-label">Every build designed, coded and deployed personally</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="block" id="services">
+  <div class="block-inner">
+    <div class="section-head">
+      <span class="eyebrow">What we build</span>
+      <h2>Websites &amp; automation for independent businesses</h2>
+      <p>A proper website, and the manual processes behind it automated away — payments, bookings, sign-ups, whatever's eating your time. Built around your business, whatever that business is.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">✨</div>
+        <h3>Business Websites</h3>
+        <p>A custom site for whatever you do, built around how you actually work — not squeezed into a theme. Stuck on what it should even look like? We'll guide the design from scratch.</p>
+        <ul class="service-list">
+          <li>Custom design from your branding</li>
+          <li>Built to fit your business, not a template</li>
+          <li>Hosting, updates &amp; ongoing maintenance</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⚙️</div>
+        <h3>Process Automation</h3>
+        <p>Spreadsheets, paper forms &amp; bank transfers replaced with a system that runs itself — spotted and fixed by someone who tests software for a living.</p>
+        <ul class="service-list">
+          <li>Online payments &amp; bookings, no manual reconciliation</li>
+          <li>Admin dashboards showing everything in one place</li>
+          <li>Built from real-world testing &amp; automation experience</li>
+        </ul>
+      </div>
+    </div>
+    <div class="services-subhead">
+      <span class="eyebrow">Run a grassroots football club?</span>
+    </div>
+    <div class="football-callout">
+      <p>We've got a dedicated page for club websites, tournament software and player recruitment — built specifically around how grassroots clubs run.</p>
+      <a href="football.html" class="btn-secondary">See our football page →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="block">
+  <div class="block-inner">
+    <div class="section-head">
+      <span class="eyebrow">How it works</span>
+      <h2>Three steps, start to finish</h2>
+    </div>
+    <div class="process-grid">
+      <div class="process-step">
+        <div class="process-num">01</div>
+        <h3>Chat &amp; brief</h3>
+        <p>A quick conversation about your business, what you need, and what's not working currently.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-num">02</div>
+        <h3>Plan &amp; build</h3>
+        <p>Whether it's a new website, an automated system, or fixing what's already costing you — we build it around you, with regular check-ins as it comes together. Not sure exactly what you need? That's exactly where we help most.</p>
+      </div>
+      <div class="process-step">
+        <div class="process-num">03</div>
+        <h3>Launch &amp; support</h3>
+        <p>Live, working, and kept up to date — so you can focus on running the business, not managing the tech.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BUSINESS SYSTEMS -->
+<section class="block" id="business-systems">
+  <div class="block-inner">
+    <div class="section-head">
+      <span class="eyebrow">Business Systems</span>
+      <h2>From manual chaos to one system that runs itself</h2>
+      <p>This is the same pattern whatever the business — replace paper, spreadsheets and back-and-forth messages with one online system built around how you actually work.</p>
+    </div>
+    <div class="systems-grid">
+      <div class="systems-card">
+        <span class="systems-tag systems-tag-real">Real client — grassroots football club</span>
+        <h3>From paper forms to one live system</h3>
+        <div class="systems-before-after">
+          <div class="systems-before">
+            <span class="systems-label">Before</span>
+            <ul>
+              <li>Paper registration forms</li>
+              <li>Manual bank transfer payments</li>
+              <li>Spreadsheet tracking by hand</li>
+            </ul>
+          </div>
+          <div class="systems-after">
+            <span class="systems-label">After</span>
+            <ul>
+              <li>Online registration &amp; secure card payments</li>
+              <li>Automatic confirmation emails</li>
+              <li>Live dashboard by week, age group &amp; income</li>
+            </ul>
+          </div>
+        </div>
+        <p class="systems-result"><strong>Result:</strong> hours of manual reconciliation per camp reduced to a glance at a dashboard.</p>
+      </div>
+
+      <div class="systems-card">
+        <span class="systems-tag systems-tag-example">Example scenario — independent tradesperson</span>
+        <h3>How it could work for a trade business</h3>
+        <div class="systems-before-after">
+          <div class="systems-before">
+            <span class="systems-label">Before</span>
+            <ul>
+              <li>Enquiries scattered across WhatsApp</li>
+              <li>Paper quotes, easy to lose</li>
+              <li>Bookings kept in a diary</li>
+            </ul>
+          </div>
+          <div class="systems-after">
+            <span class="systems-label">After</span>
+            <ul>
+              <li>One enquiry form on your own site</li>
+              <li>A proper customer record, not scattered chats</li>
+              <li>Automatic follow-ups, nothing forgotten</li>
+            </ul>
+          </div>
+        </div>
+        <p class="systems-result"><strong>Illustrative example</strong> — this shows the approach, it isn't a completed project.</p>
+      </div>
+    </div>
+
+    <div class="systems-proof">
+      <span class="eyebrow">Want to see it live?</span>
+      <div class="football-callout">
+        <p>All of this is proven in grassroots football — a full club website, tournament software running live festivals, and a player recruitment platform.</p>
+        <a href="football.html" class="btn-secondary">See our football page →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section class="block" id="pricing">
+  <div class="block-inner">
+    <div class="section-head">
+      <span class="eyebrow">Pricing</span>
+      <h2>No price list — we work around your budget</h2>
+      <p>A brochure site, a booking system, and automating a manual process all cost different amounts, for different reasons. We're a small, local operation ourselves — not a big agency with a rate card — so we'd rather have an honest conversation about your budget than force you into a package that doesn't fit.</p>
+    </div>
+    <div class="pricing-info-grid">
+      <div class="pricing-info-card">
+        <div class="pricing-info-icon">🖥️</div>
+        <h3>Websites</h3>
+        <p>Cost comes down to how much custom design and functionality you need — from a straightforward site through to one with bookings, payments or a members' area.</p>
+      </div>
+      <div class="pricing-info-card">
+        <div class="pricing-info-icon">⚙️</div>
+        <h3>Process Automation</h3>
+        <p>Depends entirely on what's being automated. We'll review what you're doing manually today — forms, spreadsheets, payments — and quote against that specifically.</p>
+      </div>
+      <div class="pricing-info-card">
+        <div class="pricing-info-icon">🔧</div>
+        <h3>Ongoing Support</h3>
+        <p>Hosting, updates and maintenance can be a one-off build with occasional support, or a small monthly retainer if you'd rather it was all handled for you.</p>
+      </div>
+    </div>
+
+    <div class="payment-options">
+      <div class="payment-options-head">
+        <span class="eyebrow">However suits you</span>
+        <h3>A few ways to pay, so it fits your cash flow</h3>
+      </div>
+      <div class="payment-grid">
+        <div class="payment-card">
+          <div class="payment-icon">💷</div>
+          <h4>Pay Upfront</h4>
+          <p>One-off cost, nothing ongoing beyond optional hosting &amp; support.</p>
+        </div>
+        <div class="payment-card">
+          <div class="payment-icon">➗</div>
+          <h4>Split It</h4>
+          <p>A lower upfront cost, plus a small monthly amount after.</p>
+        </div>
+        <div class="payment-card">
+          <div class="payment-icon">📅</div>
+          <h4>Spread It</h4>
+          <p>Little to nothing upfront, a slightly higher monthly amount instead.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-cta">
+      <a href="#contact" class="btn-primary">Get Your Free Business Review →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="block" id="contact">
+  <div class="block-inner">
+    <div class="cta-banner">
+      <h2>Ready for your Free Business Review?</h2>
+      <p>A no-obligation chat about where you're losing time and money, and what it'd realistically cost to fix — whichever way suits you to get in touch.</p>
+      <div class="cta-buttons">
+        <a href="tel:+447813689645" class="btn-white">📞 Tap to call →</a>
+        <a href="sms:+447813689645" class="btn-outline-white">💬 Tap to message →</a>
+        <a href="mailto:dealo.hello@gmail.com" class="btn-outline-white">✉️ Tap to email →</a>
+      </div>
+      <p class="cta-phone">Or call <a href="tel:+447813689645">07813 689645</a></p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo-panel"><img src="dealo-logo-full.png" alt="Dealo"></div>
+      <p>Websites and process automation — proven in grassroots football, built for any business that wants the manual admin gone.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="#services">Business Websites</a>
+      <a href="#services">Process Automation</a>
+      <a href="#losing-money">Where You're Losing Money</a>
+      <a href="football.html">Grassroots Football</a>
+    </div>
+    <div class="footer-col">
+      <h4>Company</h4>
+      <a href="#about">About</a>
+      <a href="#business-systems">Business Systems</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#contact">Free Business Review</a>
+    </div>
+<div class="footer-col">
+      <h4>Connect</h4>
+      <a href="tel:+447813689645">📞 07813 689645</a>
+      <a href="sms:+447813689645">💬 Tap to message →</a>
+      <a href="mailto:dealo.hello@gmail.com">✉️ dealo.hello@gmail.com</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Dealo. All rights reserved.</span>
+    <span>Built in Stoke-on-Trent ⚽</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+
+</body>
 </html>
