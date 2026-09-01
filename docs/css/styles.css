@@ -797,6 +797,100 @@ header {
   flex-wrap: wrap;
 }
 
+/* — Wendy Jones Welcome to Football — */
+.banner-wendy {
+  background: linear-gradient(135deg, #050d1a 0%, #0a2040 50%, #050d1a 100%);
+  padding: 4.5rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.banner-wendy::after {
+  content: '⚽';
+  position: absolute;
+  right: -1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18rem;
+  opacity: 0.05;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.w-label {
+  font-size: 0.68rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+}
+
+.w-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-weight: 900;
+  color: white;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.w-sub {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.3rem;
+  color: var(--accent);
+  font-weight: 600;
+  margin: 0.4rem 0 1.2rem;
+}
+
+.w-details {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.75rem;
+}
+
+.w-detail-label {
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.35);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+}
+
+.w-detail-val {
+  color: white;
+  font-weight: 600;
+  font-size: 0.92rem;
+  display: block;
+  margin-top: 2px;
+}
+
+.wendy-badge-wrap {
+  text-align: center;
+}
+
+.wendy-badge-wrap img {
+  width: 160px;
+  margin: 0 auto;
+  filter: drop-shadow(0 0 30px rgba(0, 168, 255, 0.4));
+}
+
+.wendy-tag {
+  display: inline-block;
+  background: rgba(0, 168, 255, 0.12);
+  border: 1px solid rgba(0, 168, 255, 0.35);
+  color: var(--accent);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 50px;
+  margin-bottom: 1rem;
+}
+
 
 /* ── 8. Wendy Jones Tribute ──────────────────────────────── */
 
@@ -2951,4 +3045,217 @@ header {
   line-height: 1.8;
   max-width: 660px;
   margin: 0 auto 1rem; /* was 2.5rem */
+}
+
+/* ============================================================
+   Wendy Jones Welcome to Football — Page Specific CSS
+   ============================================================ */
+
+.wendy-intro {
+  background: white;
+  padding: 4rem 2.5rem 2rem;
+}
+
+.wendy-intro-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.wendy-intro-inner p {
+  color: #5C6E84;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  max-width: 760px;
+}
+
+.wendy-sessions {
+  background: white;
+  padding: 2rem 2.5rem 5rem;
+}
+
+.wendy-sessions-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.session-card {
+  background: var(--off-white);
+  border-radius: 18px;
+  padding: 2.25rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+}
+
+.session-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.session-time {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.9rem;
+  font-weight: 800;
+  color: var(--navy);
+  text-transform: uppercase;
+}
+
+.session-meta {
+  display: flex;
+  gap: 1.75rem;
+  flex-wrap: wrap;
+}
+
+.session-meta-item {
+  font-size: 0.8rem;
+  color: #5C6E84;
+}
+
+.session-meta-item strong {
+  color: var(--navy);
+  display: block;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 2px;
+}
+
+.session-format {
+  font-size: 0.88rem;
+  color: #5C6E84;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.game-block-title {
+  font-size: 0.66rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--blue-light);
+  font-weight: 700;
+  margin-bottom: 0.65rem;
+}
+
+.fixture-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.fixture-item {
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 8px;
+  padding: 0.5rem 0.7rem;
+  font-size: 0.82rem;
+  color: var(--navy);
+  font-weight: 600;
+  text-align: center;
+}
+
+.fixture-item.tbc {
+  color: #9AABBE;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.session-footer {
+  display: flex;
+  gap: 2.5rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.session-note {
+  font-size: 0.85rem;
+  color: #5C6E84;
+  line-height: 1.6;
+  margin-top: 1rem;
+}
+
+.important-info {
+  background: var(--navy);
+  border-radius: 22px;
+  padding: 3rem 2.75rem;
+  max-width: 1100px;
+  margin: 0 auto 4rem;
+}
+
+.important-info-header {
+  margin-bottom: 1.5rem;
+}
+
+.important-info-header .section-eyebrow {
+  color: var(--accent);
+}
+
+.important-info-header h2 {
+  color: white;
+}
+
+.important-info ul {
+  list-style: none;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.important-info li {
+  position: relative;
+  padding-left: 1.5rem;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.important-info li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.wendy-thanks {
+  background: white;
+  padding: 0 2.5rem 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.wendy-thanks p {
+  color: #5C6E84;
+  font-size: 0.95rem;
+  line-height: 1.75;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+@media (max-width: 960px) {
+  .games-grid { grid-template-columns: repeat(2, 1fr); }
+  .session-card { padding: 1.75rem 1.5rem; }
+}
+
+@media (max-width: 600px) {
+  .games-grid { grid-template-columns: 1fr 1fr; }
+  .session-time { font-size: 1.6rem; }
 }
